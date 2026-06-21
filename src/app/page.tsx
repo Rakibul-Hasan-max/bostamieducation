@@ -1,65 +1,131 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "framer-motion";
+import { ArrowRight, BookOpen, Sparkles, GraduationCap } from "lucide-react";
+import logo from "./favicon.png";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-zinc-950 font-sans">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0 z-0">
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
+          src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop"
+          alt="Students learning"
+          fill
+          className="object-cover opacity-20"
           priority
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-zinc-900/50 mix-blend-multiply" />
+        {/* Animated Glows */}
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/4 left-1/4 w-[40rem] h-[40rem] bg-indigo-500/20 rounded-full blur-[120px] mix-blend-screen"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.5, 1],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute bottom-1/4 right-1/4 w-[30rem] h-[30rem] bg-violet-600/20 rounded-full blur-[100px] mix-blend-screen"
+        />
+      </div>
+
+      <main className="relative z-10 flex flex-col items-center justify-center w-full max-w-5xl px-6 mx-auto text-center">
+        {/* Logo Animation */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="mb-8 relative"
+        >
+          <div className="absolute inset-0 bg-white/10 blur-xl rounded-full scale-150" />
+          <Image
+            src={logo}
+            alt="Bostami Education Logo"
+            width={100}
+            height={100}
+            className="relative drop-shadow-2xl rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-4"
+          />
+        </motion.div>
+
+        {/* Headings */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-4"
+        >
+          Bostami{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">
+            Education
+          </span>
+        </motion.h1>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="text-3xl md:text-5xl font-bold text-zinc-300 mb-8"
+        >
+          Something Amazing is{" "}
+          <span className="text-white italic">Coming Soon</span>
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.8 }}
+          className="max-w-2xl text-lg md:text-xl text-zinc-400 mb-12 leading-relaxed"
+        >
+          We are crafting a next-generation EdTech platform designed to empower students and instructors globally. Get ready to elevate your educational journey.
+        </motion.p>
+
+        {/* Notify Me Form */}
+        <motion.form
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1 }}
+          className="flex w-full max-w-md flex-col sm:flex-row gap-3 mx-auto"
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <input
+            type="email"
+            placeholder="Enter your email address"
+            className="flex-1 px-6 py-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent backdrop-blur-md transition-all"
+            required
+          />
+          <button
+            type="submit"
+            className="group relative flex items-center justify-center gap-2 px-8 py-4 bg-white text-zinc-950 font-semibold rounded-xl hover:bg-zinc-200 transition-colors"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+            Notify Us
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </button>
+        </motion.form>
       </main>
+
+      {/* Floating Elements for extra dynamism */}
+      <motion.div
+        animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute hidden lg:flex items-center justify-center w-24 h-24 top-1/4 right-[15%] bg-indigo-500/10 border border-indigo-500/20 backdrop-blur-xl rounded-2xl"
+      >
+        <GraduationCap className="w-10 h-10 text-indigo-400" />
+      </motion.div>
+      <motion.div
+        animate={{ y: [0, 20, 0], rotate: [0, -10, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        className="absolute hidden lg:flex items-center justify-center w-20 h-20 bottom-1/4 left-[15%] bg-violet-500/10 border border-violet-500/20 backdrop-blur-xl rounded-full"
+      >
+        <BookOpen className="w-8 h-8 text-violet-400" />
+      </motion.div>
     </div>
   );
 }
