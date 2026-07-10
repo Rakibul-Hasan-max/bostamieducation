@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown, Menu, X } from "lucide-react";
 
@@ -10,13 +11,16 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-100 bg-white/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-brand-yellow via-brand-coral to-indigo-500 p-0.5">
-            <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-white font-bold text-brand-navy">
-              BE
-            </div>
-          </div>
+        {/* Logo — icon.png + brand name */}
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/icon.png"
+            alt="Bostami Education"
+            width={36}
+            height={36}
+            className="h-9 w-9 object-contain"
+            priority
+          />
           <span className="text-xl font-bold tracking-tight text-brand-navy">
             Bostami<span className="text-brand-coral">Education</span>
           </span>

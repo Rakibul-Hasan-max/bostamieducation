@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
 
@@ -12,12 +13,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 pb-12 border-b border-slate-200/60">
           {/* Logo & Description */}
           <div className="col-span-1 lg:col-span-6">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-brand-yellow via-brand-coral to-indigo-500 p-0.5">
-                <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-white font-bold text-brand-navy">
-                  BE
-                </div>
-              </div>
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/icon.png"
+                alt="Bostami Education"
+                width={36}
+                height={36}
+                className="h-9 w-9 object-contain"
+              />
               <span className="text-xl font-bold tracking-tight text-brand-navy">
                 Bostami<span className="text-brand-coral">Education</span>
               </span>
