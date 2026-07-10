@@ -69,9 +69,6 @@ export default function Footer() {
                 <Link href="/mentors" className="hover:text-brand-coral transition-colors">Mentors</Link>
               </li>
               <li>
-                <Link href="/blog" className="hover:text-brand-coral transition-colors">Blog</Link>
-              </li>
-              <li>
                 <Link href="/contact" className="hover:text-brand-coral transition-colors">Contact</Link>
               </li>
             </ul>
@@ -106,11 +103,11 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-brand-slate shrink-0" />
-                <span>+1 (234) 567-890</span>
+                <span>+880 176888 3213</span>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 text-brand-slate shrink-0 mt-0.5" />
-                <span>123 Education St, New York, NY 10001</span>
+                <span>Uttara Sector 7, Road 1, Dhaka, Bangladesh</span>
               </li>
             </ul>
           </div>
