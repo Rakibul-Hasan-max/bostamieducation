@@ -21,7 +21,7 @@ export default function Navbar() {
             className="h-9 w-9 object-contain"
             priority
           />
-          <span className="text-xl font-bold tracking-tight text-brand-navy">
+          <span className="text-lg sm:text-xl font-bold tracking-tight text-brand-navy">
             Bostami<span className="text-brand-coral">Education</span>
           </span>
         </Link>

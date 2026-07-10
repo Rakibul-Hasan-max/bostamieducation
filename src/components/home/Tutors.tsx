@@ -6,28 +6,28 @@ import Link from "next/link";
 export default function Tutors() {
   const tutors = [
     {
-      name: "Amanda Seyfried",
-      role: "Python Expert",
+      name: "Bayzid Bostami",
+      role: "Physics",
       image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=300",
     },
     {
-      name: "David Atten",
-      role: "Marketing Expert",
+      name: "Rakibul Hasan",
+      role: "ICT",
       image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=300",
     },
     {
-      name: "Sarah Jenkins",
-      role: "UI/UX Expert",
+      name: "Foysal Ahamed",
+      role: "Higher Math",
       image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300",
     },
     {
-      name: "Jane Doe",
-      role: "Business Expert",
+      name: "Akkash Ali",
+      role: "General Math",
       image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=300",
     },
     {
-      name: "John Smith",
-      role: "QA Tester Expert",
+      name: "Majharul Islam",
+      role: "Chemistry",
       image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=300",
     },
   ];

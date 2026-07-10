@@ -37,16 +37,16 @@ export default function Footer() {
               <h4 className="text-sm font-bold text-brand-navy mb-2">
                 Get the latest news and updates delivered to your inbox.
               </h4>
-              <form onSubmit={(e) => e.preventDefault()} className="mt-3 flex gap-2 w-full">
+              <form onSubmit={(e) => e.preventDefault()} className="mt-3 flex flex-col sm:flex-row gap-2.5 w-full">
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex-1 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm text-brand-navy placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                  className="w-full sm:flex-1 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm text-brand-navy placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
                   required
                 />
                 <button
                   type="submit"
-                  className="rounded-full bg-brand-yellow px-6 py-2.5 text-sm font-bold text-brand-navy hover:bg-brand-yellow-hover transition-colors"
+                  className="w-full sm:w-auto rounded-full bg-brand-yellow px-6 py-2.5 text-sm font-bold text-brand-navy hover:bg-brand-yellow-hover transition-colors"
                 >
                   Subscribe
                 </button>
