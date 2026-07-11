@@ -60,7 +60,7 @@ export default function Hero() {
                   <span className="inline-flex items-center">
                     <span className="relative inline-block h-10 w-10 rounded-full border-2 border-[#fdf6ef] overflow-hidden z-30 -mr-3 shadow">
                       <Image
-                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80"
+                        src="/tutor1.png"
                         alt="Mentor 1"
                         fill
                         className="object-cover"
@@ -68,7 +68,7 @@ export default function Hero() {
                     </span>
                     <span className="relative inline-block h-10 w-10 rounded-full border-2 border-[#fdf6ef] overflow-hidden z-20 -mr-3 shadow">
                       <Image
-                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80"
+                        src="/tutor2.png"
                         alt="Mentor 2"
                         fill
                         className="object-cover"
@@ -76,7 +76,7 @@ export default function Hero() {
                     </span>
                     <span className="relative inline-block h-10 w-10 rounded-full border-2 border-[#fdf6ef] overflow-hidden z-10 shadow">
                       <Image
-                        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80"
+                        src="/tutor4.png"
                         alt="Mentor 3"
                         fill
                         className="object-cover"
