@@ -8,36 +8,36 @@ export default function Tutors() {
     {
       name: "Bayzid Bostami",
       role: "Physics",
-      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=300",
+      image: "/tutor1.png",
     },
     {
       name: "Rakibul Hasan",
       role: "ICT",
-      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=300",
+      image: "/tutor2.png",
     },
     {
       name: "Foysal Ahamed",
       role: "Higher Math",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300",
+      image: "/tutor3.png",
     },
     {
       name: "Akkash Ali",
       role: "General Math",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=300",
+      image: "/tutor4.png",
     },
     {
       name: "Majharul Islam",
       role: "Chemistry",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=300",
+      image: "/tutor5.png",
     },
   ];
 
   return (
     <section className="w-full bg-white py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         
         {/* Main Box with soft cream background */}
-        <div className="bg-[#fffdf5] rounded-[32px] border border-amber-100/50 p-8 md:p-16 shadow-sm shadow-amber-50">
+        <div className="bg-[#fffdf5] rounded-[32px] border border-amber-100/50 p-4 sm:p-8 md:p-16 shadow-sm shadow-amber-50">
           
           {/* Header */}
           <div className="mx-auto max-w-3xl text-center mb-12">
@@ -51,11 +51,11 @@ export default function Tutors() {
           </div>
 
           {/* Tutors Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6">
             {tutors.map((tutor, i) => (
               <div
                 key={i}
-                className="group flex flex-col bg-white rounded-2xl border border-slate-100/70 p-4 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-200"
+                className="group flex flex-col bg-white rounded-2xl border border-slate-100/70 p-2.5 sm:p-4 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-200"
               >
                 {/* Photo container */}
                 <div className="relative aspect-[4/5] w-full rounded-xl overflow-hidden bg-slate-100">
