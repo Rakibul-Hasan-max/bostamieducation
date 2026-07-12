@@ -281,9 +281,9 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pt-20">
               {/* CTO Quote (order 2 on desktop to align opposite to CEO) */}
               <div className="lg:col-span-8 flex flex-col items-start order-2 lg:order-1">
-                <div className="text-blue-600 font-bold text-sm tracking-wider uppercase mb-2">Co-Founder & CTO</div>
+                <div className="text-green-600 font-bold text-sm tracking-wider uppercase mb-2">Co-Founder & CTO</div>
                 <h3 className="text-2xl font-extrabold text-brand-navy mb-4">Rakibul Hasan</h3>
-                <p className="text-[17px] italic font-medium text-brand-slate leading-relaxed relative pl-4 border-l-4 border-blue-600">
+                <p className="text-[17px] italic font-medium text-brand-slate leading-relaxed relative pl-4 border-l-4 border-green-600">
                   &ldquo;Technology is reshaping how we learn and collaborate. We are committed to building an innovative, seamless, and world-class digital learning experience that makes knowledge interactive, engaging, and accessible for everyone.&rdquo;
                 </p>
                 <p className="mt-4 text-[14px] text-brand-slate">

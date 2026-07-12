@@ -7,11 +7,12 @@ import { ChevronDown, Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [pagesOpen, setPagesOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-100 bg-white/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        {/* Logo — icon.png + brand name */}
+        {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
             src="/icon.png"
@@ -37,10 +38,10 @@ export default function Navbar() {
           <Link href="/mentors" className="text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors">
             Mentors
           </Link>
+          {/* Pages dropdown */}
           <div className="relative group cursor-pointer flex items-center gap-1 text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors">
             <span>Pages</span>
             <ChevronDown className="h-4 w-4" />
-            {/* Simple dropdown overlay on hover */}
             <div className="absolute top-full left-0 mt-2 hidden group-hover:block w-48 rounded-xl border border-slate-100 bg-white p-2 shadow-xl">
               <Link href="/about" className="block rounded-lg px-4 py-2 text-sm text-brand-slate hover:bg-slate-50 hover:text-brand-navy transition-colors">
                 About Us
@@ -105,13 +106,43 @@ export default function Navbar() {
             >
               Mentors
             </Link>
-            <Link
-              href="/pages"
-              onClick={() => setIsOpen(false)}
-              className="text-[15px] font-medium text-brand-slate hover:text-brand-navy"
-            >
-              Pages
-            </Link>
+
+            {/* Pages accordion */}
+            <div>
+              <button
+                onClick={() => setPagesOpen(!pagesOpen)}
+                className="flex w-full items-center justify-between text-[15px] font-medium text-brand-slate hover:text-brand-navy"
+              >
+                <span>Pages</span>
+                <ChevronDown className={`h-4 w-4 transition-transform ${pagesOpen ? "rotate-180" : ""}`} />
+              </button>
+              {pagesOpen && (
+                <div className="mt-2 ml-3 flex flex-col gap-3 border-l-2 border-slate-100 pl-4">
+                  <Link
+                    href="/about"
+                    onClick={() => { setIsOpen(false); setPagesOpen(false); }}
+                    className="text-[14px] font-medium text-brand-slate hover:text-brand-navy"
+                  >
+                    About Us
+                  </Link>
+                  <Link
+                    href="/pricing"
+                    onClick={() => { setIsOpen(false); setPagesOpen(false); }}
+                    className="text-[14px] font-medium text-brand-slate hover:text-brand-navy"
+                  >
+                    Pricing Plans
+                  </Link>
+                  <Link
+                    href="/faq"
+                    onClick={() => { setIsOpen(false); setPagesOpen(false); }}
+                    className="text-[14px] font-medium text-brand-slate hover:text-brand-navy"
+                  >
+                    FAQs
+                  </Link>
+                </div>
+              )}
+            </div>
+
             <Link
               href="/contact"
               onClick={() => setIsOpen(false)}
@@ -119,6 +150,7 @@ export default function Navbar() {
             >
               Contact
             </Link>
+
             <div className="mt-4 flex flex-col gap-3 border-t border-slate-100 pt-4">
               <Link
                 href="/login"
