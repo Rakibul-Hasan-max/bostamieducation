@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown, Menu, X } from "lucide-react";
@@ -8,6 +8,19 @@ import { ChevronDown, Menu, X } from "lucide-react";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [pagesOpen, setPagesOpen] = useState(false);
+  const [desktopPagesOpen, setDesktopPagesOpen] = useState(false);
+  const desktopPagesRef = useRef<HTMLDivElement>(null);
+
+  // Close desktop Pages dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (desktopPagesRef.current && !desktopPagesRef.current.contains(e.target as Node)) {
+        setDesktopPagesOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-100 bg-white/95 backdrop-blur-md">
@@ -38,21 +51,40 @@ export default function Navbar() {
           <Link href="/mentors" className="text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors">
             Mentors
           </Link>
-          {/* Pages dropdown */}
-          <div className="relative group cursor-pointer flex items-center gap-1 text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors">
-            <span>Pages</span>
-            <ChevronDown className="h-4 w-4" />
-            <div className="absolute top-full left-0 mt-2 hidden group-hover:block w-48 rounded-xl border border-slate-100 bg-white p-2 shadow-xl">
-              <Link href="/about" className="block rounded-lg px-4 py-2 text-sm text-brand-slate hover:bg-slate-50 hover:text-brand-navy transition-colors">
-                About Us
-              </Link>
-              <Link href="/pricing" className="block rounded-lg px-4 py-2 text-sm text-brand-slate hover:bg-slate-50 hover:text-brand-navy transition-colors">
-                Pricing Plans
-              </Link>
-              <Link href="/faq" className="block rounded-lg px-4 py-2 text-sm text-brand-slate hover:bg-slate-50 hover:text-brand-navy transition-colors">
-                FAQs
-              </Link>
-            </div>
+          {/* Pages dropdown — click-based */}
+          <div ref={desktopPagesRef} className="relative">
+            <button
+              onClick={() => setDesktopPagesOpen(!desktopPagesOpen)}
+              className="flex items-center gap-1 text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors cursor-pointer"
+            >
+              <span>Pages</span>
+              <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${desktopPagesOpen ? "rotate-180" : ""}`} />
+            </button>
+            {desktopPagesOpen && (
+              <div className="absolute top-full left-0 mt-2 w-48 rounded-xl border border-slate-100 bg-white p-2 shadow-xl z-50">
+                <Link
+                  href="/about"
+                  onClick={() => setDesktopPagesOpen(false)}
+                  className="block rounded-lg px-4 py-2 text-sm text-brand-slate hover:bg-slate-50 hover:text-brand-navy transition-colors"
+                >
+                  About Us
+                </Link>
+                <Link
+                  href="/pricing"
+                  onClick={() => setDesktopPagesOpen(false)}
+                  className="block rounded-lg px-4 py-2 text-sm text-brand-slate hover:bg-slate-50 hover:text-brand-navy transition-colors"
+                >
+                  Pricing Plans
+                </Link>
+                <Link
+                  href="/faq"
+                  onClick={() => setDesktopPagesOpen(false)}
+                  className="block rounded-lg px-4 py-2 text-sm text-brand-slate hover:bg-slate-50 hover:text-brand-navy transition-colors"
+                >
+                  FAQs
+                </Link>
+              </div>
+            )}
           </div>
           <Link href="/contact" className="text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors">
             Contact
