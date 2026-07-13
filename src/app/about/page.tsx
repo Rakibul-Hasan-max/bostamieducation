@@ -257,7 +257,7 @@ export default function AboutPage() {
               <div className="lg:col-span-4 flex justify-center">
                 <div className="relative w-full max-w-[280px] aspect-[4/5] rounded-[24px] overflow-hidden shadow-md">
                   <Image
-                    src="/tutor1.png"
+                    src="/about-ceo.png"
                     alt="Bayzid Bostami - CEO"
                     fill
                     className="object-cover"
@@ -294,7 +294,7 @@ export default function AboutPage() {
               <div className="lg:col-span-4 flex justify-center order-1 lg:order-2">
                 <div className="relative w-full max-w-[280px] aspect-[4/5] rounded-[24px] overflow-hidden shadow-md">
                   <Image
-                    src="/tutor2.png"
+                    src="/cto.png"
                     alt="Rakibul Hasan - CTO"
                     fill
                     className="object-cover"
@@ -389,18 +389,18 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* Team member cards */}
               {[
-                { name: "Bayzid Bostami", role: "CEO", img: "/tutor1.png" },
-                { name: "Rakibul Hasan", role: "CTO", img: "/tutor2.png" },
-                { name: "Orpita", role: "Instructor", img: "/tutor3.png" },
-                { name: "Akash Sheikh", role: "Instructor", img: "/tutor5.png" },
+                { name: "Bayzid Bostami", role: "CEO", img: "/about-ceo.png" },
+                { name: "Rakibul Hasan", role: "CTO", img: "/cto.png" },
+                { name: "Asrafi Islam Orpita", role: "Instructor", img: "/tutor8.png" },
+                { name: "Md. Akash", role: "Instructor", img: "/tutor7.png" },
                 { name: "Foysal Ahamed", role: "Instructor", img: "/tutor3.png" },
                 { name: "Akkash Ali", role: "Instructor", img: "/tutor4.png" },
-                { name: "Majharul Islam", role: "Instructor", img: "/tutor5.png" },
+                { name: "Majharul Islam", role: "Instructor", img: "/tutor9.png" },
                 
               ].map((member, idx) => (
                 <div key={idx} className="flex flex-col items-center text-center bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
                   <div className="relative w-24 h-24 mb-4 rounded-full overflow-hidden shadow">
-                    <Image src={member.img} alt={member.name} fill className="object-cover" />
+                    <Image src={member.img} alt={member.name} fill className="object-cover object-top" />
                   </div>
                   <h4 className="text-lg font-bold text-brand-navy">{member.name}</h4>
                   <p className="text-sm text-brand-slate mt-1">{member.role}</p>

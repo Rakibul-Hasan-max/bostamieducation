@@ -26,7 +26,7 @@ const mentorsData: Mentor[] = [
     role: "Founder & CEO, Physics Head",
     department: "Physics",
     bio: "Passionate about simplifying complex physics concepts for college and university admission seekers. Over 6 years of academic mentoring experience.",
-    img: "/tutor1.png",
+    img: "/about-ceo.png",
     students: "20k+",
     courses: "15+",
     facebook: "https://www.facebook.com/bostamieducationpage/",
@@ -38,7 +38,7 @@ const mentorsData: Mentor[] = [
     role: "Co-Founder & CTO, Technical Lead",
     department: "Technical & ICT",
     bio: "Lead software engineer and tech enthusiast, instructing digital courses in web development, programming foundations, and tech career prep.",
-    img: "/tutor2.png",
+    img: "/cto.png",
     students: "10k+",
     courses: "8+",
     facebook: "https://facebook.com/rakibulhasan.cn",
@@ -187,12 +187,12 @@ export default function MentorsPage() {
                     className="group bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
                   >
                     {/* Mentor Photo Container */}
-                    <div className="relative w-full aspect-[4/3] bg-slate-100 overflow-hidden">
+                    <div className="relative w-full h-72 bg-slate-100 overflow-hidden">
                       <Image
                         src={mentor.img}
                         alt={mentor.name}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                       />
                       {/* Department Badge */}
                       <span className="absolute top-4 left-4 bg-[#1a1a2e]/85 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full tracking-wider border border-white/10 uppercase">
