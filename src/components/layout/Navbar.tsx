@@ -76,13 +76,6 @@ export default function Navbar() {
                 >
                   Pricing Plans
                 </Link>
-                <Link
-                  href="/faq"
-                  onClick={() => setDesktopPagesOpen(false)}
-                  className="block rounded-lg px-4 py-2 text-sm text-brand-slate hover:bg-slate-50 hover:text-brand-navy transition-colors"
-                >
-                  FAQs
-                </Link>
               </div>
             )}
           </div>

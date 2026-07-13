@@ -308,41 +308,69 @@ export default function AboutPage() {
         {/* ══════════════════════════════════════
             SECTION 4 — Our Story (Timeline)
         ══════════════════════════════════════ */}
-        <section className="py-20 md:py-28 bg-[#f8fafc] w-full">
+        <section className="py-16 md:py-24 bg-white w-full">
           <div className="mx-auto max-w-7xl px-6">
-            <div className="mx-auto max-w-3xl text-center mb-20">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-brand-navy tracking-tight">
+            <div className="mx-auto max-w-3xl text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-[#1a1a2e] tracking-tight">
                 Our Story
               </h2>
-              <p className="mt-4 text-brand-slate text-[15px]">
-                A look at the major milestones of our journey from inception to current day.
-              </p>
             </div>
 
             {/* Timeline Layout */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16 items-start">
-              {milestones.map((m, i) => (
-                <div key={m.year} className="flex flex-col bg-white rounded-3xl p-6 shadow-sm border border-slate-100/80">
-                  {/* Photo of milestone */}
-                  <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden mb-6 bg-slate-100">
-                    <Image
-                      src={m.image}
-                      alt={m.title}
-                      fill
-                      className="object-cover"
-                    />
+              {milestones.map((m) => {
+                // Determine if this milestone goes to the left column on desktop (even years)
+                const isLeft = m.year === "2024" || m.year === "2026";
+                
+                // Assign grid order classes to keep chronological flow on mobile, and staggered on desktop
+                // 2023: order 1 on mobile, 2 on desktop (right col)
+                // 2024: order 2 on mobile, 1 on desktop (left col)
+                // 2025: order 3 on mobile, 4 on desktop (right col)
+                // 2026: order 4 on mobile, 3 on desktop (left col)
+                let orderClass = "";
+                if (m.year === "2023") orderClass = "order-1 md:order-2";
+                else if (m.year === "2024") orderClass = "order-2 md:order-1";
+                else if (m.year === "2025") orderClass = "order-3 md:order-4";
+                else if (m.year === "2026") orderClass = "order-4 md:order-3";
+
+                return (
+                  <div key={m.year} className={`flex flex-col ${orderClass}`}>
+                    {isLeft ? (
+                      <>
+                        {/* Left style: Image then Text */}
+                        <div className="relative w-full aspect-[16/10] rounded-[24px] overflow-hidden mb-5 bg-slate-100 shadow-sm border border-slate-100">
+                          <Image
+                            src={m.image}
+                            alt={m.title}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <span className="text-2xl font-bold text-[#1a1a2e] mb-1.5">{m.year}</span>
+                        <p className="text-[13px] text-slate-500 leading-relaxed max-w-lg">
+                          {m.desc}
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        {/* Right style: Text then Image */}
+                        <span className="text-2xl font-bold text-[#1a1a2e] mb-1.5">{m.year}</span>
+                        <p className="text-[13px] text-slate-500 leading-relaxed mb-5 max-w-lg">
+                          {m.desc}
+                        </p>
+                        <div className="relative w-full aspect-[16/10] rounded-[24px] overflow-hidden bg-slate-100 shadow-sm border border-slate-100">
+                          <Image
+                            src={m.image}
+                            alt={m.title}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      </>
+                    )}
                   </div>
-                  {/* Info */}
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl font-black text-brand-coral">{m.year}</span>
-                    <div className="h-1.5 w-1.5 rounded-full bg-slate-300" />
-                    <h4 className="text-lg font-bold text-brand-navy">{m.title}</h4>
-                  </div>
-                  <p className="mt-3 text-[13px] text-brand-slate leading-relaxed">
-                    {m.desc}
-                  </p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
