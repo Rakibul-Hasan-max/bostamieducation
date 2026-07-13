@@ -3,13 +3,31 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [pagesOpen, setPagesOpen] = useState(false);
   const [desktopPagesOpen, setDesktopPagesOpen] = useState(false);
   const desktopPagesRef = useRef<HTMLDivElement>(null);
+
+  // Returns the correct nav link class based on whether it matches current route
+  const navLink = (href: string, exact = false) => {
+    const isActive = exact ? pathname === href : pathname.startsWith(href);
+    return `text-[15px] font-medium transition-colors ${
+      isActive ? "text-brand-yellow" : "text-brand-slate hover:text-brand-navy"
+    }`;
+  };
+
+  // For mobile links
+  const mobileNavLink = (href: string, exact = false) => {
+    const isActive = exact ? pathname === href : pathname.startsWith(href);
+    return `text-[15px] font-medium ${
+      isActive ? "text-brand-yellow" : "text-brand-slate hover:text-brand-navy"
+    }`;
+  };
 
   // Close desktop Pages dropdown when clicking outside
   useEffect(() => {
@@ -42,20 +60,24 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          <Link href="/" className="text-[15px] font-medium text-brand-yellow">
+          <Link href="/" className={navLink("/", true)}>
             Home
           </Link>
-          <Link href="/courses" className="text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors">
+          <Link href="/courses" className={navLink("/courses")}>
             Courses
           </Link>
-          <Link href="/mentors" className="text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors">
+          <Link href="/mentors" className={navLink("/mentors")}>
             Mentors
           </Link>
           {/* Pages dropdown — click-based */}
           <div ref={desktopPagesRef} className="relative">
             <button
               onClick={() => setDesktopPagesOpen(!desktopPagesOpen)}
-              className="flex items-center gap-1 text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors cursor-pointer"
+              className={`flex items-center gap-1 cursor-pointer ${
+                ['/about', '/pricing', '/faq'].some(p => pathname.startsWith(p))
+                  ? 'text-[15px] font-medium text-brand-yellow'
+                  : 'text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors'
+              }`}
             >
               <span>Pages</span>
               <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${desktopPagesOpen ? "rotate-180" : ""}`} />
@@ -65,21 +87,25 @@ export default function Navbar() {
                 <Link
                   href="/about"
                   onClick={() => setDesktopPagesOpen(false)}
-                  className="block rounded-lg px-4 py-2 text-sm text-brand-slate hover:bg-slate-50 hover:text-brand-navy transition-colors"
+                  className={`block rounded-lg px-4 py-2 text-sm transition-colors ${
+                    pathname.startsWith('/about') ? 'text-brand-yellow font-bold' : 'text-brand-slate hover:bg-slate-50 hover:text-brand-navy'
+                  }`}
                 >
                   About Us
                 </Link>
                 <Link
                   href="/pricing"
                   onClick={() => setDesktopPagesOpen(false)}
-                  className="block rounded-lg px-4 py-2 text-sm text-brand-slate hover:bg-slate-50 hover:text-brand-navy transition-colors"
+                  className={`block rounded-lg px-4 py-2 text-sm transition-colors ${
+                    pathname.startsWith('/pricing') ? 'text-brand-yellow font-bold' : 'text-brand-slate hover:bg-slate-50 hover:text-brand-navy'
+                  }`}
                 >
                   Pricing Plans
                 </Link>
               </div>
             )}
           </div>
-          <Link href="/contact" className="text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors">
+          <Link href="/contact" className={navLink("/contact")}>
             Contact
           </Link>
         </nav>
@@ -113,21 +139,21 @@ export default function Navbar() {
             <Link
               href="/"
               onClick={() => setIsOpen(false)}
-              className="text-[15px] font-medium text-brand-yellow"
+              className={mobileNavLink("/", true)}
             >
               Home
             </Link>
             <Link
               href="/courses"
               onClick={() => setIsOpen(false)}
-              className="text-[15px] font-medium text-brand-slate hover:text-brand-navy"
+              className={mobileNavLink("/courses")}
             >
               Courses
             </Link>
             <Link
               href="/mentors"
               onClick={() => setIsOpen(false)}
-              className="text-[15px] font-medium text-brand-slate hover:text-brand-navy"
+              className={mobileNavLink("/mentors")}
             >
               Mentors
             </Link>
@@ -136,7 +162,11 @@ export default function Navbar() {
             <div>
               <button
                 onClick={() => setPagesOpen(!pagesOpen)}
-                className="flex w-full items-center justify-between text-[15px] font-medium text-brand-slate hover:text-brand-navy"
+                className={`flex w-full items-center justify-between text-[15px] font-medium ${
+                  ['/about', '/pricing', '/faq'].some(p => pathname.startsWith(p))
+                    ? 'text-brand-yellow'
+                    : 'text-brand-slate hover:text-brand-navy'
+                }`}
               >
                 <span>Pages</span>
                 <ChevronDown className={`h-4 w-4 transition-transform ${pagesOpen ? "rotate-180" : ""}`} />
@@ -171,7 +201,7 @@ export default function Navbar() {
             <Link
               href="/contact"
               onClick={() => setIsOpen(false)}
-              className="text-[15px] font-medium text-brand-slate hover:text-brand-navy"
+              className={mobileNavLink("/contact")}
             >
               Contact
             </Link>

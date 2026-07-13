@@ -1,51 +1,51 @@
 "use client";
 
 import Link from "next/link";
-import { Laptop, Megaphone, Palette, Shield, FileCheck, Briefcase, Database, ArrowRight } from "lucide-react";
+import { FlaskConical, BookOpen, Atom, Leaf, Monitor, Languages, ArrowRight } from "lucide-react";
 
 export default function Categories() {
   const categories = [
     {
-      name: "Development",
-      icon: Laptop,
+      name: "Physics",
+      icon: Atom,
       iconColor: "text-blue-500",
       bgColor: "bg-blue-50",
     },
     {
-      name: "Digital Marketing",
-      icon: Megaphone,
-      iconColor: "text-rose-500",
-      bgColor: "bg-rose-50",
+      name: "Math",
+      icon: BookOpen,
+      iconColor: "text-orange-500",
+      bgColor: "bg-orange-50",
     },
     {
-      name: "UI/UX Design",
-      icon: Palette,
-      iconColor: "text-indigo-500",
-      bgColor: "bg-indigo-50",
-    },
-    {
-      name: "Cyber Security",
-      icon: Shield,
-      iconColor: "text-purple-500",
-      bgColor: "bg-purple-50",
-    },
-    {
-      name: "Software Testing",
-      icon: FileCheck,
+      name: "Chemistry",
+      icon: FlaskConical,
       iconColor: "text-emerald-500",
       bgColor: "bg-emerald-50",
     },
     {
-      name: "Business",
-      icon: Briefcase,
-      iconColor: "text-amber-500",
-      bgColor: "bg-amber-50",
+      name: "Biology",
+      icon: Leaf,
+      iconColor: "text-green-600",
+      bgColor: "bg-green-50",
     },
     {
-      name: "Data Science",
-      icon: Database,
-      iconColor: "text-cyan-500",
-      bgColor: "bg-cyan-50",
+      name: "Technical & ICT",
+      icon: Monitor,
+      iconColor: "text-indigo-500",
+      bgColor: "bg-indigo-50",
+    },
+    {
+      name: "English",
+      icon: Languages,
+      iconColor: "text-rose-500",
+      bgColor: "bg-rose-50",
+    },
+    {
+      name: "Bangla",
+      icon: Languages,
+      iconColor: "text-yellow-600",
+      bgColor: "bg-yellow-50",
     },
   ];
 
