@@ -60,18 +60,18 @@ export default function Hero() {
                   <span className="inline-flex items-center">
                     <span className="relative inline-block h-10 w-10 rounded-full border-2 border-[#fdf6ef] overflow-hidden z-30 -mr-3 shadow">
                       <Image
-                        src="/tutor1.png"
+                        src="/about-ceo.png"
                         alt="Mentor 1"
                         fill
-                        className="object-cover"
+                        className="object-cover object-top"
                       />
                     </span>
                     <span className="relative inline-block h-10 w-10 rounded-full border-2 border-[#fdf6ef] overflow-hidden z-20 -mr-3 shadow">
                       <Image
-                        src="/tutor2.png"
+                        src="/cto.png"
                         alt="Mentor 2"
                         fill
-                        className="object-cover"
+                        className="object-cover object-top"
                       />
                     </span>
                     <span className="relative inline-block h-10 w-10 rounded-full border-2 border-[#fdf6ef] overflow-hidden z-10 shadow">
@@ -79,7 +79,7 @@ export default function Hero() {
                         src="/tutor4.png"
                         alt="Mentor 3"
                         fill
-                        className="object-cover"
+                        className="object-cover object-top"
                       />
                     </span>
                   </span>
@@ -157,11 +157,11 @@ export default function Hero() {
               <div className="absolute bottom-16 -right-2 lg:-right-6 z-20 hidden sm:block">
                 <div className="h-[110px] w-[130px] overflow-hidden rounded-2xl shadow-xl border-2 border-white">
                   <Image
-                    src="/tutor1.png"
+                    src="/about-ceo.png"
                     alt="Another mentor"
                     width={130}
                     height={110}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover object-top"
                   />
                 </div>
               </div>
@@ -176,10 +176,10 @@ export default function Hero() {
                 <div className="flex items-center gap-2.5">
                   <div className="relative h-8 w-8 rounded-full overflow-hidden border border-slate-100 shrink-0">
                     <Image
-                      src="/tutor1.png"
+                      src="/about-ceo.png"
                       alt="Bayzid Bostami"
                       fill
-                      className="object-cover"
+                      className="object-cover object-top"
                     />
                   </div>
                   <div>
