@@ -157,7 +157,7 @@ export default function Hero() {
               <div className="absolute bottom-16 -right-2 lg:-right-6 z-20 hidden sm:block">
                 <div className="h-[110px] w-[130px] overflow-hidden rounded-2xl shadow-xl border-2 border-white">
                   <Image
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300"
+                    src="/tutor1.png"
                     alt="Another mentor"
                     width={130}
                     height={110}
@@ -170,22 +170,22 @@ export default function Hero() {
               <div className="absolute bottom-6 left-0 lg:-left-8 z-30 w-[190px] rounded-2xl bg-white p-4 shadow-2xl border border-slate-100/80">
                 {/* Card header */}
                 <p className="text-[13px] font-bold text-[#1a1a2e] mb-3">
-                  UI Design Pattern
+                  Physics Masterclass
                 </p>
                 {/* Instructor row */}
                 <div className="flex items-center gap-2.5">
                   <div className="relative h-8 w-8 rounded-full overflow-hidden border border-slate-100 shrink-0">
                     <Image
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=80"
-                      alt="Dennis Barrett"
+                      src="/tutor1.png"
+                      alt="Bayzid Bostami"
                       fill
                       className="object-cover"
                     />
                   </div>
                   <div>
-                    <p className="text-[12px] font-bold text-[#1a1a2e] leading-tight">Dennis Barrett</p>
+                    <p className="text-[12px] font-bold text-[#1a1a2e] leading-tight">Bayzid Bostami</p>
                     <p className="text-[11px] text-slate-400 font-medium leading-tight mt-0.5">
-                      📚 123 Courses
+                      📚 10+ Courses
                     </p>
                   </div>
                 </div>
