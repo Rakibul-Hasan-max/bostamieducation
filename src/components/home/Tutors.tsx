@@ -16,20 +16,25 @@ export default function Tutors() {
       image: "/tutor2.png",
     },
     {
-      name: "Foysal Ahamed",
-      role: "Higher Math",
-      image: "/tutor3.png",
+      name: "Asrafi Islam Orpita",
+      role: "Biology",
+      image: "/tutor8.png",
+    },
+    {
+      name: "Md. Akash",
+      role: "Physics",
+      image: "/tutor7.png",
     },
     {
       name: "Akkash Ali",
       role: "General Math",
       image: "/tutor4.png",
     },
-    {
-      name: "Majharul Islam",
-      role: "Chemistry",
-      image: "/tutor5.png",
-    },
+    // {
+    //   name: "Majharul Islam",
+    //   role: "Chemistry",
+    //   image: "/tutor5.png",
+    // },
   ];
 
   return (

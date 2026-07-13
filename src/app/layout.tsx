@@ -6,7 +6,7 @@ import BackToTop from "@/components/ui/BackToTop";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Bostami Education - A EdTech platform",
+  title: "Bostami Education - An EdTech platform",
   description: "A next-generation EdTech platform for transforming education.",
   icons: {
     icon: "/icon.png",
