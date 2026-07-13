@@ -9,22 +9,28 @@ export default function Testimonials() {
 
   const testimonials = [
     {
-      name: "Amanda Seyfried",
-      role: "Python & Data Science Student",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300",
-      quote: "To deliver the exact experience of a traditional classroom, we have built features that simulate active collaboration, mentorship, and practical application. Choosing BostamiEducation was the best career decision I have ever made.",
+      name: "Arafat Hossain",
+      role: "HSC Physics Student — Dhaka College",
+      avatar: "/tutor7.png",
+      quote: "Bostami Education-এর Physics Masterclass আমার জীবন বদলে দিয়েছে। স্যারের পড়ানোর স্টাইল এত সহজ ও মজার যে কঠিন বিষয়গুলোও সহজ মনে হয়। ঢাকা বিশ্ববিদ্যালয়ে ভর্তির সুযোগ পেয়েছি সম্পূর্ণ এই কোর্সের সাহায্যে।",
     },
     {
-      name: "Marcus Aurelius",
-      role: "Digital Marketing Graduate",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300",
-      quote: "The quality of the instructors is beyond comparison. I went from having zero marketing knowledge to launching my own agency within four months. The flexible schedule helped me manage my regular job easily.",
+      name: "Nusrat Jahan",
+      role: "HSC ICT Student — Chittagong Girls' College",
+      avatar: "/tutor8.png",
+      quote: "ICT কোর্সটা আমার কাছে অনেক কঠিন মনে হত, কিন্তু Rakibul স্যার এমনভাবে বোঝালেন যে বোর্ড পরীক্ষায় A+ পেলাম। লাইভ ক্লাস এবং রেকর্ডেড ভিডিও দুটোই পাই, তাই কোনো কিছু মিস হয় না।",
     },
     {
-      name: "Sarah Jenkins",
-      role: "UI/UX Design Student",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=300",
-      quote: "BostamiEducation's hands-on projects are exceptional. The portfolio pieces I designed during the course directly helped me land my new job. The 1:1 mentorship program provided valuable constructive feedback.",
+      name: "Mehedi Hassan",
+      role: "Higher Math Student — Rajshahi College",
+      avatar: "/tutor4.png",
+      quote: "Higher Math-এ আমি সবসময় দুর্বল ছিলাম। কিন্তু Foysal স্যারের কোর্স করার পর বুঝতে পারলাম সমস্যাটা ছিল কনসেপ্টে। এখন Math আমার প্রিয় বিষয়। সবাইকে এই প্ল্যাটফর্ম রেকমেন্ড করব।",
+    },
+    {
+      name: "Sumaiya Akter",
+      role: "Biology Student — Viqarunnisa Noon College",
+      avatar: "/tutor3.png",
+      quote: "Orpita আপার Biology কোর্স অসাধারণ! প্রতিটা চ্যাপ্টার এত সুন্দরভাবে সাজানো যে মুখস্থ না করেই বুঝে পড়া যায়। মেডিকেল ভর্তি পরীক্ষায় অনেক উপকারে এসেছে।",
     },
   ];
 
