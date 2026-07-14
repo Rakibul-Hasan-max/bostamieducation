@@ -393,8 +393,8 @@ export default function AboutPage() {
                 { name: "Rakibul Hasan", role: "CTO", img: "/cto.png" },
                 { name: "Asrafi Islam Orpita", role: "Instructor", img: "/tutor8.png" },
                 { name: "Md. Akash", role: "Instructor", img: "/tutor7.png" },
-                { name: "Foysal Ahamed", role: "Instructor", img: "/tutor3.png" },
-                { name: "Akkash Ali", role: "Instructor", img: "/tutor4.png" },
+                { name: "Foysal Ahamed", role: "Instructor", img: "/tutor10.png" },
+                { name: "Akkash Ali", role: "Instructor", img: "/tutor11.png" },
                 { name: "Majharul Islam", role: "Instructor", img: "/tutor9.png" },
                 
               ].map((member, idx) => (

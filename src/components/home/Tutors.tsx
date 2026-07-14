@@ -8,12 +8,12 @@ export default function Tutors() {
     {
       name: "Bayzid Bostami",
       role: "Physics",
-      image: "/tutor1.png",
+      image: "/about-ceo.png",
     },
     {
       name: "Rakibul Hasan",
       role: "ICT",
-      image: "/tutor2.png",
+      image: "/cto.png",
     },
     {
       name: "Asrafi Islam Orpita",
@@ -28,7 +28,7 @@ export default function Tutors() {
     {
       name: "Akkash Ali",
       role: "General Math",
-      image: "/tutor4.png",
+      image: "/tutor11.png",
     },
     // {
     //   name: "Majharul Islam",

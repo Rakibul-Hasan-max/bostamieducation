@@ -76,7 +76,7 @@ export default function Hero() {
                     </span>
                     <span className="relative inline-block h-10 w-10 rounded-full border-2 border-[#fdf6ef] overflow-hidden z-10 shadow">
                       <Image
-                        src="/tutor4.png"
+                        src="/tutor10.png"
                         alt="Mentor 3"
                         fill
                         className="object-cover object-top"
