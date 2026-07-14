@@ -144,7 +144,7 @@ export default function Hero() {
               {/* ── Main large center image ── */}
               <div className="relative h-[380px] sm:h-[440px] md:h-[500px] w-[300px] sm:w-[360px] md:w-[420px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white z-10">
                 <Image
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=700"
+                  src="/hero.png"
                   alt="Featured mentor"
                   fill
                   className="object-cover object-top"
