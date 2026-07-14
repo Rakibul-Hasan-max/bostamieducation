@@ -43,10 +43,10 @@ export default function LoginPage() {
         <div className="flex items-center gap-4 mt-auto mb-4 z-10">
           <div className="flex -space-x-3">
             <div className="h-9 w-9 rounded-full border-[2px] border-white overflow-hidden relative">
-              <Image src="/tutor1.png" alt="Student" fill className="object-cover object-top" />
+              <Image src="/about-ceo.png" alt="Student" fill className="object-cover object-top" />
             </div>
             <div className="h-9 w-9 rounded-full border-[2px] border-white overflow-hidden relative">
-              <Image src="/tutor4.png" alt="Student" fill className="object-cover object-top" />
+              <Image src="/cto.png" alt="Student" fill className="object-cover object-top" />
             </div>
             <div className="h-9 w-9 rounded-full border-[2px] border-white overflow-hidden relative">
               <Image src="/tutor7.png" alt="Student" fill className="object-cover object-top" />

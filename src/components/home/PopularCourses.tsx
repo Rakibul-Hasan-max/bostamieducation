@@ -15,7 +15,7 @@ export default function PopularCourses() {
       price: "৳৩,০০০",
       originalPrice: "৳৫,০০০",
       author: "Bayzid Bostami",
-      authorImage: "/tutor1.png",
+      authorImage: "/about-ceo.png",
       tagColor: "bg-blue-50 text-blue-600",
     },
     {
@@ -27,7 +27,7 @@ export default function PopularCourses() {
       price: "৳১,৮০০",
       originalPrice: "৳৩,৫০০",
       author: "Rakibul Hasan",
-      authorImage: "/tutor2.png",
+      authorImage: "/cto.png",
       tagColor: "bg-indigo-50 text-indigo-600",
     },
     {
@@ -51,7 +51,7 @@ export default function PopularCourses() {
       price: "৳২,৮০০",
       originalPrice: "৳৫,০০০",
       author: "Foysal Ahamed",
-      authorImage: "/tutor3.png",
+      authorImage: "/tutor10.png",
       tagColor: "bg-orange-50 text-orange-600",
     },
     {
@@ -75,7 +75,7 @@ export default function PopularCourses() {
       price: "৳৫,০০০",
       originalPrice: "৳৮,০০০",
       author: "Rakibul Hasan",
-      authorImage: "/tutor2.png",
+      authorImage: "/cto.png",
       tagColor: "bg-indigo-50 text-indigo-600",
     },
   ];

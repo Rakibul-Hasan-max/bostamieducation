@@ -23,13 +23,13 @@ export default function Testimonials() {
     {
       name: "Mehedi Hassan",
       role: "Higher Math Student — Rajshahi College",
-      avatar: "/tutor4.png",
+      avatar: "/tutor10.png",
       quote: "Higher Math-এ আমি সবসময় দুর্বল ছিলাম। কিন্তু Foysal স্যারের কোর্স করার পর বুঝতে পারলাম সমস্যাটা ছিল কনসেপ্টে। এখন Math আমার প্রিয় বিষয়। সবাইকে এই প্ল্যাটফর্ম রেকমেন্ড করব।",
     },
     {
       name: "Sumaiya Akter",
       role: "Biology Student — Viqarunnisa Noon College",
-      avatar: "/tutor3.png",
+      avatar: "/tutor11.png",
       quote: "Orpita আপার Biology কোর্স অসাধারণ! প্রতিটা চ্যাপ্টার এত সুন্দরভাবে সাজানো যে মুখস্থ না করেই বুঝে পড়া যায়। মেডিকেল ভর্তি পরীক্ষায় অনেক উপকারে এসেছে।",
     },
   ];
