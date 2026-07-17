@@ -4,7 +4,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useState } from "react";
 import Image from "next/image";
-import { Award, BookOpen, Mail, Search, Users } from "lucide-react";
+import { Award, BookOpen, Mail, Search, Users, Star } from "lucide-react";
 import Link from "next/link";
 
 interface Mentor {
@@ -18,6 +18,7 @@ interface Mentor {
   facebook?: string;
   linkedin?: string;
   youtube?: string;
+  rating: number;
 }
 
 const mentorsData: Mentor[] = [
@@ -32,6 +33,7 @@ const mentorsData: Mentor[] = [
     facebook: "https://www.facebook.com/bostamieducationpage/",
     linkedin: "https://www.linkedin.com/in/bostami-education-ltd/",
     youtube: "https://www.youtube.com/@bostamieducation",
+    rating: 4.9,
   },
   {
     name: "Rakibul Hasan",
@@ -43,6 +45,7 @@ const mentorsData: Mentor[] = [
     courses: "8+",
     facebook: "https://facebook.com/rakibulhasan.cn",
     linkedin: "https://www.linkedin.com/in/rakibulhasan-bd/",
+    rating: 4.8,
   },
   {
     name: "Asrafi Islam Orpita",
@@ -52,7 +55,7 @@ const mentorsData: Mentor[] = [
     img: "/tutor8.png",
     students: "5k+",
     courses: "6+",
-    facebook: "https://facebook.com",
+    rating: 4.8,
   },
   {
     name: "Md. Akash",
@@ -62,7 +65,7 @@ const mentorsData: Mentor[] = [
     img: "/tutor7.png",
     students: "8k+",
     courses: "10+",
-    facebook: "https://facebook.com",
+    rating: 4.6,
   },
   {
     name: "Foysal Ahamed",
@@ -72,7 +75,7 @@ const mentorsData: Mentor[] = [
     img: "/tutor10.png",
     students: "6k+",
     courses: "7+",
-    facebook: "https://facebook.com",
+    rating: 4.6,
   },
   {
     name: "Akkash Ali",
@@ -82,7 +85,7 @@ const mentorsData: Mentor[] = [
     img: "/tutor11.png",
     students: "4k+",
     courses: "5+",
-    facebook: "https://facebook.com",
+    rating: 4.8,
   },
   {
     name: "Majharul Islam",
@@ -92,7 +95,7 @@ const mentorsData: Mentor[] = [
     img: "/tutor9.png",
     students: "3k+",
     courses: "4+",
-    facebook: "https://facebook.com",
+    rating: 4.7,
   },
 ];
 
@@ -180,70 +183,53 @@ export default function MentorsPage() {
         <section className="py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-6">
             {filteredMentors.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
                 {filteredMentors.map((mentor) => (
                   <div
                     key={mentor.name}
-                    className="group bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
+                    className="group flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300"
                   >
-                    {/* Mentor Photo Container */}
-                    <div className="relative w-full h-72 bg-slate-100 overflow-hidden">
-                      <Image
-                        src={mentor.img}
-                        alt={mentor.name}
-                        fill
-                        className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                      />
-                      {/* Department Badge */}
-                      <span className="absolute top-4 left-4 bg-[#1a1a2e]/85 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full tracking-wider border border-white/10 uppercase">
-                        {mentor.department}
-                      </span>
+                    {/* Mentor Photo Container - Fixed Width on SM+ */}
+                    <div className="relative w-full sm:w-[220px] md:w-[240px] shrink-0 h-64 sm:h-auto bg-slate-100 p-3">
+                      <div className="relative w-full h-full rounded-xl overflow-hidden">
+                        <Image
+                          src={mentor.img}
+                          alt={mentor.name}
+                          fill
+                          className="object-cover object-top"
+                        />
+                      </div>
                     </div>
 
                     {/* Content Details */}
-                    <div className="p-6 md:p-7 flex-1 flex flex-col justify-between">
+                    <div className="p-5 sm:p-6 md:p-7 flex-1 flex flex-col justify-between">
                       <div>
-                        {/* Name and Designation */}
-                        <div className="mb-4">
-                          <h3 className="text-lg font-bold text-[#1a1a2e] mb-1 group-hover:text-blue-600 transition-colors">
+                        {/* Name and Rating */}
+                        <div className="flex items-start justify-between mb-1">
+                          <h3 className="text-xl font-bold text-[#1a1a2e]">
                             {mentor.name}
                           </h3>
-                          <p className="text-[12px] font-bold text-slate-400">
-                            {mentor.role}
-                          </p>
+                          <div className="flex items-center gap-1 shrink-0 mt-1">
+                            <span className="text-[13px] font-bold text-slate-700">{mentor.rating}</span>
+                            <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                          </div>
                         </div>
+                        <p className="text-[13px] text-slate-500 mb-5">
+                          {mentor.role}
+                        </p>
 
                         {/* Bio */}
-                        <p className="text-[13px] text-slate-500 leading-relaxed mb-6 line-clamp-3">
+                        <p className="text-[14px] text-slate-500 leading-relaxed mb-6 line-clamp-3 md:line-clamp-2">
                           {mentor.bio}
                         </p>
                       </div>
 
-                      <div>
-                        {/* Stats Row */}
-                        <div className="grid grid-cols-2 gap-4 py-4 border-t border-slate-100 mb-4 text-[12px]">
-                          <div className="flex items-center gap-2">
-                            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50 text-blue-600 shrink-0">
-                              <Users className="h-4 w-4" />
-                            </div>
-                            <div>
-                              <p className="font-extrabold text-[#1a1a2e] leading-none">{mentor.students}</p>
-                              <p className="text-[10px] font-bold text-slate-400 mt-0.5">Students</p>
-                            </div>
-                          </div>
+                      {/* Footer Row: Department & Socials */}
+                      <div className="flex items-center justify-between mt-auto">
+                        <span className="text-[14px] font-bold text-[#f7823b]">
+                          {mentor.department}
+                        </span>
 
-                          <div className="flex items-center gap-2">
-                            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-orange-50 text-orange-600 shrink-0">
-                              <BookOpen className="h-4 w-4" />
-                            </div>
-                            <div>
-                              <p className="font-extrabold text-[#1a1a2e] leading-none">{mentor.courses}</p>
-                              <p className="text-[10px] font-bold text-slate-400 mt-0.5">Courses</p>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Social Links Row */}
                         <div className="flex items-center gap-2.5">
                           {mentor.facebook && (
                             <Link
