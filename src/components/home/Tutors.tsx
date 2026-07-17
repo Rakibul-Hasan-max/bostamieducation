@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRef } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Tutors() {
   const tutors = [
@@ -30,12 +32,27 @@ export default function Tutors() {
       role: "General Math",
       image: "/tutor11.png",
     },
-    // {
-    //   name: "Majharul Islam",
-    //   role: "Chemistry",
-    //   image: "/tutor5.png",
-    // },
+    {
+      name: "Majharul Islam",
+      role: "Chemistry",
+      image: "/tutor9.png",
+    },
+    {
+      name: "Foysal Ahamed",
+      role: "Higher Math",
+      image: "/tutor10.png",
+    }
   ];
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const { scrollLeft, clientWidth } = scrollRef.current;
+      const scrollTo = direction === "left" ? scrollLeft - clientWidth / 2 : scrollLeft + clientWidth / 2;
+      scrollRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
+    }
+  };
 
   return (
     <section className="w-full bg-white py-16 md:py-24">
@@ -44,23 +61,45 @@ export default function Tutors() {
         {/* Main Box with soft cream background */}
         <div className="bg-[#fffdf5] rounded-[32px] border border-amber-100/50 p-4 sm:p-8 md:p-16 shadow-sm shadow-amber-50">
           
-          {/* Header */}
-          <div className="mx-auto max-w-3xl text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-brand-navy leading-tight">
-              Meet the <span className="text-brand-coral">tutors</span> behind your <br />
-              learning journey
-            </h2>
-            <p className="mt-4 text-brand-slate text-[15px]">
-              Learn from a global team of developers, designers, marketers, and entrepreneurs.
-            </p>
+          {/* Header & Controls */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div className="max-w-2xl text-center md:text-left mx-auto md:mx-0">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-brand-navy leading-tight">
+                Meet the <span className="text-brand-coral">tutors</span> behind your <br className="hidden md:block" />
+                learning journey
+              </h2>
+              <p className="mt-4 text-brand-slate text-[15px]">
+                Learn from a global team of developers, designers, marketers, and entrepreneurs.
+              </p>
+            </div>
+            
+            {/* Navigation Buttons */}
+            <div className="flex items-center justify-center gap-3">
+              <button 
+                onClick={() => scroll("left")}
+                className="p-3 rounded-full bg-white border border-slate-200 text-brand-navy hover:bg-slate-50 hover:text-brand-coral transition-colors shadow-sm"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button 
+                onClick={() => scroll("right")}
+                className="p-3 rounded-full bg-white border border-slate-200 text-brand-navy hover:bg-slate-50 hover:text-brand-coral transition-colors shadow-sm"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
-          {/* Tutors Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6">
+          {/* Tutors Scroll Container */}
+          <div 
+            ref={scrollRef}
+            className="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-6 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
             {tutors.map((tutor, i) => (
               <div
                 key={i}
-                className="group flex flex-col bg-white rounded-2xl border border-slate-100/70 p-2.5 sm:p-4 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-200"
+                className="group flex flex-col bg-white rounded-2xl border border-slate-100/70 p-2.5 sm:p-4 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 w-[calc(50%-0.5rem)] sm:w-[calc(33.333%-1rem)] lg:w-[calc(20%-1.2rem)] snap-start shrink-0"
               >
                 {/* Photo container */}
                 <div className="relative aspect-[4/5] w-full rounded-xl overflow-hidden bg-slate-100">
