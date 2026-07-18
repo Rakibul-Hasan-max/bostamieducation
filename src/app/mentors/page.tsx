@@ -62,7 +62,7 @@ const mentorsData: Mentor[] = [
     role: "Physics Instructor",
     department: "Physics",
     bio: "Passionate about simplifying complex physics concepts for college and university admission seekers. Over 6 years of academic mentoring experience.",
-    img: "/tutor7.png",
+    img: "/tutor5.png",
     students: "8k+",
     courses: "10+",
     rating: 4.6,

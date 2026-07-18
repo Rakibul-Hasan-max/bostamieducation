@@ -444,7 +444,7 @@ export default function AboutPage() {
                 { name: "Bayzid Bostami", role: "CEO", img: "/about-ceo.png" },
                 { name: "Rakibul Hasan", role: "CTO", img: "/cto.png" },
                 { name: "Asrafi Islam Orpita", role: "Instructor", img: "/tutor8.png" },
-                { name: "Md. Akash", role: "Instructor", img: "/tutor7.png" },
+                { name: "Md. Akash", role: "Instructor", img: "/tutor5.png" },
                 { name: "Foysal Ahamed", role: "Instructor", img: "/tutor10.png" },
                 { name: "Akkash Ali", role: "Instructor", img: "/tutor11.png" },
                 { name: "Majharul Islam", role: "Instructor", img: "/tutor9.png" },

@@ -25,7 +25,7 @@ export default function Tutors() {
     {
       name: "Md. Akash",
       role: "Physics",
-      image: "/tutor7.png",
+      image: "/tutor5.png",
     },
     {
       name: "Akkash Ali",
