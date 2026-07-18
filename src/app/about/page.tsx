@@ -73,20 +73,25 @@ export default function AboutPage() {
 
       <main className="flex-1">
         {/* ══════════════════════════════════════
-            PAGE HEADER BANNER
+            PAGE HEADER — dot pattern background
         ══════════════════════════════════════ */}
-        <section className="bg-[#f0f5ff]/60 py-16 text-center border-b border-slate-100">
-          <div className="mx-auto max-w-7xl px-6">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-[#1a1a2e] tracking-tight">
+        <section
+          className="relative py-16 text-center overflow-hidden bg-white"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, #d1d5db 1.2px, transparent 1.2px)",
+            backgroundSize: "22px 22px",
+          }}
+        >
+          {/* White fade overlay so dots fade out from center */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/30 to-white/60 pointer-events-none" />
+          <div className="relative mx-auto max-w-7xl px-6">
+            <span className="block text-blue-600 text-sm font-bold tracking-wider mb-3">
               About Us
+            </span>
+            <h1 className="text-4xl md:text-5xl font-extrabold text-[#1a1a2e] tracking-tight">
+              More About Us
             </h1>
-            <div className="mt-4 flex items-center justify-center gap-2 text-sm font-semibold text-brand-slate">
-              <Link href="/" className="hover:text-brand-coral transition-colors">
-                Home
-              </Link>
-              <span>➔</span>
-              <span className="text-brand-coral">About Us</span>
-            </div>
           </div>
         </section>
 

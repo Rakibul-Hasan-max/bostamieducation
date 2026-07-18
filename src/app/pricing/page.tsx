@@ -140,7 +140,7 @@ export default function PricingPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/30 to-white/60 pointer-events-none" />
           <div className="relative mx-auto max-w-7xl px-6">
             <span className="block text-blue-600 text-sm font-bold tracking-wider mb-3">
-              PRICING PLANS
+              Pricing Plans
             </span>
             <h1 className="text-4xl md:text-5xl font-extrabold text-[#1a1a2e] tracking-tight mb-4">
               Simple, Transparent Pricing
