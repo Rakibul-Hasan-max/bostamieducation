@@ -74,7 +74,7 @@ export default function Navbar() {
             <button
               onClick={() => setDesktopPagesOpen(!desktopPagesOpen)}
               className={`flex items-center gap-1 cursor-pointer ${
-                ['/about', '/pricing', '/faq'].some(p => pathname.startsWith(p))
+                ['/about', '/pricing'].some(p => pathname.startsWith(p))
                   ? 'text-[15px] font-medium text-brand-yellow'
                   : 'text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors'
               }`}
@@ -163,7 +163,7 @@ export default function Navbar() {
               <button
                 onClick={() => setPagesOpen(!pagesOpen)}
                 className={`flex w-full items-center justify-between text-[15px] font-medium ${
-                  ['/about', '/pricing', '/faq'].some(p => pathname.startsWith(p))
+                  ['/about', '/pricing'].some(p => pathname.startsWith(p))
                     ? 'text-brand-yellow'
                     : 'text-brand-slate hover:text-brand-navy'
                 }`}
@@ -186,13 +186,6 @@ export default function Navbar() {
                     className="text-[14px] font-medium text-brand-slate hover:text-brand-navy"
                   >
                     Pricing Plans
-                  </Link>
-                  <Link
-                    href="/faq"
-                    onClick={() => { setIsOpen(false); setPagesOpen(false); }}
-                    className="text-[14px] font-medium text-brand-slate hover:text-brand-navy"
-                  >
-                    FAQs
                   </Link>
                 </div>
               )}
