@@ -4,6 +4,29 @@ import Image from "next/image";
 import Link from "next/link";
 import { CheckCircle2, Play, Users, BookOpen, Award, Target, Eye } from "lucide-react";
 
+// Inline social icons
+const IconFacebook = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+);
+const IconTwitter = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+  </svg>
+);
+const IconLinkedin = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+);
+const IconYoutube = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z" />
+  </svg>
+);
+
 export const metadata = {
   title: "About Us | Bostami Education",
   description: "Learn more about Bostami Education's mission, vision, history, and our team.",
@@ -255,13 +278,25 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pb-20 border-b border-slate-100">
               {/* CEO Photo */}
               <div className="lg:col-span-4 flex justify-center">
-                <div className="relative w-full max-w-[280px] aspect-[4/5] rounded-[24px] overflow-hidden shadow-md">
+                <div className="group relative w-full max-w-[280px] aspect-[4/5] rounded-[24px] overflow-hidden shadow-md">
                   <Image
                     src="/about-ceo.png"
                     alt="Bayzid Bostami - CEO"
                     fill
                     className="object-cover"
                   />
+                  {/* Social Links Overlay */}
+                  <div className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-4 bg-gradient-to-t from-black/70 to-transparent pt-12 pb-6 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                    <Link href="https://www.facebook.com/bostamieducation" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white text-blue-600 hover:bg-blue-600 hover:text-white transition-colors shadow-lg">
+                      <IconFacebook />
+                    </Link>
+                    <Link href="https://www.linkedin.com/in/bostami-education" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white text-blue-700 hover:bg-blue-700 hover:text-white transition-colors shadow-lg">
+                      <IconLinkedin />
+                    </Link>
+                    <Link href="https://www.youtube.com/@bostami-education" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white text-red-600 hover:bg-red-600 hover:text-white transition-colors shadow-lg">
+                      <IconYoutube />
+                    </Link>
+                  </div>
                 </div>
               </div>
               {/* CEO Quote */}
@@ -279,7 +314,7 @@ export default function AboutPage() {
 
             {/* CTO Block */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pt-20">
-              {/* CTO Quote (order 2 on desktop to align opposite to CEO) */}
+              {/* CTO Quote */}
               <div className="lg:col-span-8 flex flex-col items-start order-2 lg:order-1">
                 <div className="text-green-600 font-bold text-sm tracking-wider uppercase mb-2">Co-Founder & CTO</div>
                 <h3 className="text-2xl font-extrabold text-brand-navy mb-4">Rakibul Hasan</h3>
@@ -292,13 +327,25 @@ export default function AboutPage() {
               </div>
               {/* CTO Photo */}
               <div className="lg:col-span-4 flex justify-center order-1 lg:order-2">
-                <div className="relative w-full max-w-[280px] aspect-[4/5] rounded-[24px] overflow-hidden shadow-md">
+                <div className="group relative w-full max-w-[280px] aspect-[4/5] rounded-[24px] overflow-hidden shadow-md">
                   <Image
                     src="/cto.png"
                     alt="Rakibul Hasan - CTO"
                     fill
                     className="object-cover"
                   />
+                  {/* Social Links Overlay */}
+                  <div className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-4 bg-gradient-to-t from-black/70 to-transparent pt-12 pb-6 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                    <Link href="https://www.facebook.com/rakibulhasan.cn" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white text-blue-600 hover:bg-blue-600 hover:text-white transition-colors shadow-lg">
+                      <IconFacebook />
+                    </Link>
+                    {/* <Link href="https://x.com/rakibul_h4041" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white text-sky-500 hover:bg-sky-500 hover:text-white transition-colors shadow-lg">
+                      <IconTwitter />
+                    </Link> */}
+                    <Link href="https://www.linkedin.com/in/rakibulhasan-bd/" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white text-blue-700 hover:bg-blue-700 hover:text-white transition-colors shadow-lg">
+                      <IconLinkedin />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
