@@ -4,8 +4,8 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useState } from "react";
 import Image from "next/image";
-import { BookOpen, Clock, Search, Star, SlidersHorizontal, ArrowUpDown } from "lucide-react";
 import Link from "next/link";
+import { Clock, Search, Star, ArrowUpDown, Heart, LayoutGrid } from "lucide-react";
 
 interface Course {
   id: string;
@@ -14,13 +14,13 @@ interface Course {
   price: string;
   numericPrice: number; // For sorting
   duration: string;
-  lectures: string;
+  lectures: number;
   rating: number;
   reviewCount: number;
-  instructorName: string;
-  instructorImg: string;
   img: string;
-  badge?: string;
+  level: string;
+  levelBg: string;
+  levelColor: string;
 }
 
 const coursesData: Course[] = [
@@ -28,117 +28,121 @@ const coursesData: Course[] = [
     id: "hsc-physics-1st",
     title: "HSC Physics 1st Paper Complete Syllabus Course",
     category: "Physics",
-    price: "৳২,৫০০",
+    price: "৳2,500",
     numericPrice: 2500,
-    duration: "40 Hours",
-    lectures: "50 Lectures",
+    duration: "40h 30m",
+    lectures: 50,
     rating: 4.8,
     reviewCount: 156,
-    instructorName: "Md. Akash",
-    instructorImg: "/tutor7.png",
     img: "/studio1.png",
-    badge: "Recommended",
+    level: "All level",
+    levelBg: "bg-purple-50",
+    levelColor: "text-purple-600",
   },
   {
     id: "univ-physics-masterclass",
     title: "University Admission Physics Masterclass",
     category: "Physics",
-    price: "৳৩,০০০",
+    price: "৳3,000",
     numericPrice: 3000,
-    duration: "60 Hours",
-    lectures: "75 Lectures",
+    duration: "60h 15m",
+    lectures: 75,
     rating: 4.9,
     reviewCount: 320,
-    instructorName: "Bayzid Bostami",
-    instructorImg: "/about-ceo.png",
     img: "/studio4.png",
-    badge: "Popular",
+    level: "Advanced",
+    levelBg: "bg-orange-50",
+    levelColor: "text-orange-500",
   },
   {
     id: "hsc-math-admission",
     title: "HSC Higher Mathematics Admission Prep Special",
     category: "Math",
-    price: "৳২,৮০০",
+    price: "৳2,800",
     numericPrice: 2800,
-    duration: "55 Hours",
-    lectures: "70 Lectures",
+    duration: "55h 0m",
+    lectures: 70,
     rating: 4.7,
     reviewCount: 184,
-    instructorName: "Foysal Ahamed",
-    instructorImg: "/tutor10.png",
     img: "/studio2.png",
+    level: "Intermediate",
+    levelBg: "bg-blue-50",
+    levelColor: "text-blue-500",
   },
   {
     id: "calculus-geometry",
     title: "Calculus & Geometry Foundation Masterclass",
     category: "Math",
-    price: "৳১,৫০০",
+    price: "৳1,500",
     numericPrice: 1500,
-    duration: "30 Hours",
-    lectures: "40 Lectures",
+    duration: "30h 45m",
+    lectures: 40,
     rating: 4.6,
     reviewCount: 98,
-    instructorName: "Akkash Ali",
-    instructorImg: "/tutor11.png",
     img: "/studio1.png",
+    level: "Beginner",
+    levelBg: "bg-emerald-50",
+    levelColor: "text-emerald-500",
   },
   {
     id: "chemistry-2nd-organic",
-    title: "HSC Chemistry 2nd Paper Organic Chemistry Special",
+    title: "HSC Chemistry 2nd Paper Organic Chemistry",
     category: "Chemistry",
-    price: "৳২,২০০",
+    price: "৳2,200",
     numericPrice: 2200,
-    duration: "45 Hours",
-    lectures: "55 Lectures",
+    duration: "45h 20m",
+    lectures: 55,
     rating: 4.8,
     reviewCount: 215,
-    instructorName: "Majharul Islam",
-    instructorImg: "/tutor9.png",
     img: "/studio3.png",
-    badge: "Hot",
+    level: "All level",
+    levelBg: "bg-purple-50",
+    levelColor: "text-purple-600",
   },
   {
     id: "biology-crash",
     title: "HSC Biology Complete Syllabus Crash Course",
     category: "Biology",
-    price: "৳২,০০০",
+    price: "৳2,000",
     numericPrice: 2000,
-    duration: "38 Hours",
-    lectures: "48 Lectures",
+    duration: "38h 10m",
+    lectures: 48,
     rating: 4.7,
     reviewCount: 142,
-    instructorName: "Asrafi Islam Orpita",
-    instructorImg: "/tutor8.png",
     img: "/studio5.png",
+    level: "Intermediate",
+    levelBg: "bg-blue-50",
+    levelColor: "text-blue-500",
   },
   {
     id: "hsc-ict-prep",
     title: "HSC ICT Board Prep & Practical Course",
     category: "Technical & ICT",
-    price: "৳১,৮০০",
+    price: "৳1,800",
     numericPrice: 1800,
-    duration: "35 Hours",
-    lectures: "45 Lectures",
+    duration: "35h 0m",
+    lectures: 45,
     rating: 4.9,
     reviewCount: 260,
-    instructorName: "Rakibul Hasan",
-    instructorImg: "/cto.png",
     img: "/studio2.png",
-    badge: "Best Seller",
+    level: "Beginner",
+    levelBg: "bg-emerald-50",
+    levelColor: "text-emerald-500",
   },
   {
     id: "fullstack-js",
     title: "Full-Stack Web Development Foundation Bootcamp",
     category: "Technical & ICT",
-    price: "৳৫,০০০",
+    price: "৳5,000",
     numericPrice: 5000,
-    duration: "80 Hours",
-    lectures: "120 Lectures",
+    duration: "80h 30m",
+    lectures: 120,
     rating: 4.9,
     reviewCount: 195,
-    instructorName: "Rakibul Hasan",
-    instructorImg: "/cto.png",
     img: "/studio4.png",
+    level: "Advanced",
+    levelBg: "bg-orange-50",
+    levelColor: "text-orange-500",
   },
 ];
 
@@ -153,9 +157,7 @@ export default function CoursesPage() {
   const filteredCourses = coursesData
     .filter((course) => {
       const matchesCategory = selectedCategory === "All" || course.category === selectedCategory;
-      const matchesSearch =
-        course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        course.instructorName.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     })
     .sort((a, b) => {
@@ -254,92 +256,70 @@ export default function CoursesPage() {
         <section className="py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-6">
             {filteredCourses.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {filteredCourses.map((course) => (
                   <div
                     key={course.id}
-                    className="group bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                    className="group flex flex-col bg-white rounded-[16px] border border-slate-100 shadow-[0_4px_24px_-12px_rgba(0,0,0,0.08)] overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                   >
-                    {/* Course Thumbnail */}
-                    <div className="relative w-full aspect-[16/10] bg-slate-100 overflow-hidden">
+                    {/* Image Container */}
+                    <div className="relative aspect-[5/4] w-full overflow-hidden bg-slate-50">
                       <Image
                         src={course.img}
                         alt={course.title}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       />
-                      {/* Category Badge */}
-                      <span className="absolute top-4 left-4 bg-[#1a1a2e]/85 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full tracking-wider border border-white/10 uppercase">
-                        {course.category}
-                      </span>
-                      {/* Optional Custom Badge (Hot, Best Seller, etc) */}
-                      {course.badge && (
-                        <span className="absolute top-4 right-4 bg-orange-500 text-white text-[9px] font-black px-2.5 py-0.5 rounded-md uppercase tracking-wider shadow">
-                          {course.badge}
-                        </span>
-                      )}
                     </div>
 
-                    {/* Course Details Content */}
-                    <div className="p-6 flex-1 flex flex-col justify-between">
-                      <div>
-                        {/* Instructor Info */}
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="relative h-6 w-6 rounded-full overflow-hidden border border-slate-100 bg-slate-50">
-                            <Image
-                              src={course.instructorImg}
-                              alt={course.instructorName}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                          <span className="text-[11px] font-bold text-slate-400">
-                            {course.instructorName}
-                          </span>
-                        </div>
-
-                        {/* Title */}
-                        <h3 className="text-[15px] font-extrabold text-[#1a1a2e] leading-snug mb-3 group-hover:text-blue-600 transition-colors line-clamp-2 min-h-[44px]">
-                          {course.title}
-                        </h3>
-
-                        {/* Rating & Reviews */}
-                        <div className="flex items-center gap-1.5 mb-4">
-                          <div className="flex items-center text-amber-400">
-                            <Star className="h-3.5 w-3.5 fill-current" />
-                          </div>
-                          <span className="text-xs font-bold text-[#1a1a2e]">{course.rating}</span>
-                          <span className="text-[11px] text-slate-400 font-bold">
-                            ({course.reviewCount} reviews)
-                          </span>
-                        </div>
+                    {/* Course Info */}
+                    <div className="p-5">
+                      {/* Level and Heart */}
+                      <div className="flex items-center justify-between mb-3">
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${course.levelBg} ${course.levelColor}`}>
+                          {course.level}
+                        </span>
+                        <Heart className="w-4 h-4 text-slate-400 hover:text-red-500 hover:fill-red-500 transition-colors cursor-pointer" />
                       </div>
 
-                      <div>
-                        {/* Stats Row */}
-                        <div className="flex items-center justify-between py-3 border-y border-slate-100 mb-5 text-[11px] text-slate-400 font-bold">
-                          <div className="flex items-center gap-1.5">
-                            <Clock className="h-3.5 w-3.5 text-slate-300" />
-                            <span>{course.duration}</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <BookOpen className="h-3.5 w-3.5 text-slate-300" />
-                            <span>{course.lectures}</span>
-                          </div>
-                        </div>
+                      {/* Title */}
+                      <h3 className="text-[15px] font-bold text-slate-900 leading-snug line-clamp-2 mb-4 group-hover:text-blue-600 transition-colors flex-1">
+                        {course.title}
+                      </h3>
 
-                        {/* Price & Action Row */}
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-[10px] font-bold text-slate-400 leading-none mb-0.5">Price</p>
-                            <p className="text-lg font-black text-blue-600 leading-none">{course.price}</p>
+                      {/* Rating & Price */}
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-1.5">
+                          <div className="flex items-center gap-0.5 text-amber-400">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star 
+                                key={star} 
+                                className={`w-3.5 h-3.5 ${star <= Math.floor(course.rating) ? 'fill-amber-400' : 'text-slate-200'}`} 
+                              />
+                            ))}
                           </div>
-                          <Link
-                            href="/register"
-                            className="py-2.5 px-5 bg-[#ffd260] hover:bg-[#fcc13d] text-[#1a1a2e] text-[11px] font-extrabold rounded-xl transition shadow-md shadow-yellow-500/5 cursor-pointer"
-                          >
-                            Enroll Now
-                          </Link>
+                          <span className="text-[12px] font-semibold text-slate-600 ml-0.5">
+                            {course.rating.toFixed(1)}/5.0
+                          </span>
+                        </div>
+                        <span className="text-[14px] font-extrabold text-slate-900">
+                          {course.price}
+                        </span>
+                      </div>
+
+                      {/* Separator */}
+                      <div className="border-t border-slate-100 my-3" />
+
+                      {/* Footer (Time & Lectures) */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 text-slate-500">
+                          <Clock className="w-3.5 h-3.5 text-orange-500" />
+                          <span className="text-[12px] font-medium">{course.duration}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-slate-500">
+                          <LayoutGrid className="w-3.5 h-3.5 text-orange-500" />
+                          <span className="text-[12px] font-medium">{course.lectures} lectures</span>
                         </div>
                       </div>
                     </div>

@@ -2,166 +2,188 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Star, ArrowRight } from "lucide-react";
+import { Star, ArrowRight, Heart, Clock, LayoutGrid } from "lucide-react";
 
 export default function PopularCourses() {
   const courses = [
     {
       title: "University Admission Physics Masterclass",
-      category: "Physics",
+      level: "All level",
+      levelBg: "bg-purple-50",
+      levelColor: "text-purple-600",
       image: "/studio4.png",
-      rating: 4.9,
-      reviews: 320,
-      price: "৳৩,০০০",
-      originalPrice: "৳৫,০০০",
-      author: "Bayzid Bostami",
-      authorImage: "/about-ceo.png",
-      tagColor: "bg-blue-50 text-blue-600",
+      rating: 4.5,
+      price: "৳3,000",
+      duration: "12h 56m",
+      lectures: 15,
     },
     {
       title: "HSC ICT Board Prep & Practical Course",
-      category: "Technical & ICT",
+      level: "Beginner",
+      levelBg: "bg-emerald-50",
+      levelColor: "text-emerald-500",
       image: "/studio2.png",
-      rating: 4.9,
-      reviews: 260,
-      price: "৳১,৮০০",
-      originalPrice: "৳৩,৫০০",
-      author: "Rakibul Hasan",
-      authorImage: "/cto.png",
-      tagColor: "bg-indigo-50 text-indigo-600",
+      rating: 4.5,
+      price: "৳1,800",
+      duration: "9h 56m",
+      lectures: 65,
     },
     {
-      title: "HSC Chemistry 2nd Paper Organic Chemistry Special",
-      category: "Chemistry",
+      title: "HSC Chemistry 2nd Paper Organic Chemistry",
+      level: "Beginner",
+      levelBg: "bg-emerald-50",
+      levelColor: "text-emerald-500",
       image: "/studio3.png",
-      rating: 4.8,
-      reviews: 215,
-      price: "৳২,২০০",
-      originalPrice: "৳৪,০০০",
-      author: "Majharul Islam",
-      authorImage: "/tutor9.png",
-      tagColor: "bg-emerald-50 text-emerald-600",
+      rating: 4.5,
+      price: "৳2,200",
+      duration: "5h 56m",
+      lectures: 32,
     },
     {
-      title: "HSC Higher Mathematics Admission Prep Special",
-      category: "Math",
+      title: "HSC Higher Mathematics Admission Prep",
+      level: "Beginner",
+      levelBg: "bg-emerald-50",
+      levelColor: "text-emerald-500",
       image: "/studio2.png",
-      rating: 4.7,
-      reviews: 184,
-      price: "৳২,৮০০",
-      originalPrice: "৳৫,০০০",
-      author: "Foysal Ahamed",
-      authorImage: "/tutor10.png",
-      tagColor: "bg-orange-50 text-orange-600",
+      rating: 4.0,
+      price: "৳2,800",
+      duration: "18h 56m",
+      lectures: 99,
     },
     {
       title: "HSC Biology Complete Syllabus Crash Course",
-      category: "Biology",
+      level: "Intermediate",
+      levelBg: "bg-blue-50",
+      levelColor: "text-blue-500",
       image: "/studio5.png",
-      rating: 4.7,
-      reviews: 142,
-      price: "৳২,০০০",
-      originalPrice: "৳৩,৫০০",
-      author: "Asrafi Islam Orpita",
-      authorImage: "/tutor8.png",
-      tagColor: "bg-green-50 text-green-600",
+      rating: 4.5,
+      price: "৳2,000",
+      duration: "14h 30m",
+      lectures: 42,
     },
     {
-      title: "Full-Stack Web Development Foundation Bootcamp",
-      category: "Technical & ICT",
+      title: "Full-Stack Web Development Bootcamp",
+      level: "All level",
+      levelBg: "bg-purple-50",
+      levelColor: "text-purple-600",
       image: "/studio4.png",
+      rating: 4.8,
+      price: "৳5,000",
+      duration: "40h 15m",
+      lectures: 120,
+    },
+    {
+      title: "Python for Data Science and Machine Learning",
+      level: "Advanced",
+      levelBg: "bg-orange-50",
+      levelColor: "text-orange-500",
+      image: "/studio1.png",
       rating: 4.9,
-      reviews: 195,
-      price: "৳৫,০০০",
-      originalPrice: "৳৮,০০০",
-      author: "Rakibul Hasan",
-      authorImage: "/cto.png",
-      tagColor: "bg-indigo-50 text-indigo-600",
+      price: "৳4,500",
+      duration: "25h 10m",
+      lectures: 85,
+    },
+    {
+      title: "Digital Marketing and SEO Masterclass",
+      level: "Beginner",
+      levelBg: "bg-emerald-50",
+      levelColor: "text-emerald-500",
+      image: "/studio3.png",
+      rating: 4.6,
+      price: "৳2,500",
+      duration: "8h 45m",
+      lectures: 28,
     },
   ];
 
   return (
-    <section className="w-full bg-white py-16 md:py-24">
+    <section className="w-full bg-slate-50/50 py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6">
         
         {/* Header Row */}
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
           <div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-brand-navy">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900">
               Most <span className="text-brand-coral">popular</span> courses
             </h2>
-            <p className="mt-2 text-brand-slate text-[15px]">
+            <p className="mt-2 text-slate-500 text-[15px]">
               Explore our best selling courses of all time and master new skills.
             </p>
           </div>
           <Link
             href="/courses"
-            className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-brand-navy hover:bg-slate-50 transition-colors"
+            className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-800 hover:bg-slate-50 transition-colors"
           >
             <span>View all courses</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
-        {/* Courses Grid */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Courses Grid - 4 Columns */}
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {courses.map((course, index) => (
             <div
               key={index}
-              className="group flex flex-col bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:scale-[1.01] transition-all duration-300 overflow-hidden"
+              className="group flex flex-col bg-white rounded-[16px] border border-slate-100 shadow-[0_4px_24px_-12px_rgba(0,0,0,0.08)] overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
             >
               {/* Image Container */}
-              <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
+              <div className="relative aspect-[5/4] w-full overflow-hidden bg-slate-50">
                 <Image
                   src={course.image}
                   alt={course.title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
               </div>
 
               {/* Course Info */}
-              <div className="flex flex-1 flex-col p-6">
-                <div className="flex items-center justify-between">
-                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${course.tagColor}`}>
-                    {course.category}
+              <div className="p-5">
+                {/* Level and Heart */}
+                <div className="flex items-center justify-between mb-3">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${course.levelBg} ${course.levelColor}`}>
+                    {course.level}
                   </span>
-                  <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                    <span className="text-sm font-bold text-brand-navy">{course.rating.toFixed(1)}</span>
-                    <span className="text-xs text-brand-slate">({course.reviews})</span>
-                  </div>
+                  <Heart className="w-4 h-4 text-slate-400 hover:text-red-500 hover:fill-red-500 transition-colors cursor-pointer" />
                 </div>
 
-                <h3 className="mt-4 flex-1 text-base font-bold text-brand-navy line-clamp-2 group-hover:text-brand-coral transition-colors">
+                {/* Title */}
+                <h3 className="text-[15px] font-bold text-slate-900 leading-snug line-clamp-2 mb-2 group-hover:text-blue-600 transition-colors h-11">
                   {course.title}
                 </h3>
 
-                {/* Separator */}
-                <div className="my-5 border-t border-slate-100" />
-
-                {/* Price and Instructor */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="relative h-9 w-9 overflow-hidden rounded-full border border-slate-100">
-                      <Image
-                        src={course.authorImage}
-                        alt={course.author}
-                        fill
-                        className="object-cover"
-                      />
+                {/* Rating & Price */}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-0.5 text-amber-400">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star 
+                          key={star} 
+                          className={`w-3.5 h-3.5 ${star <= Math.floor(course.rating) ? 'fill-amber-400' : 'text-slate-200'}`} 
+                        />
+                      ))}
                     </div>
-                    <span className="text-sm font-medium text-brand-navy">{course.author}</span>
+                    <span className="text-[12px] font-semibold text-slate-600 ml-0.5">
+                      {course.rating.toFixed(1)}/5.0
+                    </span>
                   </div>
+                  <span className="text-[14px] font-extrabold text-slate-900">
+                    {course.price}
+                  </span>
+                </div>
 
-                  <div className="text-right">
-                    <span className="text-xs text-brand-slate line-through mr-1.5 font-medium">
-                      {course.originalPrice}
-                    </span>
-                    <span className="text-base font-extrabold text-brand-navy">
-                      {course.price}
-                    </span>
+                {/* Separator */}
+                <div className="border-t border-slate-100 my-3" />
+
+                {/* Footer (Time & Lectures) */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-slate-500">
+                    <Clock className="w-3.5 h-3.5 text-orange-500" />
+                    <span className="text-[12px] font-medium">{course.duration}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-slate-500">
+                    <LayoutGrid className="w-3.5 h-3.5 text-orange-500" />
+                    <span className="text-[12px] font-medium">{course.lectures} lectures</span>
                   </div>
                 </div>
               </div>
