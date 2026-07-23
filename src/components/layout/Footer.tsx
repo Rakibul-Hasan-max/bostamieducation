@@ -1,10 +1,33 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, Globe, ChevronUp } from "lucide-react";
 
 export default function Footer() {
+  const [langOpen, setLangOpen] = useState(false);
+  const [selectedLang, setSelectedLang] = useState<"en" | "bn">("en");
+  const langRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const languages = [
+    { code: "en" as const, label: "English", flag: "🇺🇸" },
+    { code: "bn" as const, label: "বাংলা", flag: "🇧🇩" },
+  ];
+
+  const currentLang = languages.find((l) => l.code === selectedLang)!;
+
   return (
     <footer className="w-full bg-[#f8fafc] border-t border-slate-100/80 pt-16 pb-8 text-brand-navy">
       <div className="mx-auto max-w-7xl px-6">
@@ -161,7 +184,41 @@ export default function Footer() {
           {/* Design and developed */}
           <p>Design and developed by <a href="https://epciln.com" target="_blank">Epciln</a></p>
 
-          <div className="flex gap-4">
+          <div className="flex items-center gap-5">
+            {/* Language Selector */}
+            <div ref={langRef} className="relative">
+              <button
+                onClick={() => setLangOpen(!langOpen)}
+                className="flex items-center gap-1.5 text-xs font-semibold text-brand-slate hover:text-brand-navy transition-colors cursor-pointer"
+              >
+                <Globe className="h-3.5 w-3.5" />
+                <span>{currentLang.label}</span>
+                <ChevronUp className={`h-3 w-3 transition-transform duration-200 ${langOpen ? "" : "rotate-180"}`} />
+              </button>
+
+              {langOpen && (
+                <div className="absolute bottom-full left-0 mb-2 w-36 rounded-xl border border-slate-100 bg-white p-1.5 shadow-xl z-50">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => {
+                        setSelectedLang(lang.code);
+                        setLangOpen(false);
+                      }}
+                      className={`flex items-center gap-2.5 w-full rounded-lg px-3 py-2 text-xs transition-colors cursor-pointer ${
+                        selectedLang === lang.code
+                          ? "bg-blue-50 text-blue-600 font-bold"
+                          : "text-brand-slate hover:bg-slate-50 hover:text-brand-navy font-medium"
+                      }`}
+                    >
+                      <span className="text-base leading-none">{lang.flag}</span>
+                      <span>{lang.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <Link href="/privacy" className="hover:text-brand-navy">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-brand-navy">Terms of Service</Link>
           </div>
