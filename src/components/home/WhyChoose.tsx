@@ -1,16 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import { CheckCircle2, Star } from "lucide-react";
 
 export default function WhyChoose() {
+  const t = useTranslations("WhyChoose");
+
   const benefits = [
-    "1:1 Mentorship from industry leaders",
-    "Flexible schedule tailored to your life",
-    "Hands-on projects with real-world impact",
-    "Expert instructors with proven track records",
-    "Industry-recognized certificates",
+    t("benefit1"),
+    t("benefit2"),
+    t("benefit3"),
+    t("benefit4"),
+    t("benefit5"),
   ];
 
   return (
@@ -21,15 +24,13 @@ export default function WhyChoose() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-16">
           <div className="col-span-1 md:col-span-6">
             <h2 className="text-3xl md:text-5xl font-extrabold text-brand-navy leading-tight">
-              From <span className="text-brand-coral">knowledge</span> <br />
-              to action
+              {t("title1")} <span className="text-brand-coral">{t("titleCoral")}</span> <br />
+              {t("title2")}
             </h2>
           </div>
           <div className="col-span-1 md:col-span-6 md:pt-2">
             <p className="text-brand-slate text-[15px] sm:text-base leading-relaxed">
-              To deliver the exact experience of a traditional classroom, we have built features that 
-              simulate active collaboration, mentorship, and practical application. Learn by doing 
-              with industry leaders who guide you at every step of your career.
+              {t("description")}
             </p>
           </div>
         </div>
@@ -54,7 +55,7 @@ export default function WhyChoose() {
           {/* Right: Benefits checklist and Stats */}
           <div className="col-span-1 lg:col-span-7 flex flex-col justify-center">
             <h3 className="text-2xl md:text-3xl font-extrabold text-brand-navy mb-6">
-              Why choose BostamiEducation?
+              {t("whyChooseTitle")}
             </h3>
 
             {/* Checklist */}
@@ -73,7 +74,7 @@ export default function WhyChoose() {
                 href="/about"
                 className="inline-block rounded-full bg-brand-yellow px-8 py-3 text-[15px] font-bold text-brand-navy shadow-md shadow-amber-100 hover:bg-brand-yellow-hover hover:scale-105 active:scale-95 transition-all duration-200"
               >
-                Read details
+                {t("readDetails")}
               </Link>
             </div>
 
@@ -87,12 +88,12 @@ export default function WhyChoose() {
                     <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                   </div>
                 </div>
-                <p className="text-xs text-brand-slate font-medium mt-1">Student review rating</p>
+                <p className="text-xs text-brand-slate font-medium mt-1">{t("studentReview")}</p>
               </div>
 
               <div>
                 <div className="text-2xl font-extrabold text-brand-navy">20k+</div>
-                <p className="text-xs text-brand-slate font-medium mt-1">Active global students</p>
+                <p className="text-xs text-brand-slate font-medium mt-1">{t("activeStudents")}</p>
               </div>
             </div>
 

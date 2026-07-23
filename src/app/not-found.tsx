@@ -1,5 +1,6 @@
 import NotFoundComponent from "@/components/ui/NotFound";
 import "@/app/globals.css";
+import { NextIntlClientProvider } from "next-intl";
 
 export const metadata = {
   title: "404 - Page Not Found | Bostami Education",
@@ -10,10 +11,15 @@ export const metadata = {
 // because if a route doesn't match any locale (e.g. /unknown), it falls back here.
 // Since the root layout is inside [locale], this component must include html and body tags.
 export default function GlobalNotFound() {
+  // Statically load the default English dictionary for the fallback 404 page
+  const messages = require("../../messages/en.json");
+
   return (
     <html lang="en">
       <body className="min-h-full flex flex-col font-sans">
-        <NotFoundComponent />
+        <NextIntlClientProvider locale="en" messages={messages}>
+          <NotFoundComponent />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

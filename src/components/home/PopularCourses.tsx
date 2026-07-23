@@ -1,14 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import { Star, ArrowRight, Heart, Clock, LayoutGrid } from "lucide-react";
 
 export default function PopularCourses() {
+  const t = useTranslations("PopularCourses");
+
   const courses = [
     {
-      title: "University Admission Physics Masterclass",
-      level: "All level",
+      title: t("physicsMasterclass"),
+      level: t("allLevel"),
       levelBg: "bg-purple-50",
       levelColor: "text-purple-600",
       image: "/studio4.png",
@@ -18,8 +21,8 @@ export default function PopularCourses() {
       lectures: 15,
     },
     {
-      title: "HSC ICT Board Prep & Practical Course",
-      level: "Beginner",
+      title: t("ictBoardPrep"),
+      level: t("beginner"),
       levelBg: "bg-emerald-50",
       levelColor: "text-emerald-500",
       image: "/studio2.png",
@@ -29,8 +32,8 @@ export default function PopularCourses() {
       lectures: 65,
     },
     {
-      title: "HSC Chemistry 2nd Paper Organic Chemistry",
-      level: "Beginner",
+      title: t("organicChemistry"),
+      level: t("beginner"),
       levelBg: "bg-emerald-50",
       levelColor: "text-emerald-500",
       image: "/studio3.png",
@@ -40,8 +43,8 @@ export default function PopularCourses() {
       lectures: 32,
     },
     {
-      title: "HSC Higher Mathematics Admission Prep",
-      level: "Beginner",
+      title: t("higherMathAdmission"),
+      level: t("beginner"),
       levelBg: "bg-emerald-50",
       levelColor: "text-emerald-500",
       image: "/studio2.png",
@@ -51,8 +54,8 @@ export default function PopularCourses() {
       lectures: 99,
     },
     {
-      title: "HSC Biology Complete Syllabus Crash Course",
-      level: "Intermediate",
+      title: t("biologyCrash"),
+      level: t("intermediate"),
       levelBg: "bg-blue-50",
       levelColor: "text-blue-500",
       image: "/studio5.png",
@@ -62,8 +65,8 @@ export default function PopularCourses() {
       lectures: 42,
     },
     {
-      title: "Full-Stack Web Development Bootcamp",
-      level: "All level",
+      title: t("webDevBootcamp"),
+      level: t("allLevel"),
       levelBg: "bg-purple-50",
       levelColor: "text-purple-600",
       image: "/studio4.png",
@@ -73,8 +76,8 @@ export default function PopularCourses() {
       lectures: 120,
     },
     {
-      title: "Python for Data Science and Machine Learning",
-      level: "Advanced",
+      title: t("pythonDataScience"),
+      level: t("advanced"),
       levelBg: "bg-orange-50",
       levelColor: "text-orange-500",
       image: "/studio1.png",
@@ -84,8 +87,8 @@ export default function PopularCourses() {
       lectures: 85,
     },
     {
-      title: "Digital Marketing and SEO Masterclass",
-      level: "Beginner",
+      title: t("digitalMarketing"),
+      level: t("beginner"),
       levelBg: "bg-emerald-50",
       levelColor: "text-emerald-500",
       image: "/studio3.png",
@@ -104,17 +107,17 @@ export default function PopularCourses() {
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
           <div>
             <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900">
-              Most <span className="text-brand-coral">popular</span> courses
+              {t("title")} <span className="text-brand-coral">{t("titleCoral")}</span> {t("titleEnd")}
             </h2>
             <p className="mt-2 text-slate-500 text-[15px]">
-              Explore our best selling courses of all time and master new skills.
+              {t("subtitle")}
             </p>
           </div>
           <Link
             href="/courses"
             className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-800 hover:bg-slate-50 transition-colors"
           >
-            <span>View all courses</span>
+            <span>{t("viewAll")}</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -183,7 +186,7 @@ export default function PopularCourses() {
                   </div>
                   <div className="flex items-center gap-1.5 text-slate-500">
                     <LayoutGrid className="w-3.5 h-3.5 text-orange-500" />
-                    <span className="text-[12px] font-medium">{course.lectures} lectures</span>
+                    <span className="text-[12px] font-medium">{course.lectures} {t("lectures")}</span>
                   </div>
                 </div>
               </div>

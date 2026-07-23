@@ -1,45 +1,49 @@
 "use client";
 
-const steps = [
-  {
-    badge: "Step 1",
-    title: "Explore categories",
-    desc: "Browse through our various course categories to find the area that interests you the most.",
-    yOffset: 300,
-  },
-  {
-    badge: "Step 2",
-    title: "Select your course",
-    desc: "Our course listings include all the details you need to make an informed decision.",
-    yOffset: 200,
-  },
-  {
-    badge: "Step 3",
-    title: "Enroll today",
-    desc: "Sign up for your chosen course directly through our website.",
-    yOffset: 100,
-  },
-  {
-    badge: "Step 4",
-    title: "Start learning",
-    desc: "Begin your educational journey with access to high-quality course materials, engaging content, and support from instructors and peers.",
-    yOffset: 0,
-  },
-];
+import { useTranslations } from "next-intl";
 
 export default function Excellence() {
+  const t = useTranslations("Excellence");
+
+  const steps = [
+    {
+      badge: t("step1Badge"),
+      title: t("step1Title"),
+      desc: t("step1Desc"),
+      yOffset: 300,
+    },
+    {
+      badge: t("step2Badge"),
+      title: t("step2Title"),
+      desc: t("step2Desc"),
+      yOffset: 200,
+    },
+    {
+      badge: t("step3Badge"),
+      title: t("step3Title"),
+      desc: t("step3Desc"),
+      yOffset: 100,
+    },
+    {
+      badge: t("step4Badge"),
+      title: t("step4Title"),
+      desc: t("step4Desc"),
+      yOffset: 0,
+    },
+  ];
+
   return (
     <section className="relative w-full bg-[#f0f5ff] overflow-hidden pt-20 pb-16">
       <div className="mx-auto max-w-7xl px-6">
 
-        {/* ── Section heading (top-left aligned) ── */}
+        {/* Section heading (top-left aligned) */}
         <h2 className="text-3xl md:text-[2.5rem] font-extrabold leading-[1.2] text-[#1a1a2e]">
-          How we{" "}
-          <span className="text-brand-coral">deliver</span>
-          <br />excellence
+          {t("title")}{" "}
+          <span className="text-brand-coral">{t("titleCoral")}</span>
+          <br />{t("titleEnd")}
         </h2>
 
-        {/* ── Staircase card grid ── */}
+        {/* Staircase card grid */}
         <div className="relative mt-14 hidden lg:block" style={{ height: "520px" }}>
           <svg
             className="absolute inset-0 w-full h-full pointer-events-none"
@@ -59,7 +63,7 @@ export default function Excellence() {
             <path d="M 850 190 V 10 H 1150 V 90" />
           </svg>
 
-          {/* ── The 4 cards ── */}
+          {/* The 4 cards */}
           <div className="grid grid-cols-4 gap-6 h-full items-start">
             {steps.map((s) => (
               <div
@@ -86,7 +90,7 @@ export default function Excellence() {
           </div>
         </div>
 
-        {/* ── Mobile fallback: simple vertical list ── */}
+        {/* Mobile fallback: simple vertical list */}
         <div className="mt-10 flex flex-col gap-6 lg:hidden">
           {steps.map((s, i) => (
             <div key={s.badge} className="flex gap-4 items-start">

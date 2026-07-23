@@ -1,45 +1,47 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Tutors() {
+  const t = useTranslations("Tutors");
   const tutors = [
     {
       name: "Bayzid Bostami",
-      role: "Physics",
+      role: t("physics"),
       image: "/about-ceo.png",
     },
     {
       name: "Rakibul Hasan",
-      role: "ICT",
+      role: t("ict"),
       image: "/cto.png",
     },
     {
       name: "Asrafi Islam Orpita",
-      role: "Biology",
+      role: t("biology"),
       image: "/tutor8.png",
     },
     {
       name: "Md. Akash",
-      role: "Physics",
+      role: t("physics"),
       image: "/tutor5.png",
     },
     {
       name: "Akkash Ali",
-      role: "General Math",
+      role: t("generalMath"),
       image: "/tutor11.png",
     },
     {
       name: "Majharul Islam",
-      role: "Chemistry",
+      role: t("chemistry"),
       image: "/tutor9.png",
     },
     {
       name: "Foysal Ahamed",
-      role: "Higher Math",
+      role: t("higherMath"),
       image: "/tutor10.png",
     }
   ];
@@ -65,11 +67,11 @@ export default function Tutors() {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div className="max-w-2xl text-center md:text-left mx-auto md:mx-0">
               <h2 className="text-3xl md:text-4xl font-extrabold text-brand-navy leading-tight">
-                Meet the <span className="text-brand-coral">tutors</span> behind your <br className="hidden md:block" />
-                learning journey
+                {t("title")} <span className="text-brand-coral">{t("titleCoral")}</span> <br className="hidden md:block" />
+                {t("titleEnd")}
               </h2>
               <p className="mt-4 text-brand-slate text-[15px]">
-                Learn from a global team of developers, designers, marketers, and entrepreneurs.
+                {t("subtitle")}
               </p>
             </div>
             
@@ -128,10 +130,10 @@ export default function Tutors() {
           <div className="mt-12 md:mt-16 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-amber-100/60 pt-10">
             <div className="text-center md:text-left">
               <h3 className="text-lg md:text-xl font-extrabold text-brand-navy">
-                Join us today to get 20% discount on all courses
+                {t("promoTitle")}
               </h3>
               <p className="text-xs md:text-sm text-brand-slate mt-1 font-medium">
-                Unlock lifetime access and learn at your own pace. Offers end soon.
+                {t("promoSubtitle")}
               </p>
             </div>
             
@@ -140,13 +142,13 @@ export default function Tutors() {
                 href="/register"
                 className="rounded-full bg-brand-yellow px-6 py-3 text-[14px] font-bold text-brand-navy shadow-md shadow-amber-100 hover:bg-brand-yellow-hover hover:scale-105 active:scale-95 transition-all duration-200"
               >
-                Get started now
+                {t("getStarted")}
               </Link>
               <Link
                 href="/courses"
                 className="rounded-full border border-slate-200 bg-white px-6 py-3 text-[14px] font-bold text-brand-navy hover:bg-slate-50 hover:border-slate-300 hover:scale-105 active:scale-95 transition-all duration-200"
               >
-                Explore courses
+                {t("exploreCourses")}
               </Link>
             </div>
           </div>

@@ -2,9 +2,10 @@
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Check, ChevronDown, HelpCircle, Star } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 interface PlanFeature {
   text: string;
@@ -23,101 +24,118 @@ interface PricingPlan {
   color: string;
 }
 
-const plans: PricingPlan[] = [
-  {
-    name: "Starter Plan",
-    description: "Perfect for exploring our platform and starting your learning journey.",
-    monthlyPrice: 0,
-    yearlyPrice: 0,
-    features: [
-      { text: "Access to free course materials", included: true },
-      { text: "Basic video lectures (720p)", included: true },
-      { text: "Community support forum", included: true },
-      { text: "Course completion certificates", included: false },
-      { text: "Interactive quizzes & assignments", included: false },
-      { text: "1-on-1 mentor guidance", included: false },
-    ],
-    ctaText: "Get Started",
-    ctaLink: "/register",
-    popular: false,
-    color: "border-slate-200 bg-white",
-  },
-  {
-    name: "Pro Learner",
-    description: "Our most popular plan for dedicated students seeking full academic growth.",
-    monthlyPrice: 19,
-    yearlyPrice: 15,
-    features: [
-      { text: "Unlimited access to all courses", included: true },
-      { text: "Full HD video lectures (1080p)", included: true },
-      { text: "Interactive quizzes & assignments", included: true },
-      { text: "Verified completion certificates", included: true },
-      { text: "Priority Q&A with mentors", included: true },
-      { text: "Offline downloads & mobile access", included: true },
-    ],
-    ctaText: "Start Pro Trial",
-    ctaLink: "/register",
-    popular: true,
-    color: "border-blue-500 bg-white shadow-xl shadow-blue-50/70",
-  },
-  {
-    name: "Mentor Plus",
-    description: "Designed for advanced study, career tracks, and personalized coding support.",
-    monthlyPrice: 49,
-    yearlyPrice: 39,
-    features: [
-      { text: "Everything in Pro Learner", included: true },
-      { text: "1-on-1 monthly live mentorship session", included: true },
-      { text: "Personalized study plans & reviews", included: true },
-      { text: "Job placement assistance & mock interviews", included: true },
-      { text: "Exclusive live bootcamps access", included: true },
-      { text: "Direct slack channel with instructors", included: true },
-    ],
-    ctaText: "Join Mentor Plus",
-    ctaLink: "/register",
-    popular: false,
-    color: "border-slate-200 bg-white",
-  },
-];
-
 interface FAQItem {
   question: string;
   answer: string;
 }
 
-const faqs: FAQItem[] = [
-  {
-    question: "Can I try Bostami Education for free?",
-    answer: "Yes! Our Starter Plan is 100% free forever. It allows you to access all free video courses and basic quizzes. No credit card is required to sign up.",
-  },
-  {
-    question: "What is the difference between Monthly and Yearly billing?",
-    answer: "Yearly billing is billed in one upfront payment and comes with a 20% discount compared to monthly payments. It is the most cost-effective way to achieve your learning goals.",
-  },
-  {
-    question: "Can I change or cancel my plan anytime?",
-    answer: "Absolutely. You can upgrade, downgrade, or cancel your subscription at any time directly from your account settings page. If you cancel, you will maintain access to your plan benefits until the end of your current billing cycle.",
-  },
-  {
-    question: "Do you provide certificates upon course completion?",
-    answer: "Yes! Under the Pro Learner and Mentor Plus plans, you will receive a verified digital certificate of completion once you finish all video lectures, pass the final quiz, and submit the required assignments.",
-  },
-  {
-    question: "What is your refund policy?",
-    answer: "We offer a 7-day money-back guarantee for our premium plans. If you are not satisfied with your purchase, contact us at refund@bostamieducation.com within 7 days, and we will issue a full refund, no questions asked.",
-  },
-  {
-    question: "Are there any student or institutional discounts?",
-    answer: "Yes, we offer special group pricing for schools, coaching centers, and corporate training. Please reach out to our team at corporate@bostamieducation.com for custom offers.",
-  },
-];
-
 export default function PricingPage() {
+  const t = useTranslations("Pricing");
+
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
+  useEffect(() => {
+    document.title = `${t("badge")} | Bostami Education`;
+  }, [t]);
+
   const toggleFaq = (index: number) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
+
+  const plans: PricingPlan[] = [
+    {
+      name: t("starterPlan"),
+      description: t("starterDesc"),
+      monthlyPrice: 0,
+      yearlyPrice: 0,
+      features: [
+        { text: t("fStarter1"), included: true },
+        { text: t("fStarter2"), included: true },
+        { text: t("fStarter3"), included: true },
+        { text: t("fStarter4"), included: false },
+        { text: t("fStarter5"), included: false },
+        { text: t("fStarter6"), included: false },
+      ],
+      ctaText: t("getStarted"),
+      ctaLink: "/register",
+      popular: false,
+      color: "border-slate-200 bg-white",
+    },
+    {
+      name: t("proLearner"),
+      description: t("proDesc"),
+      monthlyPrice: 19,
+      yearlyPrice: 15,
+      features: [
+        { text: t("fPro1"), included: true },
+        { text: t("fPro2"), included: true },
+        { text: t("fPro3"), included: true },
+        { text: t("fPro4"), included: true },
+        { text: t("fPro5"), included: true },
+        { text: t("fPro6"), included: true },
+      ],
+      ctaText: t("startProTrial"),
+      ctaLink: "/register",
+      popular: true,
+      color: "border-blue-500 bg-white shadow-xl shadow-blue-50/70",
+    },
+    {
+      name: t("mentorPlus"),
+      description: t("mentorDesc"),
+      monthlyPrice: 49,
+      yearlyPrice: 39,
+      features: [
+        { text: t("fPlus1"), included: true },
+        { text: t("fPlus2"), included: true },
+        { text: t("fPlus3"), included: true },
+        { text: t("fPlus4"), included: true },
+        { text: t("fPlus5"), included: true },
+        { text: t("fPlus6"), included: true },
+      ],
+      ctaText: t("joinMentorPlus"),
+      ctaLink: "/register",
+      popular: false,
+      color: "border-slate-200 bg-white",
+    },
+  ];
+
+  const faqs: FAQItem[] = [
+    {
+      question: t("faqQ1"),
+      answer: t("faqA1"),
+    },
+    {
+      question: t("faqQ2"),
+      answer: t("faqA2"),
+    },
+    {
+      question: t("faqQ3"),
+      answer: t("faqA3"),
+    },
+    {
+      question: t("faqQ4"),
+      answer: t("faqA4"),
+    },
+    {
+      question: t("faqQ5"),
+      answer: t("faqA5"),
+    },
+    {
+      question: t("faqQ6"),
+      answer: t("faqA6"),
+    },
+  ];
+
+  const formatPrice = (price: number) => {
+    // If the locale is Bengali (using a marker translated in messages/bn.json)
+    if (t("month") === "মাস") {
+      const bnNumbers: { [key: string]: string } = {
+        "0": "০", "1": "১", "2": "২", "3": "৩", "4": "৪", "5": "৫", "6": "৬", "7": "৭", "8": "৮", "9": "৯"
+      };
+      return price.toString().split("").map(char => bnNumbers[char] || char).join("");
+    }
+    return price.toString();
   };
 
   return (
@@ -140,13 +158,13 @@ export default function PricingPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/30 to-white/60 pointer-events-none" />
           <div className="relative mx-auto max-w-7xl px-6">
             <span className="block text-blue-600 text-sm font-bold tracking-wider mb-3">
-              Pricing Plans
+              {t("badge")}
             </span>
             <h1 className="text-4xl md:text-5xl font-extrabold text-[#1a1a2e] tracking-tight mb-4">
-              Simple, Transparent Pricing
+              {t("title")}
             </h1>
             <p className="max-w-2xl mx-auto text-slate-500 text-[15px] font-medium leading-relaxed mb-8">
-              Choose the perfect plan to jumpstart your education. Gain access to premium content, expert mentors, and structural learning paths.
+              {t("subtitle")}
             </p>
 
             {/* Toggle Switch */}
@@ -159,7 +177,7 @@ export default function PricingPage() {
                     : "text-slate-500 hover:text-[#1a1a2e]"
                 }`}
               >
-                Monthly Billing
+                {t("monthlyBilling")}
               </button>
               <button
                 onClick={() => setBillingCycle("yearly")}
@@ -169,7 +187,7 @@ export default function PricingPage() {
                     : "text-slate-500 hover:text-[#1a1a2e]"
                 }`}
               >
-                Yearly Billing
+                {t("yearlyBilling")}
                 <span className="absolute -top-3.5 -right-6 bg-green-500 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shadow-sm scale-95 border border-white">
                   -20%
                 </span>
@@ -195,7 +213,7 @@ export default function PricingPage() {
                   {/* Popular Badge */}
                   {plan.popular && (
                     <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[11px] font-bold px-4 py-1 rounded-full shadow-md flex items-center gap-1">
-                      <Star className="h-3 w-3 fill-current" /> Most Popular
+                      <Star className="h-3 w-3 fill-current" /> {t("mostPopular")}
                     </span>
                   )}
 
@@ -213,10 +231,10 @@ export default function PricingPage() {
                     {/* Pricing */}
                     <div className="mb-6 pb-6 border-b border-slate-100 flex items-baseline gap-1.5">
                       <span className="text-4xl md:text-5xl font-black text-[#1a1a2e]">
-                        ${currentPrice}
+                        ${formatPrice(currentPrice)}
                       </span>
                       <span className="text-[13px] font-bold text-slate-400">
-                        / {billingCycle === "monthly" ? "month" : "month, billed annually"}
+                        / {billingCycle === "monthly" ? t("month") : t("billedAnnually")}
                       </span>
                     </div>
 
@@ -274,10 +292,10 @@ export default function PricingPage() {
                 <HelpCircle className="h-5 w-5" />
               </div>
               <h2 className="text-3xl md:text-4xl font-extrabold text-[#1a1a2e] tracking-tight">
-                Frequently Asked Questions
+                {t("faqTitle")}
               </h2>
               <p className="mt-4 text-slate-500 text-[14px] font-medium">
-                Have questions about our plans? Here are the most common things people ask.
+                {t("faqSubtitle")}
               </p>
             </div>
 
@@ -307,8 +325,8 @@ export default function PricingPage() {
 
                     {/* Expandable answer panel */}
                     <div
-                      className={`transition-all duration-300 ease-in-out ${
-                        isOpen ? "max-h-56 border-t border-slate-100" : "max-h-0"
+                      className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                        isOpen ? "max-h-[300px] border-t border-slate-100" : "max-h-0"
                       }`}
                     >
                       <div className="p-5 md:p-6 text-[13px] text-slate-500 leading-relaxed">

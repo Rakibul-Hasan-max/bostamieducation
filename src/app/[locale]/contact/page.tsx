@@ -1,77 +1,79 @@
+"use client";
+
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import { MapPin, Phone, Mail } from "lucide-react";
-
-export const metadata = {
-  title: "Contact Us | Bostami Education",
-  description:
-    "Get in touch with Bostami Education. We're here to help you with any questions about our courses, mentors, or partnerships.",
-};
-
-/* ─── Info cards data ─── */
-const cards = [
-  {
-    title: "Customer Support",
-    address: "House 10, Road 7, Sector 3, Uttara, Dhaka 1230",
-    phone: "+880 176888 3213",
-    email: "support@bostamieducation.com",
-    highlight: true,
-  },
-  {
-    title: "Contact Address",
-    address: "House 10, Road 7, Sector 3, Uttara, Dhaka 1230",
-    phone: "+880 176888 3213",
-    email: "info@bostamieducation.com",
-    highlight: false,
-  },
-  {
-    title: "Main Office Address",
-    address: "House 10, Road 7, Sector 3, Uttara, Dhaka 1230",
-    phone: "+880 176888 3213",
-    email: "office@bostamieducation.com",
-    highlight: false,
-  },
-];
-
-/* ─── Social icons (inline SVG — lucide removed brand icons) ─── */
-const socials = [
-  {
-    label: "Facebook",
-    href: "https://www.facebook.com/bostamieducation",
-    color: "bg-[#1877F2]",
-    svg: (
-      <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-      </svg>
-    ),
-  },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/company/bostamieducation",
-    color: "bg-[#0A66C2]",
-    svg: (
-      <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-        <rect x="2" y="9" width="4" height="12" />
-        <circle cx="4" cy="4" r="2" />
-      </svg>
-    ),
-  },
-  {
-    label: "YouTube",
-    href: "https://www.youtube.com/@bostami-education",
-    color: "bg-[#FF0000]",
-    svg: (
-      <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
-        <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#FF0000" />
-      </svg>
-    ),
-  },
-];
+import { useEffect } from "react";
 
 export default function ContactPage() {
+  const t = useTranslations("Contact");
+
+  useEffect(() => {
+    document.title = t("metadataTitle");
+  }, [t]);
+
+  const cards = [
+    {
+      title: t("supportTitle"),
+      address: t("officeAddress"),
+      phone: "+880 176888 3213",
+      email: "support@bostamieducation.com",
+      highlight: true,
+    },
+    {
+      title: t("contactAddressTitle"),
+      address: t("officeAddress"),
+      phone: "+880 176888 3213",
+      email: "info@bostamieducation.com",
+      highlight: false,
+    },
+    {
+      title: t("mainOfficeTitle"),
+      address: t("officeAddress"),
+      phone: "+880 176888 3213",
+      email: "office@bostamieducation.com",
+      highlight: false,
+    },
+  ];
+
+  const socials = [
+    {
+      label: "Facebook",
+      href: "https://www.facebook.com/bostamieducation",
+      color: "bg-[#1877F2]",
+      svg: (
+        <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+        </svg>
+      ),
+    },
+    {
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/company/bostamieducation",
+      color: "bg-[#0A66C2]",
+      svg: (
+        <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+          <rect x="2" y="9" width="4" height="12" />
+          <circle cx="4" cy="4" r="2" />
+        </svg>
+      ),
+    },
+    {
+      label: "YouTube",
+      href: "https://www.youtube.com/@bostami-education",
+      color: "bg-[#FF0000]",
+      svg: (
+        <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+          <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
+          <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#FF0000" />
+        </svg>
+      ),
+    },
+  ];
+
   return (
     <div className="relative min-h-screen flex flex-col bg-white">
       <Navbar />
@@ -92,10 +94,10 @@ export default function ContactPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/30 to-white/60 pointer-events-none" />
           <div className="relative mx-auto max-w-7xl px-6">
             <span className="block text-blue-600 text-sm font-bold tracking-wider mb-3">
-              Contact Us
+              {t("badge")}
             </span>
             <h1 className="text-4xl md:text-5xl font-extrabold text-[#1a1a2e] tracking-tight">
-              We&apos;re here to help!
+              {t("title")}
             </h1>
           </div>
         </section>
@@ -222,7 +224,7 @@ export default function ContactPage() {
 
               {/* Follow us on */}
               <div className="mt-6 flex flex-wrap items-center gap-3 justify-center md:justify-start">
-                <span className="text-[14px] font-bold text-[#1a1a2e]">Follow us on:</span>
+                <span className="text-[14px] font-bold text-[#1a1a2e]">{t("followUs")}</span>
                 {socials.map((s) => (
                   <Link
                     key={s.label}
@@ -240,26 +242,25 @@ export default function ContactPage() {
 
             {/* ── Right: Contact form ── */}
             <div>
-              <h2 className="text-3xl font-extrabold text-[#1a1a2e] mb-3">Let&apos;s talk</h2>
+              <h2 className="text-3xl font-extrabold text-[#1a1a2e] mb-3">{t("letsTalkTitle")}</h2>
               <p className="text-[14px] text-slate-500 mb-7 leading-relaxed">
-                To request a{" "}
-                <span className="text-blue-600 font-medium">quote</span> or want to
-                meet up for coffee, contact us directly or{" "}
-                <span className="text-blue-600 font-medium">fill out the form</span>{" "}
-                and we will get back to you promptly.
+                {t.rich("letsTalkSubtitle", {
+                  quote: (chunks) => <span className="text-blue-600 font-medium">{chunks}</span>,
+                  fillForm: (chunks) => <span className="text-blue-600 font-medium">{chunks}</span>,
+                })}
               </p>
 
               <form className="space-y-4">
                 {/* Name */}
                 <div>
                   <label className="block text-[13px] font-semibold text-slate-600 mb-1.5">
-                    Your name <span className="text-red-500">*</span>
+                    {t("formName")} <span className="text-red-500">*</span>
                   </label>
                   <input
                     id="contact-name"
                     type="text"
                     required
-                    placeholder="e.g. Rakibul Hasan"
+                    placeholder={t("formNamePlaceholder")}
                     className="w-full rounded-lg border border-slate-200 px-4 py-3 text-[14px] text-[#1a1a2e] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   />
                 </div>
@@ -267,13 +268,13 @@ export default function ContactPage() {
                 {/* Email */}
                 <div>
                   <label className="block text-[13px] font-semibold text-slate-600 mb-1.5">
-                    Email address <span className="text-red-500">*</span>
+                    {t("formEmail")} <span className="text-red-500">*</span>
                   </label>
                   <input
                     id="contact-email"
                     type="email"
                     required
-                    placeholder="you@example.com"
+                    placeholder={t("formEmailPlaceholder")}
                     className="w-full rounded-lg border border-slate-200 px-4 py-3 text-[14px] text-[#1a1a2e] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   />
                 </div>
@@ -281,13 +282,13 @@ export default function ContactPage() {
                 {/* Message */}
                 <div>
                   <label className="block text-[13px] font-semibold text-slate-600 mb-1.5">
-                    Message <span className="text-red-500">*</span>
+                    {t("formMessage")} <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     id="contact-message"
                     required
                     rows={5}
-                    placeholder="Enter something..."
+                    placeholder={t("formMessagePlaceholder")}
                     className="w-full rounded-lg border border-slate-200 px-4 py-3 text-[14px] text-[#1a1a2e] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"
                   />
                 </div>
@@ -298,7 +299,7 @@ export default function ContactPage() {
                   type="submit"
                   className="w-full rounded-lg bg-blue-600 py-3.5 text-[15px] font-bold text-white hover:bg-blue-700 active:scale-[0.98] transition-all duration-200 shadow-md shadow-blue-200"
                 >
-                  Send Message
+                  {t("formSubmit")}
                 </button>
               </form>
             </div>

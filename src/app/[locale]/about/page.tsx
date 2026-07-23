@@ -1,8 +1,12 @@
+"use client";
+
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Image from "next/image";
-import Link from "next/link";
-import { CheckCircle2, Play, Users, BookOpen, Award, Target, Eye } from "lucide-react";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
+import { CheckCircle2, Play, Users, BookOpen, Target, Eye } from "lucide-react";
+import { useEffect } from "react";
 
 // Inline social icons
 const IconFacebook = () => (
@@ -27,45 +31,50 @@ const IconYoutube = () => (
   </svg>
 );
 
-export const metadata = {
-  title: "About Us | Bostami Education",
-  description: "Learn more about Bostami Education's mission, vision, history, and our team.",
-};
-
-const milestones = [
-  {
-    year: "2023",
-    title: "The Beginning",
-    desc: "Launched Bostami Education youtube channel in a small room and started sharing educational content.",
-    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=500",
-  },
-  {
-    year: "2024",
-    title: "Curriculum Expansion",
-    desc: "Expanded our course library to cover academic physics and math.Growing our community to 300+ active learners.",
-    image: "/studio2.png",
-  },
-  {
-    year: "2025",
-    title: "Solo Studio Setup",
-    desc: "Launched offline coaching and setup a solo studio for online classes.",
-    image: "/studio5.png",
-  },
-  {
-    year: "2026",
-    title: "Corporate Office & Team Expansion",
-    desc: "Setup a small office and launched corporate training programs in partnership with EPCILN.",
-    image: "/studio4.png",
-  },
-  // {
-  //   year: "2027",
-  //   title: "AI-Powered Learning",
-  //   desc: "Introduced AI learning tracks, personal mentor guidance systems, and reached a milestone of 15,000+ successful graduates.",
-  //   image: "https://images.unsplash.com/photo-1531538606174-0f90ff5dce83?auto=format&fit=crop&q=80&w=500",
-  // },
-];
-
 export default function AboutPage() {
+  const t = useTranslations("About");
+
+  useEffect(() => {
+    document.title = t("metadataTitle");
+  }, [t]);
+
+  const milestones = [
+    {
+      year: "2023",
+      title: t("milestone2023Title"),
+      desc: t("milestone2023Desc"),
+      image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=500",
+    },
+    {
+      year: "2024",
+      title: t("milestone2024Title"),
+      desc: t("milestone2024Desc"),
+      image: "/studio2.png",
+    },
+    {
+      year: "2025",
+      title: t("milestone2025Title"),
+      desc: t("milestone2025Desc"),
+      image: "/studio5.png",
+    },
+    {
+      year: "2026",
+      title: t("milestone2026Title"),
+      desc: t("milestone2026Desc"),
+      image: "/studio4.png",
+    },
+  ];
+
+  const team = [
+    { name: "Bayzid Bostami", role: t("roleCEO"), img: "/about-ceo.png" },
+    { name: "Rakibul Hasan", role: t("roleCTO"), img: "/cto.png" },
+    { name: "Asrafi Islam Orpita", role: t("roleInstructor"), img: "/tutor8.png" },
+    { name: "Md. Akash", role: t("roleInstructor"), img: "/tutor5.png" },
+    { name: "Foysal Ahamed", role: t("roleInstructor"), img: "/tutor10.png" },
+    { name: "Akkash Ali", role: t("roleInstructor"), img: "/tutor11.png" },
+    { name: "Majharul Islam", role: t("roleInstructor"), img: "/tutor9.png" },
+  ];
+
   return (
     <div className="relative min-h-screen flex flex-col bg-white">
       {/* Navigation Header */}
@@ -87,10 +96,10 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/30 to-white/60 pointer-events-none" />
           <div className="relative mx-auto max-w-7xl px-6">
             <span className="block text-blue-600 text-sm font-bold tracking-wider mb-3">
-              About Us
+              {t("pageHeaderBadge")}
             </span>
             <h1 className="text-4xl md:text-5xl font-extrabold text-[#1a1a2e] tracking-tight">
-              More About Us
+              {t("pageHeaderTitle")}
             </h1>
           </div>
         </section>
@@ -113,7 +122,7 @@ export default function AboutPage() {
                 <div className="absolute bottom-6 right-6 bg-white rounded-2xl p-4 shadow-xl border border-slate-50 flex flex-col items-start min-w-[150px]">
                   <span className="text-3xl font-extrabold text-brand-coral leading-none">5+</span>
                   <span className="text-[11px] font-bold text-brand-navy tracking-wider uppercase mt-1">
-                    Years of Experience
+                    {t("experienceBadge")}
                   </span>
                 </div>
               </div>
@@ -122,16 +131,16 @@ export default function AboutPage() {
             {/* Right Column — Text Content & Stats */}
             <div className="flex flex-col items-start">
               <div className="mb-6 rounded-full bg-[#e8f2ff] px-4 py-1.5 text-[13px] font-bold text-blue-600">
-                ABOUT BOSTAMI EDUCATION
+                {t("section1Badge")}
               </div>
               <h2 className="text-3xl md:text-4xl lg:text-[2.6rem] font-extrabold leading-[1.15] text-brand-navy tracking-tight mb-6">
-                We provide courses to unlock the transformative potential of learning.
+                {t("section1Title")}
               </h2>
               <p className="text-[15px] leading-relaxed text-brand-slate mb-4">
-                Founded to bridge the gap between innovation and education, Bostami Education began with a mission to make world-class learning accessible to everyone. We offer high-quality courses that empower students to build real-world skills, launch successful careers, and achieve their dreams.
+                {t("section1Desc1")}
               </p>
               <p className="text-[15px] leading-relaxed text-brand-slate mb-8">
-                Over the years, we have become a trusted destination for individuals and organizations aiming to build competence, confidence, and excellence in academic subjects and industrial skills.
+                {t("section1Desc2")}
               </p>
 
               {/* Counters */}
@@ -143,7 +152,7 @@ export default function AboutPage() {
                   <div>
                     <h4 className="text-2xl font-extrabold text-brand-navy">15K+</h4>
                     <p className="text-xs font-bold text-brand-slate tracking-wider uppercase mt-0.5">
-                      Happy Learners
+                      {t("happyLearners")}
                     </p>
                   </div>
                 </div>
@@ -155,7 +164,7 @@ export default function AboutPage() {
                   <div>
                     <h4 className="text-2xl font-extrabold text-brand-navy">25+</h4>
                     <p className="text-xs font-bold text-brand-slate tracking-wider uppercase mt-0.5">
-                      Expert Tutors
+                      {t("expertTutors")}
                     </p>
                   </div>
                 </div>
@@ -179,36 +188,36 @@ export default function AboutPage() {
             {/* Left Column — Text & Mission/Vision Cards */}
             <div className="flex flex-col items-start order-2 lg:order-1">
               <div className="mb-6 rounded-full bg-[#fcf0ea] px-4 py-1.5 text-[13px] font-bold text-brand-coral">
-                WHAT DRIVES US
+                {t("section2Badge")}
               </div>
               <h2 className="text-3xl md:text-4xl font-extrabold text-brand-navy tracking-tight mb-6">
-                Our passion for modern education.
+                {t("section2Title")}
               </h2>
               <p className="text-[15px] leading-relaxed text-brand-slate mb-8">
-                We are driven by a deep passion for making learning accessible, engaging, and impactful. Our primary motivation comes from the belief that education has the power to transform career paths, enrich lives, and uplift communities.
+                {t("section2Desc")}
               </p>
 
               {/* Checkmarks grid */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4 w-full mb-8 font-semibold text-brand-navy text-sm">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                  <span>Innovation</span>
+                  <span>{t("innovation")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                  <span>Collaboration</span>
+                  <span>{t("collaboration")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                  <span>Excellence</span>
+                  <span>{t("excellence")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                  <span>Impact-Driven</span>
+                  <span>{t("impactDriven")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                  <span>Accessibility</span>
+                  <span>{t("accessibility")}</span>
                 </div>
               </div>
 
@@ -219,9 +228,9 @@ export default function AboutPage() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50 text-orange-600 mb-4">
                     <Target className="h-5 w-5" />
                   </div>
-                  <h3 className="text-[16px] font-extrabold text-brand-navy mb-2">Our Mission</h3>
+                  <h3 className="text-[16px] font-extrabold text-brand-navy mb-2">{t("ourMission")}</h3>
                   <p className="text-xs text-brand-slate leading-relaxed">
-                    To empower individuals with AI, ICT, and modern skills through accessible, premium, and relevant coursework that prepares them for global opportunities.
+                    {t("ourMissionDesc")}
                   </p>
                 </div>
 
@@ -230,9 +239,9 @@ export default function AboutPage() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 mb-4">
                     <Eye className="h-5 w-5" />
                   </div>
-                  <h3 className="text-[16px] font-extrabold text-brand-navy mb-2">Our Vision</h3>
+                  <h3 className="text-[16px] font-extrabold text-brand-navy mb-2">{t("ourVision")}</h3>
                   <p className="text-xs text-brand-slate leading-relaxed">
-                    To be the leading global platform for digital-first academic and professional skill education, transforming the learning lifecycle of students everywhere.
+                    {t("ourVisionDesc")}
                   </p>
                 </div>
               </div>
@@ -272,10 +281,10 @@ export default function AboutPage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="mx-auto max-w-3xl text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-extrabold text-brand-navy tracking-tight leading-tight">
-                Our Leadership Message
+                {t("leadershipTitle")}
               </h2>
               <p className="mt-4 text-brand-slate text-[15px]">
-                Hear directly from our founding leaders about their inspiration and drive to shape education.
+                {t("leadershipSubtitle")}
               </p>
             </div>
 
@@ -306,13 +315,13 @@ export default function AboutPage() {
               </div>
               {/* CEO Quote */}
               <div className="lg:col-span-8 flex flex-col items-start">
-                <div className="text-brand-coral font-bold text-sm tracking-wider uppercase mb-2">CEO & Founder</div>
+                <div className="text-brand-coral font-bold text-sm tracking-wider uppercase mb-2">{t("ceoRole")}</div>
                 <h3 className="text-2xl font-extrabold text-brand-navy mb-4">Bayzid Bostami</h3>
                 <p className="text-[17px] italic font-medium text-brand-slate leading-relaxed relative pl-4 border-l-4 border-brand-coral">
-                  &ldquo;At Bostami Education, we believe that education is the most powerful tool for creating positive change in the world. Our mission is to break down barriers to learning and build a platform that enables anyone, anywhere, to unlock their full potential and shape a brighter future.&rdquo;
+                  &ldquo;{t("ceoQuote")}&rdquo;
                 </p>
                 <p className="mt-4 text-[14px] text-brand-slate">
-                  As our founder, Bayzid has guided Bostami Education from a localized tutorial setup to a thriving digital academy serving thousands of students across Bangladesh and internationally.
+                  {t("ceoDesc")}
                 </p>
               </div>
             </div>
@@ -321,13 +330,13 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pt-20">
               {/* CTO Quote */}
               <div className="lg:col-span-8 flex flex-col items-start order-2 lg:order-1">
-                <div className="text-green-600 font-bold text-sm tracking-wider uppercase mb-2">Co-Founder & CTO</div>
+                <div className="text-green-600 font-bold text-sm tracking-wider uppercase mb-2">{t("ctoRole")}</div>
                 <h3 className="text-2xl font-extrabold text-brand-navy mb-4">Rakibul Hasan</h3>
                 <p className="text-[17px] italic font-medium text-brand-slate leading-relaxed relative pl-4 border-l-4 border-green-600">
-                  &ldquo;Technology is reshaping how we learn and collaborate. We are committed to building an innovative, seamless, and world-class digital learning experience that makes knowledge interactive, engaging, and accessible for everyone.&rdquo;
+                  &ldquo;{t("ctoQuote")}&rdquo;
                 </p>
                 <p className="mt-4 text-[14px] text-brand-slate">
-                  Leading the technical execution and systems, Rakibul ensures Bostami Education leverages next-generation architecture to serve live class streams, interactive assignments, and seamless navigation.
+                  {t("ctoDesc")}
                 </p>
               </div>
               {/* CTO Photo */}
@@ -344,9 +353,6 @@ export default function AboutPage() {
                     <Link href="https://www.facebook.com/rakibulhasan.cn" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white text-blue-600 hover:bg-blue-600 hover:text-white transition-colors shadow-lg">
                       <IconFacebook />
                     </Link>
-                    {/* <Link href="https://x.com/rakibul_h4041" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white text-sky-500 hover:bg-sky-500 hover:text-white transition-colors shadow-lg">
-                      <IconTwitter />
-                    </Link> */}
                     <Link href="https://www.linkedin.com/in/rakibulhasan-bd/" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white text-blue-700 hover:bg-blue-700 hover:text-white transition-colors shadow-lg">
                       <IconLinkedin />
                     </Link>
@@ -364,7 +370,7 @@ export default function AboutPage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="mx-auto max-w-3xl text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-extrabold text-[#1a1a2e] tracking-tight">
-                Our Story
+                {t("storyTitle")}
               </h2>
             </div>
 
@@ -375,10 +381,6 @@ export default function AboutPage() {
                 const isLeft = m.year === "2024" || m.year === "2026";
                 
                 // Assign grid order classes to keep chronological flow on mobile, and staggered on desktop
-                // 2023: order 1 on mobile, 2 on desktop (right col)
-                // 2024: order 2 on mobile, 1 on desktop (left col)
-                // 2025: order 3 on mobile, 4 on desktop (right col)
-                // 2026: order 4 on mobile, 3 on desktop (left col)
                 let orderClass = "";
                 if (m.year === "2023") orderClass = "order-1 md:order-2";
                 else if (m.year === "2024") orderClass = "order-2 md:order-1";
@@ -399,6 +401,7 @@ export default function AboutPage() {
                           />
                         </div>
                         <span className="text-2xl font-bold text-[#1a1a2e] mb-1.5">{m.year}</span>
+                        <h4 className="text-md font-bold text-[#1a1a2e] mb-1">{m.title}</h4>
                         <p className="text-[13px] text-slate-500 leading-relaxed max-w-lg">
                           {m.desc}
                         </p>
@@ -407,6 +410,7 @@ export default function AboutPage() {
                       <>
                         {/* Right style: Text then Image */}
                         <span className="text-2xl font-bold text-[#1a1a2e] mb-1.5">{m.year}</span>
+                        <h4 className="text-md font-bold text-[#1a1a2e] mb-1">{m.title}</h4>
                         <p className="text-[13px] text-slate-500 leading-relaxed mb-5 max-w-lg">
                           {m.desc}
                         </p>
@@ -433,23 +437,14 @@ export default function AboutPage() {
         <section className="py-20 md:py-28 bg-white w-full">
           <div className="mx-auto max-w-7xl px-6">
             <div className="mx-auto max-w-3xl text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-brand-navy tracking-tight">Our Team</h2>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-brand-navy tracking-tight">{t("teamTitle")}</h2>
               <p className="mt-4 text-brand-slate text-[15px]">
-                Meet the talented people behind Bostami Education.
+                {t("teamSubtitle")}
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* Team member cards */}
-              {[
-                { name: "Bayzid Bostami", role: "CEO", img: "/about-ceo.png" },
-                { name: "Rakibul Hasan", role: "CTO", img: "/cto.png" },
-                { name: "Asrafi Islam Orpita", role: "Instructor", img: "/tutor8.png" },
-                { name: "Md. Akash", role: "Instructor", img: "/tutor5.png" },
-                { name: "Foysal Ahamed", role: "Instructor", img: "/tutor10.png" },
-                { name: "Akkash Ali", role: "Instructor", img: "/tutor11.png" },
-                { name: "Majharul Islam", role: "Instructor", img: "/tutor9.png" },
-                
-              ].map((member, idx) => (
+              {team.map((member, idx) => (
                 <div key={idx} className="flex flex-col items-center text-center bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
                   <div className="relative w-24 h-24 mb-4 rounded-full overflow-hidden shadow">
                     <Image src={member.img} alt={member.name} fill className="object-cover object-top" />

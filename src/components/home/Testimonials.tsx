@@ -2,35 +2,37 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 
 export default function Testimonials() {
+  const t = useTranslations("Testimonials");
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const testimonials = [
     {
       name: "Arafat Hossain",
-      role: "HSC Physics Student — Dhaka College",
+      role: t("arafatRole"),
       avatar: "/tutor7.png",
-      quote: "Bostami Education-এর Physics Masterclass আমার জীবন বদলে দিয়েছে। স্যারের পড়ানোর স্টাইল এত সহজ ও মজার যে কঠিন বিষয়গুলোও সহজ মনে হয়। ঢাকা বিশ্ববিদ্যালয়ে ভর্তির সুযোগ পেয়েছি সম্পূর্ণ এই কোর্সের সাহায্যে।",
+      quote: t("arafatQuote"),
     },
     {
       name: "Nusrat Jahan",
-      role: "HSC ICT Student — Chittagong Girls' College",
+      role: t("nusratRole"),
       avatar: "/tutor8.png",
-      quote: "ICT কোর্সটা আমার কাছে অনেক কঠিন মনে হত, কিন্তু Rakibul স্যার এমনভাবে বোঝালেন যে বোর্ড পরীক্ষায় A+ পেলাম। লাইভ ক্লাস এবং রেকর্ডেড ভিডিও দুটোই পাই, তাই কোনো কিছু মিস হয় না।",
+      quote: t("nusratQuote"),
     },
     {
       name: "Mehedi Hassan",
-      role: "Higher Math Student — Rajshahi College",
+      role: t("mehediRole"),
       avatar: "/tutor10.png",
-      quote: "Higher Math-এ আমি সবসময় দুর্বল ছিলাম। কিন্তু Foysal স্যারের কোর্স করার পর বুঝতে পারলাম সমস্যাটা ছিল কনসেপ্টে। এখন Math আমার প্রিয় বিষয়। সবাইকে এই প্ল্যাটফর্ম রেকমেন্ড করব।",
+      quote: t("mehediQuote"),
     },
     {
       name: "Sumaiya Akter",
-      role: "Biology Student — Viqarunnisa Noon College",
+      role: t("sumaiyaRole"),
       avatar: "/tutor11.png",
-      quote: "Orpita আপার Biology কোর্স অসাধারণ! প্রতিটা চ্যাপ্টার এত সুন্দরভাবে সাজানো যে মুখস্থ না করেই বুঝে পড়া যায়। মেডিকেল ভর্তি পরীক্ষায় অনেক উপকারে এসেছে।",
+      quote: t("sumaiyaQuote"),
     },
   ];
 
@@ -53,10 +55,10 @@ export default function Testimonials() {
         {/* Header */}
         <div className="mx-auto max-w-3xl text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-extrabold text-brand-navy">
-            Words from our <span className="text-brand-coral">students</span>
+            {t("title")} <span className="text-brand-coral">{t("titleCoral")}</span>
           </h2>
           <p className="mt-4 text-brand-slate text-[15px]">
-            Read testimonials from our global community of learners who changed their lives.
+            {t("subtitle")}
           </p>
         </div>
 

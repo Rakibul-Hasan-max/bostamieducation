@@ -1,10 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import { Award } from "lucide-react";
 
 export default function CTA() {
+  const t = useTranslations("CTA");
+
   return (
     <section className="w-full bg-white py-16 md:py-24">
       <div className="mx-auto max-w-5xl px-6">
@@ -28,8 +31,8 @@ export default function CTA() {
               <Award className="h-5 w-5" />
             </div>
             <div>
-              <div className="text-xs text-brand-slate font-medium">Over</div>
-              <div className="text-sm font-bold text-brand-navy">20k+ Students</div>
+              <div className="text-xs text-brand-slate font-medium">{t("over")}</div>
+              <div className="text-sm font-bold text-brand-navy">20k+ {t("studentsBadge")}</div>
             </div>
           </div>
         </div>
@@ -37,8 +40,8 @@ export default function CTA() {
         {/* Text & Button Area */}
         <div className="mt-12 text-center">
           <h2 className="text-3xl md:text-5xl font-extrabold text-brand-navy leading-tight">
-            Ready to achieve <span className="text-brand-coral">greatness</span> <br />
-            in your studies?
+            {t("title")} <span className="text-brand-coral">{t("titleCoral")}</span> <br />
+            {t("titleEnd")}
           </h2>
 
           <div className="mt-8 flex flex-wrap justify-center items-center gap-6">
@@ -46,13 +49,13 @@ export default function CTA() {
               href="/register"
               className="rounded-full bg-brand-yellow px-8 py-3.5 text-[15px] font-bold text-brand-navy shadow-md shadow-amber-100 hover:bg-brand-yellow-hover hover:scale-105 active:scale-95 transition-all duration-200"
             >
-              Get started
+              {t("getStarted")}
             </Link>
             <Link
               href="/about"
               className="text-[15px] font-bold text-brand-navy hover:text-brand-coral transition-colors flex items-center gap-1.5 py-2"
             >
-              Learn more
+              {t("learnMore")}
             </Link>
           </div>
         </div>

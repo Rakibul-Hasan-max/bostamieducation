@@ -2,10 +2,11 @@
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Award, BookOpen, Mail, Search, Users, Star } from "lucide-react";
-import Link from "next/link";
+import { Award, Star, Search } from "lucide-react";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 interface Mentor {
   name: string;
@@ -21,89 +22,112 @@ interface Mentor {
   rating: number;
 }
 
-const mentorsData: Mentor[] = [
-  {
-    name: "Bayzid Bostami",
-    role: "Founder & CEO, Physics Head",
-    department: "Physics",
-    bio: "Passionate about simplifying complex physics concepts for college and university admission seekers. Over 6 years of academic mentoring experience.",
-    img: "/about-ceo.png",
-    students: "20k+",
-    courses: "15+",
-    facebook: "https://www.facebook.com/bostamieducationpage/",
-    linkedin: "https://www.linkedin.com/in/bostami-education-ltd/",
-    youtube: "https://www.youtube.com/@bostamieducation",
-    rating: 4.9,
-  },
-  {
-    name: "Rakibul Hasan",
-    role: "Co-Founder & CTO, Technical Lead",
-    department: "Technical & ICT",
-    bio: "Lead software engineer and tech enthusiast, instructing digital courses in web development, programming foundations, and tech career prep.",
-    img: "/cto.png",
-    students: "10k+",
-    courses: "8+",
-    facebook: "https://facebook.com/rakibulhasan.cn",
-    linkedin: "https://www.linkedin.com/in/rakibulhasan-bd/",
-    rating: 4.8,
-  },
-  {
-    name: "Asrafi Islam Orpita",
-    role: "Biology Instructor",
-    department: "Biology",
-    bio: "Specializes in organic and inorganic chemistry with a focus on board exams, shortcuts, and university admission prep.",
-    img: "/tutor8.png",
-    students: "5k+",
-    courses: "6+",
-    rating: 4.8,
-  },
-  {
-    name: "Md. Akash",
-    role: "Physics Instructor",
-    department: "Physics",
-    bio: "Passionate about simplifying complex physics concepts for college and university admission seekers. Over 6 years of academic mentoring experience.",
-    img: "/tutor5.png",
-    students: "8k+",
-    courses: "10+",
-    rating: 4.6,
-  },
-  {
-    name: "Foysal Ahamed",
-    role: "Higher Math Instructor",
-    department: "Math",
-    bio: "Passionate about simplifying complex math concepts for college and university admission seekers. Over 6 years of academic mentoring experience.",
-    img: "/tutor10.png",
-    students: "6k+",
-    courses: "7+",
-    rating: 4.6,
-  },
-  {
-    name: "Akkash Ali",
-    role: "General Math Instructor",
-    department: "Math",
-    bio: "Passionate about simplifying complex math concepts for college and university admission seekers. Over 6 years of academic mentoring experience.",
-    img: "/tutor11.png",
-    students: "4k+",
-    courses: "5+",
-    rating: 4.8,
-  },
-  {
-    name: "Majharul Islam",
-    role: "Chemistry Instructor",
-    department: "Chemistry",
-    bio: "Passionate about simplifying complex chemistry concepts for college and university admission seekers. Over 6 years of academic mentoring experience.",
-    img: "/tutor9.png",
-    students: "3k+",
-    courses: "4+",
-    rating: 4.7,
-  },
-];
-
-const categories = ["All", "Physics", "Math", "Chemistry", "Biology", "Technical & ICT"];
-
 export default function MentorsPage() {
+  const t = useTranslations("Mentors");
+  const tCourses = useTranslations("Courses");
+
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    document.title = `${t("badge")} | Bostami Education`;
+  }, [t]);
+
+  const categories = [
+    { key: "All", label: tCourses("catAll") },
+    { key: "Physics", label: tCourses("catPhysics") },
+    { key: "Math", label: tCourses("catMath") },
+    { key: "Chemistry", label: tCourses("catChemistry") },
+    { key: "Biology", label: tCourses("catBiology") },
+    { key: "Technical & ICT", label: tCourses("catICT") },
+  ];
+
+  const mentorsData: Mentor[] = [
+    {
+      name: "Bayzid Bostami",
+      role: t("roleCEO"),
+      department: "Physics",
+      bio: t("bioCEO"),
+      img: "/about-ceo.png",
+      students: "20k+",
+      courses: "15+",
+      facebook: "https://www.facebook.com/bostamieducationpage/",
+      linkedin: "https://www.linkedin.com/in/bostami-education-ltd/",
+      youtube: "https://www.youtube.com/@bostamieducation",
+      rating: 4.9,
+    },
+    {
+      name: "Rakibul Hasan",
+      role: t("roleCTO"),
+      department: "Technical & ICT",
+      bio: t("bioCTO"),
+      img: "/cto.png",
+      students: "10k+",
+      courses: "8+",
+      facebook: "https://facebook.com/rakibulhasan.cn",
+      linkedin: "https://www.linkedin.com/in/rakibulhasan-bd/",
+      rating: 4.8,
+    },
+    {
+      name: "Asrafi Islam Orpita",
+      role: t("roleBiology"),
+      department: "Biology",
+      bio: t("bioBiology"),
+      img: "/tutor8.png",
+      students: "5k+",
+      courses: "6+",
+      rating: 4.8,
+    },
+    {
+      name: "Md. Akash",
+      role: t("rolePhysics"),
+      department: "Physics",
+      bio: t("bioPhysics"),
+      img: "/tutor5.png",
+      students: "8k+",
+      courses: "10+",
+      rating: 4.6,
+    },
+    {
+      name: "Foysal Ahamed",
+      role: t("roleHigherMath"),
+      department: "Math",
+      bio: t("bioHigherMath"),
+      img: "/tutor10.png",
+      students: "6k+",
+      courses: "7+",
+      rating: 4.6,
+    },
+    {
+      name: "Akkash Ali",
+      role: t("roleGeneralMath"),
+      department: "Math",
+      bio: t("bioGeneralMath"),
+      img: "/tutor11.png",
+      students: "4k+",
+      courses: "5+",
+      rating: 4.8,
+    },
+    {
+      name: "Majharul Islam",
+      role: t("roleChemistry"),
+      department: "Chemistry",
+      bio: t("bioChemistry"),
+      img: "/tutor9.png",
+      students: "3k+",
+      courses: "4+",
+      rating: 4.7,
+    },
+  ];
+
+  const getDeptLabel = (dept: string) => {
+    if (dept === "Physics") return tCourses("catPhysics");
+    if (dept === "Math") return tCourses("catMath");
+    if (dept === "Chemistry") return tCourses("catChemistry");
+    if (dept === "Biology") return tCourses("catBiology");
+    if (dept === "Technical & ICT") return tCourses("catICT");
+    return dept;
+  };
 
   // Filter mentors based on category and search query
   const filteredMentors = mentorsData.filter((mentor) => {
@@ -134,13 +158,13 @@ export default function MentorsPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/30 to-white/60 pointer-events-none" />
           <div className="relative mx-auto max-w-7xl px-6">
             <span className="block text-blue-600 text-sm font-bold tracking-wider mb-3">
-              Our Instructors
+              {t("badge")}
             </span>
             <h1 className="text-4xl md:text-5xl font-extrabold text-[#1a1a2e] tracking-tight mb-4">
-              Meet Our Expert Mentors
+              {t("title")}
             </h1>
             <p className="max-w-2xl mx-auto text-slate-500 text-[15px] font-medium leading-relaxed mb-8">
-              Learn from top educators, industry specialists, and experienced mentors committed to guiding you towards academic excellence and technical careers.
+              {t("subtitle")}
             </p>
 
             {/* Filter and Search Bar Container */}
@@ -149,15 +173,15 @@ export default function MentorsPage() {
               <div className="flex flex-wrap items-center justify-center gap-1.5 w-full md:w-auto">
                 {categories.map((cat) => (
                   <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
+                    key={cat.key}
+                    onClick={() => setSelectedCategory(cat.key)}
                     className={`px-4 py-2 text-xs font-bold rounded-full transition-all cursor-pointer ${
-                      selectedCategory === cat
+                      selectedCategory === cat.key
                         ? "bg-blue-600 text-white shadow-md shadow-blue-100"
                         : "text-slate-500 hover:text-[#1a1a2e] hover:bg-slate-100"
                     }`}
                   >
-                    {cat}
+                    {cat.label}
                   </button>
                 ))}
               </div>
@@ -167,7 +191,7 @@ export default function MentorsPage() {
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <input
                   type="text"
-                  placeholder="Search mentors..."
+                  placeholder={t("searchPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full rounded-full bg-slate-50 border border-slate-200 pl-10 pr-4 py-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition"
@@ -227,7 +251,7 @@ export default function MentorsPage() {
                       {/* Footer Row: Department & Socials */}
                       <div className="flex items-center justify-between mt-auto">
                         <span className="text-[14px] font-bold text-[#f7823b]">
-                          {mentor.department}
+                          {getDeptLabel(mentor.department)}
                         </span>
 
                         <div className="flex items-center gap-2.5">
@@ -278,9 +302,9 @@ export default function MentorsPage() {
             ) : (
               <div className="text-center py-20 bg-white rounded-3xl border border-slate-100 shadow-sm max-w-xl mx-auto">
                 <Award className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-[#1a1a2e] mb-1">No mentors found</h3>
+                <h3 className="text-lg font-bold text-[#1a1a2e] mb-1">{t("noMentorsTitle")}</h3>
                 <p className="text-slate-400 text-xs">
-                  Try adjusting your search criteria or selecting a different category tab.
+                  {t("noMentorsDesc")}
                 </p>
               </div>
             )}
@@ -299,23 +323,23 @@ export default function MentorsPage() {
 
               <div className="relative z-10 max-w-2xl mx-auto">
                 <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-4">
-                  Want to teach at Bostami Education?
+                  {t("ctaTitle")}
                 </h2>
                 <p className="text-slate-300 text-[14px] leading-relaxed mb-8">
-                  We are always looking for passionate educators, tech practitioners, and subject experts. Join our teaching community, build quality courses, and impact thousands of students.
+                  {t("ctaDesc")}
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-4">
                   <Link
                     href="/contact"
                     className="px-6 py-3 bg-[#ffd260] hover:bg-[#fcc13d] text-slate-900 font-extrabold text-xs rounded-full transition shadow-md shadow-yellow-500/10 cursor-pointer"
                   >
-                    Apply as Instructor
+                    {t("applyInstructor")}
                   </Link>
                   <Link
                     href="/contact"
                     className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-extrabold text-xs rounded-full transition border border-white/20 cursor-pointer"
                   >
-                    Contact Support
+                    {t("contactSupport")}
                   </Link>
                 </div>
               </div>

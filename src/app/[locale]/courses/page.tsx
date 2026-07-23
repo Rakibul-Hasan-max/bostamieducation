@@ -2,9 +2,10 @@
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import { Clock, Search, Star, ArrowUpDown, Heart, LayoutGrid } from "lucide-react";
 
 interface Course {
@@ -23,135 +24,156 @@ interface Course {
   levelColor: string;
 }
 
-const coursesData: Course[] = [
-  {
-    id: "hsc-physics-1st",
-    title: "HSC Physics 1st Paper Complete Syllabus Course",
-    category: "Physics",
-    price: "৳2,500",
-    numericPrice: 2500,
-    duration: "40h 30m",
-    lectures: 50,
-    rating: 4.8,
-    reviewCount: 156,
-    img: "/studio1.png",
-    level: "All level",
-    levelBg: "bg-purple-50",
-    levelColor: "text-purple-600",
-  },
-  {
-    id: "univ-physics-masterclass",
-    title: "University Admission Physics Masterclass",
-    category: "Physics",
-    price: "৳3,000",
-    numericPrice: 3000,
-    duration: "60h 15m",
-    lectures: 75,
-    rating: 4.9,
-    reviewCount: 320,
-    img: "/studio4.png",
-    level: "Advanced",
-    levelBg: "bg-orange-50",
-    levelColor: "text-orange-500",
-  },
-  {
-    id: "hsc-math-admission",
-    title: "HSC Higher Mathematics Admission Prep Special",
-    category: "Math",
-    price: "৳2,800",
-    numericPrice: 2800,
-    duration: "55h 0m",
-    lectures: 70,
-    rating: 4.7,
-    reviewCount: 184,
-    img: "/studio2.png",
-    level: "Intermediate",
-    levelBg: "bg-blue-50",
-    levelColor: "text-blue-500",
-  },
-  {
-    id: "calculus-geometry",
-    title: "Calculus & Geometry Foundation Masterclass",
-    category: "Math",
-    price: "৳1,500",
-    numericPrice: 1500,
-    duration: "30h 45m",
-    lectures: 40,
-    rating: 4.6,
-    reviewCount: 98,
-    img: "/studio1.png",
-    level: "Beginner",
-    levelBg: "bg-emerald-50",
-    levelColor: "text-emerald-500",
-  },
-  {
-    id: "chemistry-2nd-organic",
-    title: "HSC Chemistry 2nd Paper Organic Chemistry",
-    category: "Chemistry",
-    price: "৳2,200",
-    numericPrice: 2200,
-    duration: "45h 20m",
-    lectures: 55,
-    rating: 4.8,
-    reviewCount: 215,
-    img: "/studio3.png",
-    level: "All level",
-    levelBg: "bg-purple-50",
-    levelColor: "text-purple-600",
-  },
-  {
-    id: "biology-crash",
-    title: "HSC Biology Complete Syllabus Crash Course",
-    category: "Biology",
-    price: "৳2,000",
-    numericPrice: 2000,
-    duration: "38h 10m",
-    lectures: 48,
-    rating: 4.7,
-    reviewCount: 142,
-    img: "/studio5.png",
-    level: "Intermediate",
-    levelBg: "bg-blue-50",
-    levelColor: "text-blue-500",
-  },
-  {
-    id: "hsc-ict-prep",
-    title: "HSC ICT Board Prep & Practical Course",
-    category: "Technical & ICT",
-    price: "৳1,800",
-    numericPrice: 1800,
-    duration: "35h 0m",
-    lectures: 45,
-    rating: 4.9,
-    reviewCount: 260,
-    img: "/studio2.png",
-    level: "Beginner",
-    levelBg: "bg-emerald-50",
-    levelColor: "text-emerald-500",
-  },
-  {
-    id: "fullstack-js",
-    title: "Full-Stack Web Development Foundation Bootcamp",
-    category: "Technical & ICT",
-    price: "৳5,000",
-    numericPrice: 5000,
-    duration: "80h 30m",
-    lectures: 120,
-    rating: 4.9,
-    reviewCount: 195,
-    img: "/studio4.png",
-    level: "Advanced",
-    levelBg: "bg-orange-50",
-    levelColor: "text-orange-500",
-  },
-];
-
-const categories = ["All", "Physics", "Math", "Chemistry", "Biology", "Technical & ICT"];
-
 export default function CoursesPage() {
+  const t = useTranslations("Courses");
+
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("default");
+
+  useEffect(() => {
+    document.title = `${t("badge")} | Bostami Education`;
+  }, [t]);
+
+  const categories = [
+    { key: "All", label: t("catAll") },
+    { key: "Physics", label: t("catPhysics") },
+    { key: "Math", label: t("catMath") },
+    { key: "Chemistry", label: t("catChemistry") },
+    { key: "Biology", label: t("catBiology") },
+    { key: "Technical & ICT", label: t("catICT") },
+  ];
+
+  const coursesData: Course[] = [
+    {
+      id: "hsc-physics-1st",
+      title: t("c1Title"),
+      category: "Physics",
+      price: t("c1Price"),
+      numericPrice: 2500,
+      duration: t("c1Duration"),
+      lectures: 50,
+      rating: 4.8,
+      reviewCount: 156,
+      img: "/studio1.png",
+      level: "All level",
+      levelBg: "bg-purple-50",
+      levelColor: "text-purple-600",
+    },
+    {
+      id: "univ-physics-masterclass",
+      title: t("c2Title"),
+      category: "Physics",
+      price: t("c2Price"),
+      numericPrice: 3000,
+      duration: t("c2Duration"),
+      lectures: 75,
+      rating: 4.9,
+      reviewCount: 320,
+      img: "/studio4.png",
+      level: "Advanced",
+      levelBg: "bg-orange-50",
+      levelColor: "text-orange-500",
+    },
+    {
+      id: "hsc-math-admission",
+      title: t("c3Title"),
+      category: "Math",
+      price: t("c3Price"),
+      numericPrice: 2800,
+      duration: t("c3Duration"),
+      lectures: 70,
+      rating: 4.7,
+      reviewCount: 184,
+      img: "/studio2.png",
+      level: "Intermediate",
+      levelBg: "bg-blue-50",
+      levelColor: "text-blue-500",
+    },
+    {
+      id: "calculus-geometry",
+      title: t("c4Title"),
+      category: "Math",
+      price: t("c4Price"),
+      numericPrice: 1500,
+      duration: t("c4Duration"),
+      lectures: 40,
+      rating: 4.6,
+      reviewCount: 98,
+      img: "/studio1.png",
+      level: "Beginner",
+      levelBg: "bg-emerald-50",
+      levelColor: "text-emerald-500",
+    },
+    {
+      id: "chemistry-2nd-organic",
+      title: t("c5Title"),
+      category: "Chemistry",
+      price: t("c5Price"),
+      numericPrice: 2200,
+      duration: t("c5Duration"),
+      lectures: 55,
+      rating: 4.8,
+      reviewCount: 215,
+      img: "/studio3.png",
+      level: "All level",
+      levelBg: "bg-purple-50",
+      levelColor: "text-purple-600",
+    },
+    {
+      id: "biology-crash",
+      title: t("c6Title"),
+      category: "Biology",
+      price: t("c6Price"),
+      numericPrice: 2000,
+      duration: t("c6Duration"),
+      lectures: 48,
+      rating: 4.7,
+      reviewCount: 142,
+      img: "/studio5.png",
+      level: "Intermediate",
+      levelBg: "bg-blue-50",
+      levelColor: "text-blue-500",
+    },
+    {
+      id: "hsc-ict-prep",
+      title: t("c7Title"),
+      category: "Technical & ICT",
+      price: t("c7Price"),
+      numericPrice: 1800,
+      duration: t("c7Duration"),
+      lectures: 45,
+      rating: 4.9,
+      reviewCount: 260,
+      img: "/studio2.png",
+      level: "Beginner",
+      levelBg: "bg-emerald-50",
+      levelColor: "text-emerald-500",
+    },
+    {
+      id: "fullstack-js",
+      title: t("c8Title"),
+      category: "Technical & ICT",
+      price: t("c8Price"),
+      numericPrice: 5000,
+      duration: t("c8Duration"),
+      lectures: 120,
+      rating: 4.9,
+      reviewCount: 195,
+      img: "/studio4.png",
+      level: "Advanced",
+      levelBg: "bg-orange-50",
+      levelColor: "text-orange-500",
+    },
+  ];
+
+  const getLevelLabel = (level: string) => {
+    if (level === "All level") return t("allLevel");
+    if (level === "Beginner") return t("beginner");
+    if (level === "Intermediate") return t("intermediate");
+    if (level === "Advanced") return t("advanced");
+    return level;
+  };
 
   // Filter and Sort Courses
   const filteredCourses = coursesData
@@ -188,13 +210,13 @@ export default function CoursesPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/30 to-white/60 pointer-events-none" />
           <div className="relative mx-auto max-w-7xl px-6">
             <span className="block text-blue-600 text-sm font-bold tracking-wider mb-3">
-              Academic & Skill Courses
+              {t("badge")}
             </span>
             <h1 className="text-4xl md:text-5xl font-extrabold text-[#1a1a2e] tracking-tight mb-4">
-              Explore Our Courses
+              {t("title")}
             </h1>
             <p className="max-w-2xl mx-auto text-slate-500 text-[15px] font-medium leading-relaxed mb-8">
-              Choose from our curated courses designed to help you excel in board exams, university admissions, and modern industrial programming skills.
+              {t("subtitle")}
             </p>
 
             {/* Filter, Search, and Sort Container */}
@@ -203,15 +225,15 @@ export default function CoursesPage() {
               <div className="flex flex-wrap items-center justify-center gap-1.5 w-full lg:w-auto">
                 {categories.map((cat) => (
                   <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
+                    key={cat.key}
+                    onClick={() => setSelectedCategory(cat.key)}
                     className={`px-4 py-2.5 text-xs font-bold rounded-full transition-all cursor-pointer ${
-                      selectedCategory === cat
+                      selectedCategory === cat.key
                         ? "bg-blue-600 text-white shadow-md shadow-blue-100"
                         : "text-slate-500 hover:text-[#1a1a2e] hover:bg-slate-100"
                     }`}
                   >
-                    {cat}
+                    {cat.label}
                   </button>
                 ))}
               </div>
@@ -223,7 +245,7 @@ export default function CoursesPage() {
                   <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                   <input
                     type="text"
-                    placeholder="Search courses..."
+                    placeholder={t("searchPlaceholder")}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full rounded-full bg-slate-50 border border-slate-200 pl-10 pr-4 py-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition"
@@ -238,11 +260,11 @@ export default function CoursesPage() {
                     onChange={(e) => setSortBy(e.target.value)}
                     className="w-full rounded-full bg-slate-50 border border-slate-200 pl-10 pr-8 py-2.5 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition appearance-none cursor-pointer"
                   >
-                    <option value="default">Sort: Default</option>
-                    <option value="popularity">Most Reviews</option>
-                    <option value="rating">Highest Rated</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
+                    <option value="default">{t("sortDefault")}</option>
+                    <option value="popularity">{t("sortReviews")}</option>
+                    <option value="rating">{t("sortRating")}</option>
+                    <option value="price-low">{t("sortPriceLow")}</option>
+                    <option value="price-high">{t("sortPriceHigh")}</option>
                   </select>
                 </div>
               </div>
@@ -278,7 +300,7 @@ export default function CoursesPage() {
                       {/* Level and Heart */}
                       <div className="flex items-center justify-between mb-3">
                         <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${course.levelBg} ${course.levelColor}`}>
-                          {course.level}
+                          {getLevelLabel(course.level)}
                         </span>
                         <Heart className="w-4 h-4 text-slate-400 hover:text-red-500 hover:fill-red-500 transition-colors cursor-pointer" />
                       </div>
@@ -319,7 +341,7 @@ export default function CoursesPage() {
                         </div>
                         <div className="flex items-center gap-1.5 text-slate-500">
                           <LayoutGrid className="w-3.5 h-3.5 text-orange-500" />
-                          <span className="text-[12px] font-medium">{course.lectures} lectures</span>
+                          <span className="text-[12px] font-medium">{course.lectures} {t("lecturesSuffix")}</span>
                         </div>
                       </div>
                     </div>
@@ -329,9 +351,9 @@ export default function CoursesPage() {
             ) : (
               <div className="text-center py-20 bg-white rounded-3xl border border-slate-100 shadow-sm max-w-xl mx-auto">
                 <Search className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-[#1a1a2e] mb-1">No courses found</h3>
+                <h3 className="text-lg font-bold text-[#1a1a2e] mb-1">{t("noCoursesTitle")}</h3>
                 <p className="text-slate-400 text-xs">
-                  Try adjusting your search query or selecting another category tab.
+                  {t("noCoursesDesc")}
                 </p>
               </div>
             )}
@@ -350,23 +372,23 @@ export default function CoursesPage() {
 
               <div className="relative z-10 max-w-2xl mx-auto">
                 <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-4">
-                  Ready to start your learning journey?
+                  {t("ctaTitle")}
                 </h2>
                 <p className="text-slate-300 text-[14px] leading-relaxed mb-8">
-                  Sign up today and get immediate access to all free course materials, quizzes, and community forums.
+                  {t("ctaDesc")}
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-4">
                   <Link
                     href="/register"
                     className="px-6 py-3 bg-[#ffd260] hover:bg-[#fcc13d] text-slate-900 font-extrabold text-xs rounded-full transition shadow-md shadow-yellow-500/10 cursor-pointer"
                   >
-                    Sign Up for Free
+                    {t("signUpFree")}
                   </Link>
                   <Link
                     href="/pricing"
                     className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-extrabold text-xs rounded-full transition border border-white/20 cursor-pointer"
                   >
-                    View Pricing Plans
+                    {t("viewPricing")}
                   </Link>
                 </div>
               </div>
