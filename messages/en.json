@@ -1,0 +1,47 @@
+{
+  "Navbar": {
+    "home": "Home",
+    "courses": "Courses",
+    "mentors": "Mentors",
+    "pages": "Pages",
+    "about": "About Us",
+    "pricing": "Pricing Plans",
+    "contact": "Contact",
+    "login": "Login",
+    "signup": "Sign Up"
+  },
+  "Footer": {
+    "description": "We are a library that provides a variety of courses for you. Learn new skills, start a new career, and achieve your goals with us.",
+    "newsletterTitle": "Get the latest news and updates delivered to your inbox.",
+    "emailPlaceholder": "Enter your email",
+    "subscribe": "Subscribe",
+    "pages": "Pages",
+    "home": "Home",
+    "courses": "Courses",
+    "mentors": "Mentors",
+    "contact": "Contact",
+    "utility": "Utility",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "forgotPassword": "Forgot Password",
+    "resetPassword": "Reset Password",
+    "contactInfo": "Contact Info",
+    "address": "Uttara Sector 7, Road 1, Dhaka, Bangladesh",
+    "followUs": "Follow Us",
+    "allRightsReserved": "All rights reserved.",
+    "designBy": "Design and developed by",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
+  },
+  "Hero": {
+    "badge": "Get started with Bostami Education",
+    "titlePart1": "Find suitable",
+    "titlePart2": "courses from the",
+    "titlePart3": "best mentors",
+    "subtitle": "The good gathering doesn't bearing day stars over open behold may male tree replenish don't blessed beast days earth fifth let multiply and he every blessed.",
+    "startLearning": "Start Learning",
+    "watchVideo": "Watch Video",
+    "cardTitle": "Physics Masterclass",
+    "cardSubtitle": "10+ Courses"
+  }
+}

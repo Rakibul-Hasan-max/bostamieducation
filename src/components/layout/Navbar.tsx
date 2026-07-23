@@ -2,11 +2,12 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import { ChevronDown, Menu, X } from "lucide-react";
 
 export default function Navbar() {
+  const t = useTranslations("Navbar");
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [pagesOpen, setPagesOpen] = useState(false);
@@ -61,13 +62,13 @@ export default function Navbar() {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
           <Link href="/" className={navLink("/", true)}>
-            Home
+            {t("home")}
           </Link>
           <Link href="/courses" className={navLink("/courses")}>
-            Courses
+            {t("courses")}
           </Link>
           <Link href="/mentors" className={navLink("/mentors")}>
-            Mentors
+            {t("mentors")}
           </Link>
           {/* Pages dropdown — click-based */}
           <div ref={desktopPagesRef} className="relative">
@@ -79,7 +80,7 @@ export default function Navbar() {
                   : 'text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors'
               }`}
             >
-              <span>Pages</span>
+              <span>{t("pages")}</span>
               <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${desktopPagesOpen ? "rotate-180" : ""}`} />
             </button>
             {desktopPagesOpen && (
@@ -91,7 +92,7 @@ export default function Navbar() {
                     pathname.startsWith('/about') ? 'text-brand-yellow font-bold' : 'text-brand-slate hover:bg-slate-50 hover:text-brand-navy'
                   }`}
                 >
-                  About Us
+                  {t("about")}
                 </Link>
                 <Link
                   href="/pricing"
@@ -100,26 +101,26 @@ export default function Navbar() {
                     pathname.startsWith('/pricing') ? 'text-brand-yellow font-bold' : 'text-brand-slate hover:bg-slate-50 hover:text-brand-navy'
                   }`}
                 >
-                  Pricing Plans
+                  {t("pricing")}
                 </Link>
               </div>
             )}
           </div>
           <Link href="/contact" className={navLink("/contact")}>
-            Contact
+            {t("contact")}
           </Link>
         </nav>
 
         {/* Desktop Buttons */}
         <div className="hidden md:flex items-center gap-5">
           <Link href="/login" className="text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors">
-            Login
+            {t("login")}
           </Link>
           <Link
             href="/register"
             className="rounded-full bg-brand-yellow px-6 py-2.5 text-[15px] font-bold text-brand-navy shadow-sm hover:bg-brand-yellow-hover hover:scale-105 active:scale-95 transition-all duration-200"
           >
-            Sign Up
+            {t("signup")}
           </Link>
         </div>
 
@@ -141,21 +142,21 @@ export default function Navbar() {
               onClick={() => setIsOpen(false)}
               className={mobileNavLink("/", true)}
             >
-              Home
+              {t("home")}
             </Link>
             <Link
               href="/courses"
               onClick={() => setIsOpen(false)}
               className={mobileNavLink("/courses")}
             >
-              Courses
+              {t("courses")}
             </Link>
             <Link
               href="/mentors"
               onClick={() => setIsOpen(false)}
               className={mobileNavLink("/mentors")}
             >
-              Mentors
+              {t("mentors")}
             </Link>
 
             {/* Pages accordion */}
@@ -168,7 +169,7 @@ export default function Navbar() {
                     : 'text-brand-slate hover:text-brand-navy'
                 }`}
               >
-                <span>Pages</span>
+                <span>{t("pages")}</span>
                 <ChevronDown className={`h-4 w-4 transition-transform ${pagesOpen ? "rotate-180" : ""}`} />
               </button>
               {pagesOpen && (
@@ -178,14 +179,14 @@ export default function Navbar() {
                     onClick={() => { setIsOpen(false); setPagesOpen(false); }}
                     className="text-[14px] font-medium text-brand-slate hover:text-brand-navy"
                   >
-                    About Us
+                    {t("about")}
                   </Link>
                   <Link
                     href="/pricing"
                     onClick={() => { setIsOpen(false); setPagesOpen(false); }}
                     className="text-[14px] font-medium text-brand-slate hover:text-brand-navy"
                   >
-                    Pricing Plans
+                    {t("pricing")}
                   </Link>
                 </div>
               )}
@@ -196,7 +197,7 @@ export default function Navbar() {
               onClick={() => setIsOpen(false)}
               className={mobileNavLink("/contact")}
             >
-              Contact
+              {t("contact")}
             </Link>
 
             <div className="mt-4 flex flex-col gap-3 border-t border-slate-100 pt-4">
@@ -205,14 +206,14 @@ export default function Navbar() {
                 onClick={() => setIsOpen(false)}
                 className="text-center text-[15px] font-medium text-brand-slate hover:text-brand-navy py-2"
               >
-                Login
+                {t("login")}
               </Link>
               <Link
                 href="/register"
                 onClick={() => setIsOpen(false)}
                 className="rounded-full bg-brand-yellow py-3 text-center text-[15px] font-bold text-brand-navy hover:bg-brand-yellow-hover"
               >
-                Sign Up
+                {t("signup")}
               </Link>
             </div>
           </nav>

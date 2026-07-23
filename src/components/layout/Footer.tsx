@@ -2,12 +2,17 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link, usePathname, useRouter } from "@/i18n/routing";
+import { useTranslations, useLocale } from "next-intl";
 import { Mail, Phone, MapPin, Globe, ChevronUp } from "lucide-react";
 
 export default function Footer() {
+  const t = useTranslations("Footer");
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [langOpen, setLangOpen] = useState(false);
-  const [selectedLang, setSelectedLang] = useState<"en" | "bn">("en");
   const langRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
@@ -26,7 +31,12 @@ export default function Footer() {
     { code: "bn" as const, label: "বাংলা", flag: "🇧🇩" },
   ];
 
-  const currentLang = languages.find((l) => l.code === selectedLang)!;
+  const currentLang = languages.find((l) => l.code === locale) || languages[0];
+
+  const changeLanguage = (newLocale: "en" | "bn") => {
+    router.replace(pathname, { locale: newLocale });
+    setLangOpen(false);
+  };
 
   return (
     <footer className="w-full bg-[#f8fafc] border-t border-slate-100/80 pt-16 pb-8 text-brand-navy">
@@ -49,8 +59,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-4 max-w-sm text-sm text-brand-slate leading-relaxed">
-              We are a library that provides a variety of courses for you. Learn new skills, 
-              start a new career, and achieve your goals with us.
+              {t("description")}
             </p>
           </div>
 
@@ -58,12 +67,12 @@ export default function Footer() {
           <div className="col-span-1 lg:col-span-6 flex flex-col md:items-end justify-center">
             <div className="w-full max-w-md">
               <h4 className="text-sm font-bold text-brand-navy mb-2">
-                Get the latest news and updates delivered to your inbox.
+                {t("newsletterTitle")}
               </h4>
               <form onSubmit={(e) => e.preventDefault()} className="mt-3 flex flex-col sm:flex-row gap-2.5 w-full">
                 <input
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={t("emailPlaceholder")}
                   className="w-full sm:flex-1 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm text-brand-navy placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
                   required
                 />
@@ -71,7 +80,7 @@ export default function Footer() {
                   type="submit"
                   className="w-full sm:w-auto rounded-full bg-brand-yellow px-6 py-2.5 text-sm font-bold text-brand-navy hover:bg-brand-yellow-hover transition-colors"
                 >
-                  Subscribe
+                  {t("subscribe")}
                 </button>
               </form>
             </div>
@@ -83,45 +92,45 @@ export default function Footer() {
           
           {/* Column 1: Pages */}
           <div>
-            <h4 className="text-[15px] font-bold text-brand-navy mb-4">Pages</h4>
+            <h4 className="text-[15px] font-bold text-brand-navy mb-4">{t("pages")}</h4>
             <ul className="flex flex-col gap-3 text-sm text-brand-slate font-medium">
               <li>
-                <Link href="/" className="hover:text-brand-coral transition-colors">Home</Link>
+                <Link href="/" className="hover:text-brand-coral transition-colors">{t("home")}</Link>
               </li>
               <li>
-                <Link href="/courses" className="hover:text-brand-coral transition-colors">Courses</Link>
+                <Link href="/courses" className="hover:text-brand-coral transition-colors">{t("courses")}</Link>
               </li>
               <li>
-                <Link href="/mentors" className="hover:text-brand-coral transition-colors">Mentors</Link>
+                <Link href="/mentors" className="hover:text-brand-coral transition-colors">{t("mentors")}</Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-brand-coral transition-colors">Contact</Link>
+                <Link href="/contact" className="hover:text-brand-coral transition-colors">{t("contact")}</Link>
               </li>
             </ul>
           </div>
 
           {/* Column 2: Utility */}
           <div>
-            <h4 className="text-[15px] font-bold text-brand-navy mb-4">Utility</h4>
+            <h4 className="text-[15px] font-bold text-brand-navy mb-4">{t("utility")}</h4>
             <ul className="flex flex-col gap-3 text-sm text-brand-slate font-medium">
               <li>
-                <Link href="/login" className="hover:text-brand-coral transition-colors">Sign In</Link>
+                <Link href="/login" className="hover:text-brand-coral transition-colors">{t("signIn")}</Link>
               </li>
               <li>
-                <Link href="/register" className="hover:text-brand-coral transition-colors">Sign Up</Link>
+                <Link href="/register" className="hover:text-brand-coral transition-colors">{t("signUp")}</Link>
               </li>
               <li>
-                <Link href="/forgot-password" className="hover:text-brand-coral transition-colors">Forgot Password</Link>
+                <Link href="/forgot-password" className="hover:text-brand-coral transition-colors">{t("forgotPassword")}</Link>
               </li>
               <li>
-                <Link href="/reset-password" className="hover:text-brand-coral transition-colors">Reset Password</Link>
+                <Link href="/reset-password" className="hover:text-brand-coral transition-colors">{t("resetPassword")}</Link>
               </li>
             </ul>
           </div>
 
           {/* Column 3: Contact */}
           <div>
-            <h4 className="text-[15px] font-bold text-brand-navy mb-4">Contact Info</h4>
+            <h4 className="text-[15px] font-bold text-brand-navy mb-4">{t("contactInfo")}</h4>
             <ul className="flex flex-col gap-3 text-sm text-brand-slate font-medium">
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-brand-slate shrink-0" />
@@ -133,14 +142,14 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 text-brand-slate shrink-0 mt-0.5" />
-                <span>Uttara Sector 7, Road 1, Dhaka, Bangladesh</span>
+                <span>{t("address")}</span>
               </li>
             </ul>
           </div>
 
           {/* Column 4: Follow Us */}
           <div>
-            <h4 className="text-[15px] font-bold text-brand-navy mb-4">Follow Us</h4>
+            <h4 className="text-[15px] font-bold text-brand-navy mb-4">{t("followUs")}</h4>
             <div className="flex gap-3">
               <a
                 href="https://www.facebook.com/bostamieducation"
@@ -179,10 +188,10 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200/60 pt-8 text-xs text-brand-slate font-semibold">
-          <p>© {new Date().getFullYear()} BostamiEducation. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} BostamiEducation. {t("allRightsReserved")}</p>
 
           {/* Design and developed */}
-          <p>Design and developed by <a href="https://epciln.com" target="_blank">Epciln</a></p>
+          <p>{t("designBy")} <a href="https://epciln.com" target="_blank">Epciln</a></p>
 
           <div className="flex items-center gap-5">
             {/* Language Selector */}
@@ -201,12 +210,9 @@ export default function Footer() {
                   {languages.map((lang) => (
                     <button
                       key={lang.code}
-                      onClick={() => {
-                        setSelectedLang(lang.code);
-                        setLangOpen(false);
-                      }}
+                      onClick={() => changeLanguage(lang.code)}
                       className={`flex items-center gap-2.5 w-full rounded-lg px-3 py-2 text-xs transition-colors cursor-pointer ${
-                        selectedLang === lang.code
+                        locale === lang.code
                           ? "bg-blue-50 text-blue-600 font-bold"
                           : "text-brand-slate hover:bg-slate-50 hover:text-brand-navy font-medium"
                       }`}
@@ -219,8 +225,8 @@ export default function Footer() {
               )}
             </div>
 
-            <Link href="/privacy" className="hover:text-brand-navy">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-brand-navy">Terms of Service</Link>
+            <Link href="/privacy" className="hover:text-brand-navy">{t("privacyPolicy")}</Link>
+            <Link href="/terms" className="hover:text-brand-navy">{t("termsOfService")}</Link>
           </div>
         </div>
 

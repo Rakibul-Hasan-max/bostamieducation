@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import { Play } from "lucide-react";
 
 /* ─── Partner brand logos ─── */
@@ -14,6 +15,8 @@ const partners = [
 ];
 
 export default function Hero() {
+  const t = useTranslations("Hero");
+
   return (
     <>
       {/* ═══════════════════════════════════════════════════════════════════
@@ -47,14 +50,14 @@ export default function Hero() {
               {/* Badge pill */}
               <div className="mb-6 flex items-center gap-2 rounded-full bg-[#fce8dd] px-4 py-1.5 text-[13px] font-semibold text-[#c0694a]">
                 <span className="text-[#c0694a]">•</span>
-                <span>Get started with Bostami Education</span>
+                <span>{t("badge")}</span>
                 <span className="text-[#c0694a]">•</span>
               </div>
 
               {/* Main heading — with inline avatar cluster + arrow icons */}
               <h1 className="text-[2.6rem] sm:text-5xl md:text-[3.25rem] font-extrabold leading-[1.12] tracking-tight text-[#1a1a2e] mb-6">
-                Find suitable <br />
-                courses from the{" "}
+                {t("titlePart1")} <br />
+                {t("titlePart2")}{" "}
                 <span className="inline-flex items-center gap-2 align-middle">
                   {/* Stacked mentor avatar cluster */}
                   <span className="inline-flex items-center">
@@ -88,14 +91,12 @@ export default function Hero() {
                     ›› 
                   </span>
                 </span>{" "}
-                best mentors
+                {t("titlePart3")}
               </h1>
 
               {/* Subtitle */}
               <p className="mb-8 max-w-sm text-[15px] leading-relaxed text-slate-500">
-                The good gathering doesn&apos;t bearing day stars over open behold 
-                may male tree replenish don&apos;t blessed beast days earth fifth 
-                let multiply and he every blessed.
+                {t("subtitle")}
               </p>
 
               {/* CTA Buttons */}
@@ -105,7 +106,7 @@ export default function Hero() {
                   href="/courses"
                   className="rounded-xl bg-[#1a1a2e] px-7 py-3.5 text-[15px] font-bold text-white shadow-md hover:bg-[#2d2d4a] hover:scale-105 active:scale-95 transition-all duration-200 leading-tight text-center"
                 >
-                  Start<br />Learning
+                  {t("startLearning").split(' ')[0]}<br />{t("startLearning").split(' ').slice(1).join(' ')}
                 </Link>
 
                 {/* Watch Video text link */}
@@ -114,7 +115,7 @@ export default function Hero() {
                   target="_blank"
                   className="flex items-center gap-3 text-[15px] font-semibold text-[#1a1a2e] hover:text-slate-600 transition-colors group"
                 >
-                  <span>Watch Video</span>
+                  <span>{t("watchVideo")}</span>
                   {/* Circle arrow button */}
                   <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-[#1a1a2e] text-[#1a1a2e] group-hover:bg-[#1a1a2e] group-hover:text-white transition-all duration-200">
                     <Play className="h-3.5 w-3.5 fill-current ml-0.5" />
@@ -170,7 +171,7 @@ export default function Hero() {
               <div className="absolute bottom-6 left-0 lg:-left-8 z-30 w-[190px] rounded-2xl bg-white p-4 shadow-2xl border border-slate-100/80">
                 {/* Card header */}
                 <p className="text-[13px] font-bold text-[#1a1a2e] mb-3">
-                  Physics Masterclass
+                  {t("cardTitle")}
                 </p>
                 {/* Instructor row */}
                 <div className="flex items-center gap-2.5">
@@ -185,7 +186,7 @@ export default function Hero() {
                   <div>
                     <p className="text-[12px] font-bold text-[#1a1a2e] leading-tight">Bayzid Bostami</p>
                     <p className="text-[11px] text-slate-400 font-medium leading-tight mt-0.5">
-                      📚 10+ Courses
+                      📚 {t("cardSubtitle")}
                     </p>
                   </div>
                 </div>
