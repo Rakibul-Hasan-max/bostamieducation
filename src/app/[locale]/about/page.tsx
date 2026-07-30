@@ -61,13 +61,13 @@ export default function AboutPage() {
       year: "2026",
       title: t("milestone2026Title"),
       desc: t("milestone2026Desc"),
-      image: "/studio4.png",
+      image: "/team1.jpg",
     },
   ];
 
   const team = [
     { name: "Bayzid Bostami", role: t("roleCEO"), img: "/about-ceo.png" },
-    { name: "Rakibul Hasan", role: t("roleCTO"), img: "/cto.png" },
+    { name: "Rakibul Hasan", role: t("roleCTO"), img: "/hasan.png" },
     { name: "Asrafi Islam Orpita", role: t("roleInstructor"), img: "/tutor8.png" },
     { name: "Md. Akash", role: t("roleInstructor"), img: "/tutor5.png" },
     { name: "Foysal Ahamed", role: t("roleInstructor"), img: "/tutor10.png" },
@@ -343,7 +343,7 @@ export default function AboutPage() {
               <div className="lg:col-span-4 flex justify-center order-1 lg:order-2">
                 <div className="group relative w-full max-w-[280px] aspect-[4/5] rounded-[24px] overflow-hidden shadow-md">
                   <Image
-                    src="/cto.png"
+                    src="/hasan.png"
                     alt="Rakibul Hasan - CTO"
                     fill
                     className="object-cover"
