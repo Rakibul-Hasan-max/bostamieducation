@@ -61,7 +61,7 @@ export default function MentorsPage() {
       role: t("roleCTO"),
       department: "Technical & ICT",
       bio: t("bioCTO"),
-      img: "/cto.png",
+      img: "/hasan.png",
       students: "10k+",
       courses: "8+",
       facebook: "https://facebook.com/rakibulhasan.cn",
