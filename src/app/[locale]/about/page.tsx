@@ -304,10 +304,10 @@ export default function AboutPage() {
                     <Link href="https://www.facebook.com/bostamieducation" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white text-blue-600 hover:bg-blue-600 hover:text-white transition-colors shadow-lg">
                       <IconFacebook />
                     </Link>
-                    <Link href="https://www.linkedin.com/in/bostami-education" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white text-blue-700 hover:bg-blue-700 hover:text-white transition-colors shadow-lg">
+                    <Link href="https://www.linkedin.com/in/bostamieducation" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white text-blue-700 hover:bg-blue-700 hover:text-white transition-colors shadow-lg">
                       <IconLinkedin />
                     </Link>
-                    <Link href="https://www.youtube.com/@bostami-education" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white text-red-600 hover:bg-red-600 hover:text-white transition-colors shadow-lg">
+                    <Link href="https://www.youtube.com/@bostamieducation" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white text-red-600 hover:bg-red-600 hover:text-white transition-colors shadow-lg">
                       <IconYoutube />
                     </Link>
                   </div>

@@ -172,7 +172,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://www.youtube.com/@bostami-education"
+                href="https://www.youtube.com/@bostamieducation"
                 target="_blank"
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-white border border-slate-100 text-brand-slate hover:bg-brand-coral hover:text-white shadow-sm hover:border-brand-coral transition-all"
                 aria-label="Youtube"

@@ -111,7 +111,7 @@ export default function Hero() {
 
                 {/* Watch Video text link */}
                 <Link
-                  href="https://www.youtube.com/@bostami-education"
+                  href="https://www.youtube.com/@bostamieducation"
                   target="_blank"
                   className="flex items-center gap-3 text-[15px] font-semibold text-[#1a1a2e] hover:text-slate-600 transition-colors group"
                 >

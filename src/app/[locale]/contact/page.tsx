@@ -63,7 +63,7 @@ export default function ContactPage() {
     },
     {
       label: "YouTube",
-      href: "https://www.youtube.com/@bostami-education",
+      href: "https://www.youtube.com/@bostamieducation",
       color: "bg-[#FF0000]",
       svg: (
         <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
