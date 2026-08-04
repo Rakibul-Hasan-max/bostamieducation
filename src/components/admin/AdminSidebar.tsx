@@ -30,7 +30,9 @@ export default function AdminSidebar() {
       {/* Logo */}
       <div className="h-16 flex items-center px-6 mb-4">
         <div className="flex items-center gap-2">
-          <Image src={logo} alt="Logo" width={100} className="mx-auto"/>
+          <Link href="/">
+            <Image src={logo} alt="Logo" width={100} className="mx-auto"/>
+          </Link>
         </div>
       </div>
 
