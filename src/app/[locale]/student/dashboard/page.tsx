@@ -34,10 +34,7 @@ export default function StudentDashboardPage() {
     { label: "Dashboard", icon: LayoutDashboard },
     { label: "My Subscriptions", icon: Layers },
     { label: "My Courses", icon: Tv },
-    { label: "Course Resume", icon: FileText },
     { label: "Quiz", icon: HelpCircle },
-    { label: "Payment Info", icon: CreditCard },
-    { label: "Wishlist", icon: Heart },
     { label: "Edit Profile", icon: Edit3 },
     { label: "Settings", icon: Settings },
     { label: "Delete Profile", icon: Trash2 },
@@ -163,15 +160,6 @@ export default function StudentDashboardPage() {
                   <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-rose-500 hover:bg-rose-500/10 transition-all cursor-pointer mt-1">
                     <LogOut size={17} />
                     <span>Sign Out</span>
-                  </button>
-
-                  {/* Dropdown level */}
-                  <button className="w-full flex items-center justify-between px-4 py-3 text-xs font-bold text-slate-400 hover:text-white cursor-pointer mt-1">
-                    <div className="flex items-center gap-3">
-                      <User size={17} />
-                      <span>Dropdown level</span>
-                    </div>
-                    <ChevronDown size={14} />
                   </button>
                 </nav>
               </div>
