@@ -74,8 +74,6 @@ export default function InstructorDashboardPage() {
     { label: "Quiz", icon: HelpCircle },
     { label: "Earnings", icon: TrendingUp },
     { label: "Students", icon: Users },
-    { label: "Orders", icon: ShoppingBag },
-    { label: "Reviews", icon: Star },
     { label: "Edit Profile", icon: Edit3 },
     { label: "Payouts", icon: CreditCard },
     { label: "Settings", icon: Settings },
