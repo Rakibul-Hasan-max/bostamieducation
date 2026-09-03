@@ -280,9 +280,10 @@ export default function CoursesPage() {
             {filteredCourses.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {filteredCourses.map((course) => (
-                  <div
+                  <Link
                     key={course.id}
-                    className="group flex flex-col bg-white rounded-[16px] border border-slate-100 shadow-[0_4px_24px_-12px_rgba(0,0,0,0.08)] overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                    href={`/courses/${course.id}`}
+                    className="group flex flex-col bg-white rounded-[16px] border border-slate-100 shadow-[0_4px_24px_-12px_rgba(0,0,0,0.08)] overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                   >
                     {/* Image Container */}
                     <div className="relative aspect-[5/4] w-full overflow-hidden bg-slate-50">
@@ -296,56 +297,69 @@ export default function CoursesPage() {
                     </div>
 
                     {/* Course Info */}
-                    <div className="p-5">
-                      {/* Level and Heart */}
-                      <div className="flex items-center justify-between mb-3">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${course.levelBg} ${course.levelColor}`}>
-                          {getLevelLabel(course.level)}
-                        </span>
-                        <Heart className="w-4 h-4 text-slate-400 hover:text-red-500 hover:fill-red-500 transition-colors cursor-pointer" />
+                    <div className="p-5 flex-1 flex flex-col justify-between">
+                      <div>
+                        {/* Level and Heart */}
+                        <div className="flex items-center justify-between mb-3">
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${course.levelBg} ${course.levelColor}`}>
+                            {getLevelLabel(course.level)}
+                          </span>
+                          <button 
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }}
+                            className="p-1 hover:bg-slate-100 rounded-full transition"
+                          >
+                            <Heart className="w-4 h-4 text-slate-400 hover:text-red-500 hover:fill-red-500 transition-colors" />
+                          </button>
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="text-[15px] font-bold text-slate-900 leading-snug line-clamp-2 mb-4 group-hover:text-blue-600 transition-colors">
+                          {course.title}
+                        </h3>
                       </div>
 
-                      {/* Title */}
-                      <h3 className="text-[15px] font-bold text-slate-900 leading-snug line-clamp-2 mb-4 group-hover:text-blue-600 transition-colors flex-1">
-                        {course.title}
-                      </h3>
-
-                      {/* Rating & Price */}
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-1.5">
-                          <div className="flex items-center gap-0.5 text-amber-400">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                              <Star 
-                                key={star} 
-                                className={`w-3.5 h-3.5 ${star <= Math.floor(course.rating) ? 'fill-amber-400' : 'text-slate-200'}`} 
-                              />
-                            ))}
+                      <div>
+                        {/* Rating & Price */}
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-1.5">
+                            <div className="flex items-center gap-0.5 text-amber-400">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <Star 
+                                  key={star} 
+                                  className={`w-3.5 h-3.5 ${star <= Math.floor(course.rating) ? 'fill-amber-400' : 'text-slate-200'}`} 
+                                />
+                              ))}
+                            </div>
+                            <span className="text-[12px] font-semibold text-slate-600 ml-0.5">
+                              {course.rating.toFixed(1)}/5.0
+                            </span>
                           </div>
-                          <span className="text-[12px] font-semibold text-slate-600 ml-0.5">
-                            {course.rating.toFixed(1)}/5.0
+                          <span className="text-[14px] font-extrabold text-slate-900">
+                            {course.price}
                           </span>
                         </div>
-                        <span className="text-[14px] font-extrabold text-slate-900">
-                          {course.price}
-                        </span>
-                      </div>
 
-                      {/* Separator */}
-                      <div className="border-t border-slate-100 my-3" />
+                        {/* Separator */}
+                        <div className="border-t border-slate-100 my-3" />
 
-                      {/* Footer (Time & Lectures) */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1.5 text-slate-500">
-                          <Clock className="w-3.5 h-3.5 text-orange-500" />
-                          <span className="text-[12px] font-medium">{course.duration}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-slate-500">
-                          <LayoutGrid className="w-3.5 h-3.5 text-orange-500" />
-                          <span className="text-[12px] font-medium">{course.lectures} {t("lecturesSuffix")}</span>
+                        {/* Footer (Time & Lectures) */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 text-slate-500">
+                            <Clock className="w-3.5 h-3.5 text-orange-500" />
+                            <span className="text-[12px] font-medium">{course.duration}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 text-slate-500">
+                            <LayoutGrid className="w-3.5 h-3.5 text-orange-500" />
+                            <span className="text-[12px] font-medium">{course.lectures} {t("lecturesSuffix")}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             ) : (
