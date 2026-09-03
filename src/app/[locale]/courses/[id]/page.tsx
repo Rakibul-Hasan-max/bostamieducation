@@ -751,7 +751,7 @@ export default function CourseDetailPage({
                 {/* CTA Buttons */}
                 <div className="space-y-3">
                   <Link
-                    href="/student/dashboard"
+                    href={`/enroll?courseId=${course.id}`}
                     className="w-full py-3.5 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold text-sm rounded-2xl transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <span>{t("enrollNow")}</span>
