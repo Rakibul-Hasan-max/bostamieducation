@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState, useEffect } from "react";
+import { use, useState, useEffect, useRef } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Image from "next/image";
@@ -70,6 +70,56 @@ export default function CourseDetailPage({
       document.title = `Course Not Found | Bostami Education`;
     }
   }, [course]);
+
+  const isScrollingRef = useRef(false);
+
+  const handleTabClick = (
+    tabId: "overview" | "curriculum" | "instructor" | "reviews" | "faq"
+  ) => {
+    setActiveTab(tabId);
+    isScrollingRef.current = true;
+
+    const element = document.getElementById(tabId);
+    if (element) {
+      const yOffset = -110;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+
+    setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 800);
+  };
+
+  useEffect(() => {
+    const sectionIds: Array<"overview" | "curriculum" | "instructor" | "reviews" | "faq"> = [
+      "overview",
+      "curriculum",
+      "instructor",
+      "reviews",
+      "faq",
+    ];
+
+    const handleScroll = () => {
+      if (isScrollingRef.current) return;
+
+      let currentTab: "overview" | "curriculum" | "instructor" | "reviews" | "faq" = "overview";
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const section = document.getElementById(sectionIds[i]);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 160) {
+            currentTab = sectionIds[i];
+            break;
+          }
+        }
+      }
+      setActiveTab(currentTab);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   if (!course) {
     return (
@@ -261,7 +311,7 @@ export default function CourseDetailPage({
                 ).map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
+                    onClick={() => handleTabClick(tab.id)}
                     className={`px-5 py-2.5 text-xs font-bold rounded-xl transition cursor-pointer shrink-0 ${
                       activeTab === tab.id
                         ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
@@ -276,7 +326,7 @@ export default function CourseDetailPage({
               {/* OVERVIEW SECTION */}
               <div
                 id="overview"
-                className="space-y-8"
+                className="space-y-8 scroll-mt-28"
               >
                 {/* What You Will Learn Card */}
                 <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm">
@@ -327,7 +377,7 @@ export default function CourseDetailPage({
               {/* CURRICULUM SECTION */}
               <div
                 id="curriculum"
-                className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm"
+                className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm scroll-mt-28"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
                   <div>
@@ -422,7 +472,7 @@ export default function CourseDetailPage({
               {/* INSTRUCTOR SECTION */}
               <div
                 id="instructor"
-                className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm"
+                className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm scroll-mt-28"
               >
                 <h2 className="text-xl font-extrabold text-[#1a1a2e] mb-6">
                   {t("instructorTitle")}
@@ -478,7 +528,7 @@ export default function CourseDetailPage({
               {/* REVIEWS SECTION */}
               <div
                 id="reviews"
-                className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm"
+                className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm scroll-mt-28"
               >
                 <h2 className="text-xl font-extrabold text-[#1a1a2e] mb-6">
                   {t("studentFeedback")}
@@ -587,7 +637,7 @@ export default function CourseDetailPage({
               {/* FAQ SECTION */}
               <div
                 id="faq"
-                className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm"
+                className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm scroll-mt-28"
               >
                 <h2 className="text-xl font-extrabold text-[#1a1a2e] mb-6 flex items-center gap-2">
                   <HelpCircle className="w-5 h-5 text-blue-600" />
