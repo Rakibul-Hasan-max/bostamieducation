@@ -5,107 +5,32 @@ import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { Star, ArrowRight, Heart, Clock, LayoutGrid } from "lucide-react";
 
+import { COURSES_DATA } from "@/constants/coursesData";
+
 export default function PopularCourses() {
   const t = useTranslations("PopularCourses");
+  const tCourses = useTranslations("Courses");
 
-  const courses = [
-    {
-      id: "univ-physics-masterclass",
-      title: t("physicsMasterclass"),
-      level: t("allLevel"),
-      levelBg: "bg-purple-50",
-      levelColor: "text-purple-600",
-      image: "/course2.png",
-      rating: 4.5,
-      price: "৳3,000",
-      duration: "12h 56m",
-      lectures: 15,
-    },
-    {
-      id: "hsc-ict-prep",
-      title: t("ictBoardPrep"),
-      level: t("beginner"),
-      levelBg: "bg-emerald-50",
-      levelColor: "text-emerald-500",
-      image: "/course1.png",
-      rating: 4.5,
-      price: "৳1,800",
-      duration: "9h 56m",
-      lectures: 65,
-    },
-    {
-      id: "chemistry-2nd-organic",
-      title: t("organicChemistry"),
-      level: t("beginner"),
-      levelBg: "bg-emerald-50",
-      levelColor: "text-emerald-500",
-      image: "/course1.png",
-      rating: 4.5,
-      price: "৳2,200",
-      duration: "5h 56m",
-      lectures: 32,
-    },
-    {
-      id: "hsc-math-admission",
-      title: t("higherMathAdmission"),
-      level: t("beginner"),
-      levelBg: "bg-emerald-50",
-      levelColor: "text-emerald-500",
-      image: "/course1.png",
-      rating: 4.0,
-      price: "৳2,800",
-      duration: "18h 56m",
-      lectures: 99,
-    },
-    {
-      id: "biology-crash",
-      title: t("biologyCrash"),
-      level: t("intermediate"),
-      levelBg: "bg-blue-50",
-      levelColor: "text-blue-500",
-      image: "/course1.png",
-      rating: 4.5,
-      price: "৳2,000",
-      duration: "14h 30m",
-      lectures: 42,
-    },
-    {
-      id: "fullstack-js",
-      title: t("webDevBootcamp"),
-      level: t("allLevel"),
-      levelBg: "bg-purple-50",
-      levelColor: "text-purple-600",
-      image: "/course1.png",
-      rating: 4.8,
-      price: "৳5,000",
-      duration: "40h 15m",
-      lectures: 120,
-    },
-    {
-      id: "hsc-physics-1st",
-      title: t("pythonDataScience"),
-      level: t("advanced"),
-      levelBg: "bg-orange-50",
-      levelColor: "text-orange-500",
-      image: "/course1.png",
-      rating: 4.9,
-      price: "৳4,500",
-      duration: "25h 10m",
-      lectures: 85,
-    },
-    {
-      id: "calculus-geometry",
-      title: t("digitalMarketing"),
-      level: t("beginner"),
-      levelBg: "bg-emerald-50",
-      levelColor: "text-emerald-500",
-      image: "/course1.png",
-      rating: 4.6,
-      price: "৳2,500",
-      duration: "8h 45m",
-      lectures: 28,
-    },
-  ];
+  const getLevelLabel = (level: string) => {
+    if (level === "All level") return t("allLevel");
+    if (level === "Beginner") return t("beginner");
+    if (level === "Intermediate") return t("intermediate");
+    if (level === "Advanced") return t("advanced");
+    return level;
+  };
+
+  const courses = COURSES_DATA.map((course) => ({
+    id: course.id,
+    title: tCourses.has(course.titleKey) ? tCourses(course.titleKey) : course.defaultTitle,
+    level: getLevelLabel(course.level),
+    levelBg: course.levelBg,
+    levelColor: course.levelColor,
+    image: course.img,
+    rating: course.rating,
+    price: course.price,
+    duration: course.duration,
+    lectures: course.lectures,
+  }));
 
   return (
     <section className="w-full bg-slate-50/50 py-16 md:py-24">

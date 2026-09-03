@@ -535,59 +535,6 @@ export const COURSES_DATA: CourseDetail[] = [
     curriculum: [],
     reviews: [],
     faqs: []
-  },
-  {
-    id: "fullstack-js",
-    titleKey: "c8Title",
-    defaultTitle: "Full-Stack Web Development Foundation Bootcamp",
-    category: "Technical & ICT",
-    price: "৳5,000",
-    numericPrice: 5000,
-    originalPrice: "৳8,000",
-    duration: "80h 30m",
-    lectures: 120,
-    rating: 4.9,
-    reviewCount: 195,
-    studentCount: 1420,
-    img: "/course1.png",
-    level: "Advanced",
-    levelBg: "bg-orange-50",
-    levelColor: "text-orange-500",
-    lastUpdated: "August 2026",
-    language: "Bangla / English",
-    shortDescriptionKey: "c8ShortDesc",
-    defaultShortDesc: "Build modern web apps with React, Next.js, Node.js, TypeScript, and MongoDB.",
-    description: [
-      "A complete project-based full-stack JavaScript bootcamp designed to take you from web fundamentals to deploying enterprise-ready React and Next.js applications."
-    ],
-    learningOutcomes: [
-      "Build real-world full-stack web applications from scratch",
-      "Master HTML, CSS, JavaScript, React, Next.js, Node.js, and Express",
-      "Database design with MongoDB and PostgreSQL",
-      "Deploy apps to Vercel, Railway, and AWS"
-    ],
-    requirements: [
-      "Basic computer literacy and enthusiasm to code"
-    ],
-    features: [
-      "120 HD Video Lessons",
-      "5 Complete Real-World Capstone Projects",
-      "Code Repositories on GitHub",
-      "1-on-1 Code Review & Discord Community",
-      "Job Placement Assistance & Portfolio Review"
-    ],
-    instructor: {
-      name: "Engr. Mahmudul Hasan Bostami",
-      title: "Full-Stack Engineer & Tech Lead",
-      avatar: "/avatar1.png",
-      rating: 4.9,
-      studentsCount: 15400,
-      coursesCount: 12,
-      bio: "Senior software engineer with industry experience building scalable web solutions."
-    },
-    curriculum: [],
-    reviews: [],
-    faqs: []
   }
 ];
 
