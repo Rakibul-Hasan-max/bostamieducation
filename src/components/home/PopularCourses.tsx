@@ -15,7 +15,7 @@ export default function PopularCourses() {
       level: t("allLevel"),
       levelBg: "bg-purple-50",
       levelColor: "text-purple-600",
-      image: "/course1.png",
+      image: "/course2.png",
       rating: 4.5,
       price: "৳3,000",
       duration: "12h 56m",

@@ -100,10 +100,10 @@ function EnrollFormContent() {
     }, 1200);
   };
 
-  const paymentNumbers = {
-    bkash: "01712-345678",
-    nagad: "01812-345678",
-    rocket: "01912-345678",
+  const paymentNumbers = { 
+    bkash: "+880 176888 3213",
+    nagad: "+880 176888 3213",
+    rocket: "+880 176888 3213", 
     card: "Visa / Mastercard / AMEX",
   };
 

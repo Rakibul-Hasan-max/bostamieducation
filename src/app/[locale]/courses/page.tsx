@@ -70,7 +70,7 @@ export default function CoursesPage() {
       lectures: 75,
       rating: 4.9,
       reviewCount: 320,
-      img: "/course1.png",
+      img: "/course2.png",
       level: "Advanced",
       levelBg: "bg-orange-50",
       levelColor: "text-orange-500",

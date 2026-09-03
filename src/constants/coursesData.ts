@@ -195,7 +195,7 @@ export const COURSES_DATA: CourseDetail[] = [
   {
     id: "univ-physics-masterclass",
     titleKey: "c2Title",
-    defaultTitle: "University Admission Physics Masterclass",
+    defaultTitle: "Revision Course for SSC 2027 Batch",
     category: "Physics",
     price: "৳3,000",
     numericPrice: 3000,
@@ -205,7 +205,7 @@ export const COURSES_DATA: CourseDetail[] = [
     rating: 4.9,
     reviewCount: 320,
     studentCount: 2150,
-    img: "/course1.png",
+    img: "/course2.png",
     level: "Advanced",
     levelBg: "bg-orange-50",
     levelColor: "text-orange-500",
