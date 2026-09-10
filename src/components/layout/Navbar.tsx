@@ -125,26 +125,23 @@ export default function Navbar() {
             <div ref={userDropdownRef} className="relative">
               <button
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                className="flex items-center gap-2.5 p-1 rounded-full hover:bg-slate-100 transition-colors cursor-pointer"
+                className="flex items-center justify-center p-0.5 rounded-full ring-2 ring-transparent hover:ring-brand-coral/40 focus:outline-none focus:ring-brand-coral transition-all cursor-pointer"
+                title={user.displayName || user.email || "Profile"}
               >
                 {user.photoURL ? (
                   <Image
                     src={user.photoURL}
                     alt={user.displayName || "User"}
-                    width={36}
-                    height={36}
+                    width={38}
+                    height={38}
                     unoptimized
-                    className="h-9 w-9 rounded-full object-cover border border-slate-200"
+                    className="h-[38px] w-[38px] rounded-full object-cover border-2 border-slate-200 shadow-sm hover:scale-105 transition-transform"
                   />
                 ) : (
-                  <div className="h-9 w-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+                  <div className="h-[38px] w-[38px] rounded-full bg-brand-navy text-white flex items-center justify-center font-bold text-sm border-2 border-slate-200 shadow-sm hover:scale-105 transition-transform">
                     {user.displayName?.charAt(0) || user.email?.charAt(0).toUpperCase() || "U"}
                   </div>
                 )}
-                <span className="text-sm font-semibold text-slate-800 max-w-[120px] truncate">
-                  {user.displayName || user.email?.split("@")[0]}
-                </span>
-                <ChevronDown className={`h-4 w-4 text-slate-500 transition-transform ${userDropdownOpen ? "rotate-180" : ""}`} />
               </button>
 
               {userDropdownOpen && (
