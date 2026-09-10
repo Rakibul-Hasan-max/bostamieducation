@@ -379,76 +379,16 @@ export default function StudentDashboardPage() {
       )}
 
       <main className="flex-1 pb-16">
-        
-        {/* ══════════════════════════════════════════════
-            1. CLEAN & SIMPLE GREEN HEADER
-        ══════════════════════════════════════════════ */}
         <section className="bg-white border-b border-slate-200/80">
           <div className="mx-auto max-w-7xl px-4 md:px-6 py-6 md:py-8">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-              
-              {/* Student Identity */}
-              <div className="flex items-center gap-4 md:gap-5">
-                <div className="relative w-16 h-16 md:w-18 md:h-18 rounded-2xl overflow-hidden bg-emerald-100 border-2 border-emerald-500 shrink-0 shadow-sm">
-                  <Image 
-                    src={profile.avatar} 
-                    alt={profile.name}
-                    fill
-                    unoptimized
-                    className="object-cover"
-                  />
-                </div>
-
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h1 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
-                      {profile.name}
-                    </h1>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-md">
-                      <ShieldCheck size={12} className="text-emerald-600" />
-                      Verified Student
-                    </span>
-                  </div>
-
-                  <p className="text-xs text-slate-500 font-medium">
-                    ID: <span className="font-mono font-semibold text-slate-700">{profile.studentId}</span> • {profile.track}
-                  </p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
-                    {profile.institution} • Target: <span className="text-slate-600 font-medium">{profile.target}</span>
-                  </p>
-                </div>
-              </div>
-
-              {/* Quick Resume Button */}
-              <div className="flex items-center gap-3 w-full md:w-auto">
-                <button
-                  onClick={() => setActiveVideoModal(primaryContinueCourse)}
-                  className="flex-1 md:flex-initial inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-2.5 rounded-xl text-xs transition shadow-sm cursor-pointer"
-                >
-                  <Play size={14} className="fill-white" />
-                  <span>Resume Physics Lecture</span>
-                </button>
-
-                <button
-                  onClick={() => setActiveTab("settings")}
-                  className="inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-4 py-2.5 rounded-xl text-xs transition cursor-pointer"
-                >
-                  <Settings size={14} />
-                  <span className="hidden sm:inline">Settings</span>
-                </button>
-              </div>
-
-            </div>
-
-            {/* Navigation Tabs Bar */}
-            <div className="flex items-center gap-2 overflow-x-auto pt-6 border-t border-slate-100 mt-6 scrollbar-none">
+            <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-0.5">
               {[
-                { id: "overview", label: "Dashboard Overview", icon: LayoutDashboard },
-                { id: "courses", label: "My Enrolled Courses", icon: BookOpen, count: enrolledCourses.length },
-                { id: "quizzes", label: "Quizzes & Marks", icon: FileCheck2, count: quizResults.length },
-                { id: "live", label: "Live Classes Routine", icon: Calendar, count: 3 },
-                { id: "resources", label: "Lecture Notes & PDFs", icon: FileText, count: studyResources.length },
-                { id: "certificates", label: "My Certificates", icon: Award, count: 1 },
+                { id: "overview", label: "Overview", icon: LayoutDashboard },
+                { id: "courses", label: "My Courses", icon: BookOpen },
+                { id: "quizzes", label: "Quizzes & Marks", icon: FileCheck2 },
+                { id: "live", label: "Live Class", icon: Calendar },
+                { id: "resources", label: "Lecture Notes", icon: FileText },
+                { id: "certificates", label: "Certificates", icon: Award },
                 { id: "settings", label: "Profile & Settings", icon: Settings },
               ].map((tab) => {
                 const Icon = tab.icon;
@@ -466,16 +406,11 @@ export default function StudentDashboardPage() {
                   >
                     <Icon size={15} />
                     <span>{tab.label}</span>
-                    {tab.count !== undefined && (
-                      <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-md ${
-                        isActive ? "bg-emerald-700 text-white" : "bg-slate-100 text-slate-500"
-                      }`}>
-                        {tab.count}
-                      </span>
-                    )}
                   </button>
                 );
               })}
+              {/* Trailing spacer so last tab is never clipped */}
+              <div className="shrink-0 w-4" />
             </div>
 
           </div>
