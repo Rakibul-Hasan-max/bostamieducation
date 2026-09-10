@@ -2,23 +2,33 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Mail, Lock, Phone, AlertCircle, Loader2 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  
   const router = useRouter();
-  const { signInWithGoogle } = useAuth();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect") || "/student/dashboard";
+  const { user, loading, signInWithGoogle } = useAuth();
+
+  // If user is already logged in, redirect them directly
+  useEffect(() => {
+    if (!loading && user) {
+      router.push(redirectUrl);
+    }
+  }, [user, loading, router, redirectUrl]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push("/");
+    router.push(redirectUrl);
   };
 
   const handleGoogleLogin = async () => {
@@ -26,7 +36,7 @@ export default function LoginPage() {
     setGoogleLoading(true);
     try {
       await signInWithGoogle();
-      router.push("/student/dashboard");
+      router.push(redirectUrl);
     } catch (err: any) {
       console.error("Login failed:", err);
       if (err?.code === "auth/popup-closed-by-user") {
@@ -228,5 +238,17 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

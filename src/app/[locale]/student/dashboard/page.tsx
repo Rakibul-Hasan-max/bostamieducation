@@ -4,6 +4,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { 
   LayoutDashboard, 
@@ -92,7 +93,8 @@ interface StudyResource {
 }
 
 export default function StudentDashboardPage() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<string>("overview");
   const [courseFilter, setCourseFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -113,6 +115,13 @@ export default function StudentDashboardPage() {
     target: "BUET & Medical Admission 2026",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300"
   });
+
+  // Redirect to login if user is not authenticated
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login?redirect=/student/dashboard");
+    }
+  }, [user, loading, router]);
 
   useEffect(() => {
     if (user) {
@@ -338,6 +347,22 @@ export default function StudentDashboardPage() {
   }, [enrolledCourses, searchQuery, courseFilter]);
 
   const primaryContinueCourse = enrolledCourses[0];
+
+  if (loading || !user) {
+    return (
+      <div className="min-h-screen flex flex-col bg-[#f8fafc]">
+        <Navbar />
+        <div className="flex-1 flex flex-col items-center justify-center p-8">
+          <div className="w-12 h-12 rounded-full border-4 border-emerald-200 border-t-emerald-600 animate-spin mb-4" />
+          <p className="text-sm font-semibold text-slate-700">
+            {loading ? "Verifying student session..." : "Redirecting to login..."}
+          </p>
+          <p className="text-xs text-slate-400 mt-1">Please wait a moment</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen flex flex-col bg-[#f8fafc] text-slate-800 font-sans selection:bg-emerald-500 selection:text-white">
