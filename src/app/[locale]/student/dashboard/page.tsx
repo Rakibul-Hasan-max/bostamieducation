@@ -2,8 +2,9 @@
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
 import { 
   LayoutDashboard, 
   BookOpen, 
@@ -91,6 +92,7 @@ interface StudyResource {
 }
 
 export default function StudentDashboardPage() {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<string>("overview");
   const [courseFilter, setCourseFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -111,6 +113,17 @@ export default function StudentDashboardPage() {
     target: "BUET & Medical Admission 2026",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300"
   });
+
+  useEffect(() => {
+    if (user) {
+      setProfile((prev) => ({
+        ...prev,
+        name: user.displayName || prev.name,
+        email: user.email || prev.email,
+        avatar: user.photoURL || prev.avatar,
+      }));
+    }
+  }, [user]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -356,6 +369,7 @@ export default function StudentDashboardPage() {
                     src={profile.avatar} 
                     alt={profile.name}
                     fill
+                    unoptimized
                     className="object-cover"
                   />
                 </div>

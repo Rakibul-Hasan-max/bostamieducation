@@ -4,15 +4,20 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Link, usePathname } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X, User as UserIcon, LogOut, LayoutDashboard } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
   const t = useTranslations("Navbar");
   const pathname = usePathname();
+  const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [pagesOpen, setPagesOpen] = useState(false);
   const [desktopPagesOpen, setDesktopPagesOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  
   const desktopPagesRef = useRef<HTMLDivElement>(null);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
 
   // Returns the correct nav link class based on whether it matches current route
   const navLink = (href: string, exact = false) => {
@@ -30,11 +35,14 @@ export default function Navbar() {
     }`;
   };
 
-  // Close desktop Pages dropdown when clicking outside
+  // Close desktop dropdowns when clicking outside
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (desktopPagesRef.current && !desktopPagesRef.current.contains(e.target as Node)) {
         setDesktopPagesOpen(false);
+      }
+      if (userDropdownRef.current && !userDropdownRef.current.contains(e.target as Node)) {
+        setUserDropdownOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -111,17 +119,74 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* Desktop Buttons */}
+        {/* Desktop Buttons or User Avatar */}
         <div className="hidden md:flex items-center gap-5">
-          <Link href="/login" className="text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors">
-            {t("login")}
-          </Link>
-          <Link
-            href="/register"
-            className="rounded-full bg-brand-yellow px-6 py-2.5 text-[15px] font-bold text-brand-navy shadow-sm hover:bg-brand-yellow-hover hover:scale-105 active:scale-95 transition-all duration-200"
-          >
-            {t("signup")}
-          </Link>
+          {user ? (
+            <div ref={userDropdownRef} className="relative">
+              <button
+                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                className="flex items-center gap-2.5 p-1 rounded-full hover:bg-slate-100 transition-colors cursor-pointer"
+              >
+                {user.photoURL ? (
+                  <Image
+                    src={user.photoURL}
+                    alt={user.displayName || "User"}
+                    width={36}
+                    height={36}
+                    unoptimized
+                    className="h-9 w-9 rounded-full object-cover border border-slate-200"
+                  />
+                ) : (
+                  <div className="h-9 w-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+                    {user.displayName?.charAt(0) || user.email?.charAt(0).toUpperCase() || "U"}
+                  </div>
+                )}
+                <span className="text-sm font-semibold text-slate-800 max-w-[120px] truncate">
+                  {user.displayName || user.email?.split("@")[0]}
+                </span>
+                <ChevronDown className={`h-4 w-4 text-slate-500 transition-transform ${userDropdownOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              {userDropdownOpen && (
+                <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl border border-slate-100 bg-white p-2 shadow-xl z-50">
+                  <div className="px-3 py-2 border-b border-slate-100 mb-1">
+                    <p className="text-sm font-bold text-slate-900 truncate">{user.displayName || "Student"}</p>
+                    <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                  </div>
+                  <Link
+                    href="/student/dashboard"
+                    onClick={() => setUserDropdownOpen(false)}
+                    className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+                  >
+                    <LayoutDashboard className="h-4 w-4 text-blue-600" />
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setUserDropdownOpen(false);
+                      logout();
+                    }}
+                    className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <Link href="/login" className="text-[15px] font-medium text-brand-slate hover:text-brand-navy transition-colors">
+                {t("login")}
+              </Link>
+              <Link
+                href="/register"
+                className="rounded-full bg-brand-yellow px-6 py-2.5 text-[15px] font-bold text-brand-navy shadow-sm hover:bg-brand-yellow-hover hover:scale-105 active:scale-95 transition-all duration-200"
+              >
+                {t("signup")}
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -201,20 +266,65 @@ export default function Navbar() {
             </Link>
 
             <div className="mt-4 flex flex-col gap-3 border-t border-slate-100 pt-4">
-              <Link
-                href="/login"
-                onClick={() => setIsOpen(false)}
-                className="text-center text-[15px] font-medium text-brand-slate hover:text-brand-navy py-2"
-              >
-                {t("login")}
-              </Link>
-              <Link
-                href="/register"
-                onClick={() => setIsOpen(false)}
-                className="rounded-full bg-brand-yellow py-3 text-center text-[15px] font-bold text-brand-navy hover:bg-brand-yellow-hover"
-              >
-                {t("signup")}
-              </Link>
+              {user ? (
+                <>
+                  <div className="flex items-center gap-3 px-2 py-1">
+                    {user.photoURL ? (
+                      <Image
+                        src={user.photoURL}
+                        alt={user.displayName || "User"}
+                        width={36}
+                        height={36}
+                        unoptimized
+                        className="h-9 w-9 rounded-full object-cover border border-slate-200"
+                      />
+                    ) : (
+                      <div className="h-9 w-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+                        {user.displayName?.charAt(0) || user.email?.charAt(0).toUpperCase() || "U"}
+                      </div>
+                    )}
+                    <div className="overflow-hidden">
+                      <p className="text-sm font-bold text-slate-800 truncate">{user.displayName || "Student"}</p>
+                      <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                    </div>
+                  </div>
+                  <Link
+                    href="/student/dashboard"
+                    onClick={() => setIsOpen(false)}
+                    className="rounded-xl bg-blue-50 text-blue-700 py-2.5 text-center text-[14px] font-semibold flex items-center justify-center gap-2"
+                  >
+                    <LayoutDashboard className="h-4 w-4" />
+                    Student Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                      logout();
+                    }}
+                    className="rounded-xl bg-red-50 text-red-600 py-2.5 text-center text-[14px] font-semibold flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="text-center text-[15px] font-medium text-brand-slate hover:text-brand-navy py-2"
+                  >
+                    {t("login")}
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setIsOpen(false)}
+                    className="rounded-full bg-brand-yellow py-3 text-center text-[15px] font-bold text-brand-navy hover:bg-brand-yellow-hover"
+                  >
+                    {t("signup")}
+                  </Link>
+                </>
+              )}
             </div>
           </nav>
         </div>

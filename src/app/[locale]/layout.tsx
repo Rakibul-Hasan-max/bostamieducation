@@ -19,6 +19,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { AuthProvider } from "@/context/AuthContext";
+
 export default async function RootLayout({
   children,
   params
@@ -37,10 +39,12 @@ export default async function RootLayout({
   return (
     <html lang={locale} className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
-        <NextIntlClientProvider messages={messages}>
-          {children}
-          <BackToTop />
-        </NextIntlClientProvider>
+        <AuthProvider>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+            <BackToTop />
+          </NextIntlClientProvider>
+        </AuthProvider>
       </body>
     </html>
   );
