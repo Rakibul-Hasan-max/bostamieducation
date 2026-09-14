@@ -126,12 +126,12 @@ export default function Navbar() {
               <button
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                 className="flex items-center justify-center p-0.5 rounded-full ring-2 ring-transparent hover:ring-brand-coral/40 focus:outline-none focus:ring-brand-coral transition-all cursor-pointer"
-                title={user.displayName || user.email || "Profile"}
+                title={user.displayName || user.email || user.phoneNumber || "Profile"}
               >
                 {user.photoURL ? (
                   <Image
                     src={user.photoURL}
-                    alt={user.displayName || "User"}
+                    alt={user.displayName || user.phoneNumber || "User"}
                     width={38}
                     height={38}
                     unoptimized
@@ -139,7 +139,7 @@ export default function Navbar() {
                   />
                 ) : (
                   <div className="h-[38px] w-[38px] rounded-full bg-brand-navy text-white flex items-center justify-center font-bold text-sm border-2 border-slate-200 shadow-sm hover:scale-105 transition-transform">
-                    {user.displayName?.charAt(0) || user.email?.charAt(0).toUpperCase() || "U"}
+                    {user.displayName?.charAt(0) || user.email?.charAt(0).toUpperCase() || (user.phoneNumber ? "📱" : "U")}
                   </div>
                 )}
               </button>
@@ -147,8 +147,8 @@ export default function Navbar() {
               {userDropdownOpen && (
                 <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl border border-slate-100 bg-white p-2 shadow-xl z-50">
                   <div className="px-3 py-2 border-b border-slate-100 mb-1">
-                    <p className="text-sm font-bold text-slate-900 truncate">{user.displayName || "Student"}</p>
-                    <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                    <p className="text-sm font-bold text-slate-900 truncate">{user.displayName || user.phoneNumber || "Student"}</p>
+                    <p className="text-xs text-slate-500 truncate">{user.email || user.phoneNumber}</p>
                   </div>
                   <Link
                     href="/student/dashboard"
@@ -269,7 +269,7 @@ export default function Navbar() {
                     {user.photoURL ? (
                       <Image
                         src={user.photoURL}
-                        alt={user.displayName || "User"}
+                        alt={user.displayName || user.phoneNumber || "User"}
                         width={36}
                         height={36}
                         unoptimized
@@ -277,12 +277,12 @@ export default function Navbar() {
                       />
                     ) : (
                       <div className="h-9 w-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
-                        {user.displayName?.charAt(0) || user.email?.charAt(0).toUpperCase() || "U"}
+                        {user.displayName?.charAt(0) || user.email?.charAt(0).toUpperCase() || (user.phoneNumber ? "📱" : "U")}
                       </div>
                     )}
                     <div className="overflow-hidden">
-                      <p className="text-sm font-bold text-slate-800 truncate">{user.displayName || "Student"}</p>
-                      <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                      <p className="text-sm font-bold text-slate-800 truncate">{user.displayName || user.phoneNumber || "Student"}</p>
+                      <p className="text-xs text-slate-500 truncate">{user.email || user.phoneNumber}</p>
                     </div>
                   </div>
                   <Link

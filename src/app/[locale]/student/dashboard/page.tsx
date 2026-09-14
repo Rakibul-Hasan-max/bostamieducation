@@ -127,8 +127,8 @@ export default function StudentDashboardPage() {
     if (user) {
       setProfile((prev) => ({
         ...prev,
-        name: user.displayName || prev.name,
-        email: user.email || prev.email,
+        name: user.displayName || user.phoneNumber || prev.name,
+        email: user.email || user.phoneNumber || prev.email,
         avatar: user.photoURL || prev.avatar,
       }));
     }
