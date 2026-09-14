@@ -7,6 +7,8 @@ import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { COURSES_DATA, CourseDetail } from "@/constants/coursesData";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import {
   GraduationCap,
   User,
@@ -84,20 +86,44 @@ function EnrollFormContent() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleStep2Submit = (e: React.FormEvent) => {
+  const handleStep2Submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.senderPhone || !formData.transactionId) {
       alert("অনুগ্রহ করে প্রেরকের মোবাইল নম্বর এবং ট্রানজেকশন আইডি প্রদান করুন।");
       return;
     }
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
       const generatedId = "BST-" + Math.floor(100000 + Math.random() * 900000);
+
+      await addDoc(collection(db, "enrollments"), {
+        enrollmentId: generatedId,
+        studentName: formData.fullName,
+        age: formData.age,
+        schoolName: formData.schoolName,
+        address: formData.presentAddress,
+        guardianPhone: formData.guardianPhone,
+        email: formData.emailAddress,
+        courseId: selectedCourse.id,
+        courseTitle: selectedCourse.defaultTitle,
+        amount: selectedCourse.price,
+        paymentMethod: formData.paymentMethod,
+        senderPhone: formData.senderPhone,
+        transactionId: formData.transactionId.toUpperCase(),
+        status: "pending",
+        createdAt: serverTimestamp(),
+        verifiedAt: null,
+      });
+
       setEnrollmentId(generatedId);
       setStep(3);
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 1200);
+    } catch (error) {
+      console.error("Firestore enrollment error:", error);
+      alert("তথ্য সংরক্ষণে সমস্যা হয়েছে। ইন্টারনেট সংযোগ চেক করুন এবং আবার চেষ্টা করুন।");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const paymentNumbers = { 
@@ -533,21 +559,24 @@ function EnrollFormContent() {
 
             {/* STEP 3: SUCCESS CONFIRMATION MODAL / SCREEN */}
             {step === 3 && (
-              <div className="text-center py-6 space-y-6">
-                <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                  <CheckCircle2 className="w-10 h-10" />
+              <div className="py-6 space-y-6">
+
+                {/* Header */}
+                <div className="text-center space-y-3">
+                  <div className="w-16 h-16 rounded-full bg-amber-100 text-amber-600 mx-auto flex items-center justify-center shadow-lg shadow-amber-500/20">
+                    <CheckCircle2 className="w-10 h-10" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-extrabold text-[#1a1a2e] mb-1">
+                      আবেদন সফলভাবে জমা হয়েছে! ✅
+                    </h2>
+                    <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
+                      আপনার পেমেন্ট তথ্য পাওয়া গেছে। আমাদের টিম ২৪ ঘণ্টার মধ্যে যাচাই করবে।
+                    </p>
+                  </div>
                 </div>
 
-                <div>
-                  <h2 className="text-xl sm:text-2xl font-extrabold text-[#1a1a2e] mb-2">
-                    {t("successTitle")}
-                  </h2>
-                  <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
-                    {t("successDesc")}
-                  </p>
-                </div>
-
-                {/* Order Summary Card */}
+                {/* Enrollment Summary Card */}
                 <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 text-left space-y-2.5 max-w-md mx-auto text-xs text-slate-700">
                   <div className="flex justify-between border-b border-slate-200 pb-2">
                     <span className="text-slate-500 font-semibold">{t("orderId")}:</span>
@@ -561,27 +590,90 @@ function EnrollFormContent() {
                     <span className="text-slate-500 font-semibold">{t("enrolledCourse")}:</span>
                     <span className="font-bold text-blue-600 line-clamp-1">{selectedCourse.defaultTitle}</span>
                   </div>
+                  <div className="flex justify-between border-b border-slate-200 pb-2">
+                    <span className="text-slate-500 font-semibold">TxID:</span>
+                    <span className="font-mono font-extrabold text-slate-900 uppercase">{formData.transactionId}</span>
+                  </div>
                   <div className="flex justify-between">
                     <span className="text-slate-500 font-semibold">{t("amountPaid")}:</span>
                     <span className="font-extrabold text-emerald-600">{selectedCourse.price}</span>
                   </div>
                 </div>
 
+                {/* Verification Steps — what happens next */}
+                <div className="max-w-md mx-auto space-y-3">
+                  <p className="text-xs font-bold text-slate-700 uppercase tracking-wider text-center">পেমেন্ট ভেরিফিকেশন প্রক্রিয়া</p>
+
+                  <div className="space-y-2.5">
+                    {[
+                      {
+                        step: "১",
+                        color: "bg-emerald-500",
+                        title: "তথ্য জমা হয়েছে",
+                        desc: "আপনার Transaction ID ও ফোন নম্বর আমাদের সিস্টেমে পাঠানো হয়েছে।",
+                        done: true,
+                      },
+                      {
+                        step: "২",
+                        color: "bg-amber-500",
+                        title: "যাচাই চলছে (Pending)",
+                        desc: "আমাদের টিম আপনার bKash/Nagad ট্রানজেকশন ম্যানুয়ালি যাচাই করবে। সাধারণত ১–২৪ ঘণ্টা সময় লাগে।",
+                        done: false,
+                      },
+                      {
+                        step: "৩",
+                        color: "bg-blue-500",
+                        title: "ফোনে/WhatsApp এ কনফার্মেশন",
+                        desc: `যাচাই হলে আপনার নম্বরে (${formData.guardianPhone || "দেওয়া নম্বরে"}) SMS / WhatsApp এ কনফার্মেশন পাঠানো হবে।`,
+                        done: false,
+                      },
+                      {
+                        step: "৪",
+                        color: "bg-indigo-500",
+                        title: "Dashboard Access চালু হবে",
+                        desc: "কনফার্মেশনের পর আপনার Student Dashboard এ কোর্স অ্যাক্সেস সক্রিয় হয়ে যাবে।",
+                        done: false,
+                      },
+                    ].map((item) => (
+                      <div key={item.step} className={`flex items-start gap-3 p-3.5 rounded-xl border ${item.done ? "bg-emerald-50 border-emerald-200" : "bg-white border-slate-200"}`}>
+                        <div className={`w-7 h-7 rounded-full ${item.color} text-white text-[11px] font-extrabold flex items-center justify-center shrink-0 mt-0.5`}>
+                          {item.done ? <Check className="w-3.5 h-3.5" /> : item.step}
+                        </div>
+                        <div>
+                          <p className={`text-xs font-bold ${item.done ? "text-emerald-700" : "text-slate-800"}`}>{item.title}</p>
+                          <p className="text-[11px] text-slate-500 leading-relaxed mt-0.5">{item.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Contact note */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-3.5 text-[11px] text-blue-700 leading-relaxed font-medium text-center">
+                    📞 সমস্যা হলে WhatsApp করুন:{" "}
+                    <a href="https://wa.me/8801768883213" target="_blank" rel="noopener noreferrer" className="font-extrabold underline">
+                      +880 176888 3213
+                    </a>
+                    <br />
+                    Enrollment ID উল্লেখ করুন: <span className="font-mono font-extrabold text-blue-900">{enrollmentId}</span>
+                  </div>
+                </div>
+
                 {/* Actions */}
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 max-w-md mx-auto">
                   <Link
                     href="/student/dashboard"
-                    className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-full transition shadow-md shadow-blue-500/20"
+                    className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-full transition shadow-md shadow-blue-500/20 text-center"
                   >
                     {t("goToDashboard")}
                   </Link>
                   <Link
                     href="/"
-                    className="w-full sm:w-auto px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-full transition border border-slate-200"
+                    className="w-full sm:w-auto px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-full transition border border-slate-200 text-center"
                   >
                     {t("backToHome")}
                   </Link>
                 </div>
+
               </div>
             )}
 
