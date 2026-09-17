@@ -820,7 +820,7 @@ export default function CourseDetailPage({
                     href={`/courses/${rel.id}`}
                     className="group flex flex-col bg-white rounded-2xl border border-slate-100 shadow-[0_4px_24px_-12px_rgba(0,0,0,0.08)] overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                   >
-                    <div className="relative aspect-[5/4] w-full overflow-hidden bg-slate-50">
+                    <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-50">
                       <Image
                         src={rel.img}
                         alt={rel.defaultTitle}

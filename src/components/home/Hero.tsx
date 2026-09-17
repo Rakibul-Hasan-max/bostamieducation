@@ -10,9 +10,14 @@ import {
   Crown, 
   FileCheck2, 
   MessageSquare, 
-  Mail, 
-  Globe
+  Mail
 } from "lucide-react";
+
+const IconYoutube = ({ className = "h-3.5 w-3.5" }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z" />
+  </svg>
+);
 
 export default function Hero() {
   const t = useTranslations("Hero");
@@ -38,30 +43,35 @@ export default function Hero() {
       icon: Crown,
       label: "Memberships",
       href: "/pricing",
+      isExternal: false,
     },
     {
       id: "assessments",
       icon: FileCheck2,
       label: "Assessments",
       href: "/courses",
+      isExternal: false,
     },
     {
       id: "community",
       icon: MessageSquare,
       label: "Community",
       href: "/about",
+      isExternal: false,
     },
     {
       id: "emails",
       icon: Mail,
       label: "Emails",
       href: "/contact",
+      isExternal: false,
     },
     {
-      id: "website",
-      icon: Globe,
-      label: "Website",
-      href: "/courses",
+      id: "free-content",
+      icon: IconYoutube,
+      label: "Free Content",
+      href: "https://www.youtube.com/@bostamieducation",
+      isExternal: true,
     },
   ];
 
@@ -182,16 +192,38 @@ export default function Hero() {
         <div className="mt-8 grid grid-cols-2 gap-3 border-t border-slate-200/60 pt-6 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
           {featureTabs.map((tab) => {
             const Icon = tab.icon;
+            const content = (
+              <>
+                <span className={`flex h-6 w-6 items-center justify-center rounded-lg ${tab.id === 'free-content' ? 'bg-red-50 text-red-600 group-hover:bg-red-100' : 'bg-slate-100 text-slate-700 group-hover:bg-blue-50 group-hover:text-blue-600'} transition-colors`}>
+                  <Icon className="h-3.5 w-3.5" />
+                </span>
+                <span>{tab.label}</span>
+              </>
+            );
+
+            const tabStyle = "group flex items-center justify-center gap-2.5 rounded-xl border border-white/80 bg-white/80 p-3.5 text-xs font-semibold text-slate-700 shadow-xs backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:text-slate-900 hover:shadow-md sm:rounded-2xl sm:text-sm";
+
+            if (tab.isExternal) {
+              return (
+                <a
+                  key={tab.id}
+                  href={tab.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={tabStyle}
+                >
+                  {content}
+                </a>
+              );
+            }
+
             return (
               <Link
                 key={tab.id}
                 href={tab.href}
-                className="group flex items-center justify-center gap-2.5 rounded-xl border border-white/80 bg-white/80 p-3.5 text-xs font-semibold text-slate-700 shadow-xs backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:text-slate-900 hover:shadow-md sm:rounded-2xl sm:text-sm"
+                className={tabStyle}
               >
-                <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-slate-100 text-slate-700 transition-colors group-hover:bg-blue-50 group-hover:text-blue-600">
-                  <Icon className="h-3.5 w-3.5" />
-                </span>
-                <span>{tab.label}</span>
+                {content}
               </Link>
             );
           })}

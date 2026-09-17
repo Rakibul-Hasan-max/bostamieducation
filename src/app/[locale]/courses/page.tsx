@@ -181,7 +181,7 @@ export default function CoursesPage() {
                     className="group flex flex-col bg-white rounded-[16px] border border-slate-100 shadow-[0_4px_24px_-12px_rgba(0,0,0,0.08)] overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                   >
                     {/* Image Container */}
-                    <div className="relative aspect-[5/4] w-full overflow-hidden bg-slate-50">
+                    <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-50">
                       <Image
                         src={course.img}
                         alt={course.title}

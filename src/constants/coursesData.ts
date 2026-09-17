@@ -147,6 +147,95 @@ export const COURSES_DATA: CourseDetail[] = [
         answer: "Yes, both HSC candidates and admission examinees will benefit immensely from the advanced concept building."
       }
     ]
+  },
+  {
+    id: "class-9-10-physics-basic-to-advanced",
+    titleKey: "c1Title",
+    defaultTitle: "Class 9-10 Physics Basic to Advanced - Complete Course",
+    category: "Physics",
+    price: "৳1200",
+    numericPrice: 1200,
+    originalPrice: "৳4000",
+    duration: "45h 30m",
+    lectures: 60,
+    rating: 4.9,
+    reviewCount: 245,
+    studentCount: 1890,
+    img: "/course2.png",
+    level: "Beginner",
+    levelBg: "bg-blue-50",
+    levelColor: "text-blue-600",
+    lastUpdated: "September 2026",
+    language: "Bangla",
+    shortDescriptionKey: "c1ShortDesc",
+    defaultShortDesc: "Complete Class 9-10 Physics foundation course covering basic principles to advanced board exam prep.",
+    description: [
+      "Master Class 9 & 10 Physics from basic concepts to board question solving with clear explanations, visual experiments, and real-life applications.",
+      "Covers all chapters of NCTB Class 9-10 Physics syllabus with MCQ hacks and creative question (CQ) mastery."
+    ],
+    learningOutcomes: [
+      "Clear fundamental concepts of Motion, Force, Work, Power & Energy",
+      "Solve board exam creative questions (CQ) with full marks techniques",
+      "Master mathematical formulas (F=ma, E=mc², V=u+at) with step-by-step problem solving",
+      "Chapter-wise MCQ shortcuts and model test practice"
+    ],
+    requirements: [
+      "Class 9 or 10 science student or SSC candidate"
+    ],
+    features: [
+      "60 Foundation & Advanced Video Lectures",
+      "Chapter-wise Lecture Sheet PDFs",
+      "SSC Board Past 10 Years Solved Questions",
+      "Interactive Doubt Solving Sessions",
+      "Full Syllabus Model Tests"
+    ],
+    instructor: {
+      name: "Engr. Mahmudul Hasan Bostami",
+      title: "Senior Physics Lecturer | Ex-BUET",
+      avatar: "/avatar1.png",
+      rating: 4.9,
+      studentsCount: 15400,
+      coursesCount: 12,
+      bio: "Engr. Bostami has guided over 15,000+ SSC, HSC and admission candidates."
+    },
+    curriculum: [
+      {
+        id: "mod-c1-1",
+        title: "Module 1: Physical Quantities, Measurement & Motion",
+        lessonsCount: 10,
+        duration: "8h 30m",
+        lessons: [
+          { id: "les-c1-1", title: "Units, Dimensions & Measurement Hacks", duration: "45m", isPreview: true },
+          { id: "les-c1-2", title: "Equations of Motion (V = u + at, s = ut + 1/2at²)", duration: "55m", isPreview: true }
+        ]
+      },
+      {
+        id: "mod-c1-2",
+        title: "Module 2: Force, Work, Power & Energy",
+        lessonsCount: 12,
+        duration: "9h 45m",
+        lessons: [
+          { id: "les-c1-3", title: "Newton's Laws of Motion & Momentum", duration: "50m", isPreview: false },
+          { id: "les-c1-4", title: "Kinetic & Potential Energy Problem Solving", duration: "60m", isPreview: false }
+        ]
+      }
+    ],
+    reviews: [
+      {
+        id: "rev-c1-1",
+        name: "Tanvir Ahmed",
+        avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+        rating: 5,
+        date: "1 week ago",
+        comment: "The best Physics course for SSC! Every single concept is crystal clear now."
+      }
+    ],
+    faqs: [
+      {
+        question: "Is this course suitable for both Class 9 and 10 students?",
+        answer: "Yes! It starts from the absolute basics of Class 9 and progresses to complete SSC exam preparation."
+      }
+    ]
   }
 ];
 
