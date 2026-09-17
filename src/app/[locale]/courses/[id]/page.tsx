@@ -4,7 +4,8 @@ import { use, useState, useEffect, useRef } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Image from "next/image";
-import { Link } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
+import { useAuth } from "@/context/AuthContext";
 import { useTranslations } from "next-intl";
 import {
   COURSES_DATA,
@@ -44,8 +45,21 @@ export default function CourseDetailPage({
 
   const t = useTranslations("CourseDetails");
   const tCourses = useTranslations("Courses");
+  const { user } = useAuth();
+  const router = useRouter();
 
   const course: CourseDetail | undefined = getCourseById(courseId);
+
+  const handleEnrollClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!course) return;
+    const targetUrl = `/enroll?courseId=${course.id}`;
+    if (!user) {
+      router.push(`/login?redirect=${encodeURIComponent(targetUrl)}`);
+    } else {
+      router.push(targetUrl);
+    }
+  };
 
   const [activeTab, setActiveTab] = useState<
     "overview" | "curriculum" | "instructor" | "reviews" | "faq"
@@ -750,13 +764,14 @@ export default function CourseDetailPage({
 
                 {/* CTA Buttons */}
                 <div className="space-y-3">
-                  <Link
-                    href={`/enroll?courseId=${course.id}`}
+                  <button
+                    type="button"
+                    onClick={handleEnrollClick}
                     className="w-full py-3.5 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold text-sm rounded-2xl transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <span>{t("enrollNow")}</span>
                     <ArrowRight className="w-4 h-4" />
-                  </Link>
+                  </button>
 
                   <button
                     type="button"

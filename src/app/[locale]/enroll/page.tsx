@@ -5,9 +5,10 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { COURSES_DATA, CourseDetail } from "@/constants/coursesData";
 import { db } from "@/lib/firebase";
+import { useAuth } from "@/context/AuthContext";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import {
   GraduationCap,
@@ -33,6 +34,9 @@ function EnrollFormContent() {
   const t = useTranslations("Enrollment");
   const tCourses = useTranslations("Courses");
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
+
   const initialCourseId = searchParams.get("courseId") || COURSES_DATA[0].id;
 
   // Form State
@@ -58,6 +62,25 @@ function EnrollFormContent() {
 
   const selectedCourse: CourseDetail =
     COURSES_DATA.find((c) => c.id === selectedCourseId) || COURSES_DATA[0];
+
+  // Protect route: Redirect to login if user is not authenticated
+  useEffect(() => {
+    if (!authLoading && !user) {
+      const targetUrl = `/enroll?courseId=${selectedCourseId}`;
+      router.push(`/login?redirect=${encodeURIComponent(targetUrl)}`);
+    }
+  }, [user, authLoading, selectedCourseId, router]);
+
+  // Pre-fill user information if logged in
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        fullName: prev.fullName || user.displayName || "",
+        emailAddress: prev.emailAddress || user.email || "",
+      }));
+    }
+  }, [user]);
 
   useEffect(() => {
     document.title = `${t("title")} | Bostami Education`;
