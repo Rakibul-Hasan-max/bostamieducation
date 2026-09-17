@@ -4,6 +4,9 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { 
   User, 
   signInWithPopup, 
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
   signOut as firebaseSignOut, 
   onAuthStateChanged 
 } from "firebase/auth";
@@ -13,6 +16,8 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   signInWithGoogle: () => Promise<User>;
+  registerWithEmail: (email: string, pass: string, name?: string) => Promise<User>;
+  loginWithEmail: (email: string, pass: string) => Promise<User>;
   logout: () => Promise<void>;
 }
 
@@ -42,6 +47,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const registerWithEmail = async (email: string, pass: string, name?: string): Promise<User> => {
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, pass);
+      if (name && result.user) {
+        await updateProfile(result.user, { displayName: name });
+      }
+      setUser(result.user);
+      return result.user;
+    } catch (error: any) {
+      console.error("Email Registration Error:", error);
+      throw error;
+    }
+  };
+
+  const loginWithEmail = async (email: string, pass: string): Promise<User> => {
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, pass);
+      setUser(result.user);
+      return result.user;
+    } catch (error: any) {
+      console.error("Email Login Error:", error);
+      throw error;
+    }
+  };
+
   const logout = async () => {
     try {
       await firebaseSignOut(auth);
@@ -53,7 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user, loading, signInWithGoogle, registerWithEmail, loginWithEmail, logout }}>
       {children}
     </AuthContext.Provider>
   );

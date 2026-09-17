@@ -37,6 +37,7 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   
   // Phone Login state
@@ -55,7 +56,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get("redirect") || "/student/dashboard";
-  const { user, loading, signInWithGoogle } = useAuth();
+  const { user, loading, signInWithGoogle, loginWithEmail } = useAuth();
 
   // If user is already logged in, redirect them directly
   useEffect(() => {
@@ -87,9 +88,37 @@ function LoginForm() {
     };
   }, []);
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    router.push(redirectUrl);
+    setErrorMsg("");
+    setSuccessMsg("");
+
+    if (!email.trim() || !password) {
+      setErrorMsg("Please fill in both email and password.");
+      return;
+    }
+
+    setEmailLoading(true);
+    try {
+      await loginWithEmail(email.trim(), password);
+      setSuccessMsg("Logged in successfully! Redirecting...");
+      router.push(redirectUrl);
+    } catch (err: any) {
+      console.error("Email login failed:", err);
+      if (err?.code === "auth/invalid-credential" || err?.code === "auth/wrong-password" || err?.code === "auth/user-not-found") {
+        setErrorMsg("Incorrect email or password. Please check your credentials.");
+      } else if (err?.code === "auth/invalid-email") {
+        setErrorMsg("Please enter a valid email address.");
+      } else if (err?.code === "auth/too-many-requests") {
+        setErrorMsg("Access to this account has been temporarily disabled due to many failed attempts. Please try again later.");
+      } else if (err?.code === "auth/invalid-api-key") {
+        setErrorMsg("Invalid Firebase API Key. Please configure NEXT_PUBLIC_FIREBASE_API_KEY in your .env.local file.");
+      } else {
+        setErrorMsg(err?.message || "Failed to sign in. Please try again.");
+      }
+    } finally {
+      setEmailLoading(false);
+    }
   };
 
   const handleGoogleLogin = async () => {
@@ -433,9 +462,11 @@ function LoginForm() {
               {/* Login Button */}
               <button
                 type="submit"
-                className="w-full rounded-lg bg-[#0d6efd] hover:bg-[#0b5ed7] active:scale-[0.99] py-3 text-[14px] font-medium text-white transition-all duration-200 mt-2 cursor-pointer shadow-md shadow-blue-500/10"
+                disabled={emailLoading}
+                className="w-full flex items-center justify-center gap-2 rounded-lg bg-[#0d6efd] hover:bg-[#0b5ed7] disabled:opacity-70 active:scale-[0.99] py-3 text-[14px] font-medium text-white transition-all duration-200 mt-2 cursor-pointer shadow-md shadow-blue-500/10"
               >
-                Login
+                {emailLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+                {emailLoading ? "Logging in..." : "Login"}
               </button>
             </form>
           )}

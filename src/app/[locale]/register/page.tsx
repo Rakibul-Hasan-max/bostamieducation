@@ -4,27 +4,60 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Mail, Lock, Phone, AlertCircle, Loader2 } from "lucide-react";
+import { Mail, Lock, Phone, AlertCircle, Loader2, User as UserIcon } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function RegisterPage() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
-  const { signInWithGoogle } = useAuth();
+  const { registerWithEmail, signInWithGoogle } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMsg("");
+
     if (password !== confirmPassword) {
       setErrorMsg("Passwords do not match!");
       return;
     }
-    // Simulate successful registration and redirect to login
-    router.push("/login");
+
+    if (password.length < 6) {
+      setErrorMsg("Password must be at least 6 characters long.");
+      return;
+    }
+
+    if (!agreeTerms) {
+      setErrorMsg("Please agree to the terms of service to continue.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await registerWithEmail(email.trim(), password, name.trim());
+      router.push("/student/dashboard");
+    } catch (err: any) {
+      console.error("Registration failed:", err);
+      if (err?.code === "auth/email-already-in-use") {
+        setErrorMsg("An account with this email already exists. Please sign in instead.");
+      } else if (err?.code === "auth/weak-password") {
+        setErrorMsg("Password is too weak. Please use at least 6 characters.");
+      } else if (err?.code === "auth/invalid-email") {
+        setErrorMsg("Please enter a valid email address.");
+      } else if (err?.code === "auth/invalid-api-key") {
+        setErrorMsg("Invalid Firebase API Key. Please configure NEXT_PUBLIC_FIREBASE_API_KEY in your .env.local file.");
+      } else {
+        setErrorMsg(err?.message || "Failed to create an account. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGoogleSignup = async () => {
@@ -115,6 +148,25 @@ export default function RegisterPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Full Name Field */}
+            <div>
+              <label className="block text-[13px] font-medium text-slate-700 mb-2">
+                Full Name
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <UserIcon className="h-5 w-5 text-slate-400" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="John Doe"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full rounded-lg bg-[#f4f7f9] border-none px-4 py-3.5 pl-11 text-[14px] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition"
+                />
+              </div>
+            </div>
+
             {/* Email Field */}
             <div>
               <label className="block text-[13px] font-medium text-slate-700 mb-2">
@@ -154,7 +206,7 @@ export default function RegisterPage() {
                 />
               </div>
               <p className="text-[12px] text-slate-400 mt-2">
-                Your password must be 8 characters at least
+                Your password must be 6 characters at least
               </p>
             </div>
 
@@ -199,9 +251,11 @@ export default function RegisterPage() {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full rounded-lg bg-[#0d6efd] hover:bg-[#0b5ed7] active:scale-[0.99] py-3 text-[14px] font-medium text-white transition-all duration-200 mt-2 cursor-pointer"
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-2 rounded-lg bg-[#0d6efd] hover:bg-[#0b5ed7] disabled:opacity-70 active:scale-[0.99] py-3 text-[14px] font-medium text-white transition-all duration-200 mt-2 cursor-pointer shadow-md shadow-blue-500/10"
             >
-              Sign Up
+              {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+              {loading ? "Creating account..." : "Sign Up"}
             </button>
           </form>
 
