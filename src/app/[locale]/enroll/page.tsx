@@ -14,7 +14,6 @@ import {
   GraduationCap,
   User,
   School,
-  MapPin,
   Phone,
   Mail,
   BookOpen,
@@ -46,9 +45,7 @@ function EnrollFormContent() {
   // Student Info Inputs
   const [formData, setFormData] = useState({
     fullName: "",
-    age: "",
     schoolName: "",
-    presentAddress: "",
     guardianPhone: "",
     emailAddress: "",
     paymentMethod: "bkash" as "bkash" | "nagad" | "rocket" | "card",
@@ -101,7 +98,7 @@ function EnrollFormContent() {
 
   const handleStep1Submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.fullName || !formData.age || !formData.schoolName || !formData.presentAddress || !formData.guardianPhone) {
+    if (!formData.fullName || !formData.schoolName || !formData.guardianPhone) {
       alert("অনুগ্রহ করে সকল আবশ্যকীয় তথ্য পূরণ করুন।");
       return;
     }
@@ -122,9 +119,7 @@ function EnrollFormContent() {
       await addDoc(collection(db, "enrollments"), {
         enrollmentId: generatedId,
         studentName: formData.fullName,
-        age: formData.age,
         schoolName: formData.schoolName,
-        address: formData.presentAddress,
         guardianPhone: formData.guardianPhone,
         email: formData.emailAddress,
         courseId: selectedCourse.id,
@@ -266,82 +261,41 @@ function EnrollFormContent() {
                     {t("studentDetails")}
                   </h3>
 
-                  {/* Full Name + Age Row */}
-                  <div className="grid grid-cols-2 gap-3">
-                    {/* Full Name */}
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        {t("fullName")} <span className="text-red-500">*</span>
-                      </label>
-                      <div className="relative">
-                        <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                        <input
-                          type="text"
-                          name="fullName"
-                          required
-                          value={formData.fullName}
-                          onChange={handleChange}
-                          placeholder={t("fullNamePlaceholder")}
-                          className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none text-xs text-slate-800 bg-slate-50 focus:bg-white transition"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Age */}
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        {t("age")} <span className="text-red-500">*</span>
-                      </label>
+                  {/* Full Name */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      {t("fullName")} <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
-                        type="number"
-                        name="age"
+                        type="text"
+                        name="fullName"
                         required
-                        min={5}
-                        max={100}
-                        value={formData.age}
+                        value={formData.fullName}
                         onChange={handleChange}
-                        placeholder={t("agePlaceholder")}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none text-xs text-slate-800 bg-slate-50 focus:bg-white transition"
+                        placeholder={t("fullNamePlaceholder")}
+                        className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none text-xs text-slate-800 bg-slate-50 focus:bg-white transition"
                       />
                     </div>
                   </div>
 
-                  {/* School & Address Row */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        {t("schoolName")} <span className="text-red-500">*</span>
-                      </label>
-                      <div className="relative">
-                        <School className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                        <input
-                          type="text"
-                          name="schoolName"
-                          required
-                          value={formData.schoolName}
-                          onChange={handleChange}
-                          placeholder={t("schoolPlaceholder")}
-                          className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none text-xs text-slate-800 bg-slate-50 focus:bg-white transition"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        {t("presentAddress")} <span className="text-red-500">*</span>
-                      </label>
-                      <div className="relative">
-                        <MapPin className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                        <input
-                          type="text"
-                          name="presentAddress"
-                          required
-                          value={formData.presentAddress}
-                          onChange={handleChange}
-                          placeholder={t("addressPlaceholder")}
-                          className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none text-xs text-slate-800 bg-slate-50 focus:bg-white transition"
-                        />
-                      </div>
+                  {/* School Name */}
+                  <div className="mt-3">
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      {t("schoolName")} <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <School className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="text"
+                        name="schoolName"
+                        required
+                        value={formData.schoolName}
+                        onChange={handleChange}
+                        placeholder={t("schoolPlaceholder")}
+                        className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none text-xs text-slate-800 bg-slate-50 focus:bg-white transition"
+                      />
                     </div>
                   </div>
 
