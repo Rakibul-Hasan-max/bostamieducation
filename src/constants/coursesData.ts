@@ -91,8 +91,7 @@ export const COURSES_DATA: CourseDetail[] = [
     shortDescriptionKey: "c2ShortDesc",
     defaultShortDesc: "Intensive problem-solving and revision course for SSC 2027 Batch",
     description: [
-      "Prepare for Bangladesh's top engineering and varsity admission tests with high-yield physics short techniques, concept clearings, and rigorous problem-solving drills.",
-      "Covers BUET, DU A-Unit, RUET, KUET, CUET, and GST past 20 years question patterns."
+      "This course is designed to help SSC 2027 batch students prepare for the SSC exam. It covers Physics, Chemistry, Genaral Math & Higher Math subjects with conceptual clarity, problem solving, and exam-focused selected topics. It also includes short hand tricks to save time in exam hall and intensive revision classes for last minute preparation."
     ],
     learningOutcomes: [
       "Deep dive into Physics, Chemistry, Genaral Math & Higher Math subject",
@@ -101,7 +100,7 @@ export const COURSES_DATA: CourseDetail[] = [
       "Intensive revision classes for last minute preparation with Short hand tricks"
     ],
     requirements: [
-      "HSC Physics syllabus completed or currently appearing in HSC"
+      "SSC exam candidate for 2027 batch"
     ],
     features: [
       "75 High-Intensity Admission Video Lectures",
