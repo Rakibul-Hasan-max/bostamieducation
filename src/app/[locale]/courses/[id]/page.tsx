@@ -753,13 +753,13 @@ export default function CourseDetailPage({
                     )}
                     {course.originalPrice && (
                       <span className="px-2 py-0.5 bg-red-50 text-red-600 text-[10px] font-extrabold rounded">
-                        37% OFF
+                        60% OFF
                       </span>
                     )}
                   </div>
-                  <p className="text-[11px] text-red-500 font-bold flex items-center gap-1">
+                  {/* <p className="text-[11px] text-red-500 font-bold flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5" /> Special Discount ends in 2 days!
-                  </p>
+                  </p> */}
                 </div>
 
                 {/* CTA Buttons */}

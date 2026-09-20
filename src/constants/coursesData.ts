@@ -76,7 +76,7 @@ export const COURSES_DATA: CourseDetail[] = [
     category: "Physics",
     price: "৳1500",
     numericPrice: 1500,
-    originalPrice: "৳5000",
+    originalPrice: "৳4000",
     duration: "60h 15m",
     lectures: 75,
     rating: 4.9,
@@ -103,11 +103,9 @@ export const COURSES_DATA: CourseDetail[] = [
       "SSC exam candidate for 2027 batch"
     ],
     features: [
-      "75 High-Intensity Admission Video Lectures",
-      "20 Years BUET & DU Solved Question Bank",
-      "10 Live Model Tests with All-Bangladesh Rank",
+      "100+ High-Intensity Video Lectures",
       "Direct Doubt Solve Sessions with Mentors",
-      "Lifetime Access"
+      "Lecture Sheet PDF",
     ],
     instructor: {
       name: "Bayzid Bostami",
@@ -193,7 +191,7 @@ export const COURSES_DATA: CourseDetail[] = [
       title: "Physics",
       avatar: "/avatar1.png",
       rating: 4.9,
-      studentsCount: 15400,
+      studentsCount: 100,
       coursesCount: 12,
       bio: "Bayzid Bostami has guided over 100+ SSC students in 4 years."
     },
