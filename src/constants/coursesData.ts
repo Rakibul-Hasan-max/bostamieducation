@@ -89,16 +89,16 @@ export const COURSES_DATA: CourseDetail[] = [
     lastUpdated: "August 2026",
     language: "Bangla",
     shortDescriptionKey: "c2ShortDesc",
-    defaultShortDesc: "Intensive problem-solving course for BUET, DU, CKREU & Medical Admission candidates.",
+    defaultShortDesc: "Intensive problem-solving and revision course for SSC 2027 Batch",
     description: [
       "Prepare for Bangladesh's top engineering and varsity admission tests with high-yield physics short techniques, concept clearings, and rigorous problem-solving drills.",
       "Covers BUET, DU A-Unit, RUET, KUET, CUET, and GST past 20 years question patterns."
     ],
     learningOutcomes: [
-      "Master short tricks & conceptual shortcuts for varsity MCQs",
-      "Solve advanced multi-concept engineering written problems",
-      "Speed optimization for 45-second MCQ answering technique",
-      "Mock tests with ranking & detailed video solutions"
+      "Deep dive into Physics, Chemistry, Genaral Math & Higher Math subject",
+      "Problem solving with conceptual clarity include CQ, SQ & MCQ",
+      "Interactive learning with exam focused selected topics",
+      "Intensive revision classes for last minute preparation with Short hand tricks"
     ],
     requirements: [
       "HSC Physics syllabus completed or currently appearing in HSC"
@@ -111,13 +111,13 @@ export const COURSES_DATA: CourseDetail[] = [
       "Lifetime Access"
     ],
     instructor: {
-      name: "Engr. Mahmudul Hasan Bostami",
-      title: "Senior Physics Lecturer | Ex-BUET",
+      name: "Bayzid Bostami",
+      title: "Physics",
       avatar: "/avatar1.png",
       rating: 4.9,
-      studentsCount: 15400,
+      studentsCount: 100,
       coursesCount: 12,
-      bio: "Engr. Bostami has guided over 15,000+ HSC and admission candidates over the last 8 years."
+      bio: "Bayzid Bostami has guided over 100+ SSC students in 4 years."
     },
     curriculum: [
       {
@@ -138,13 +138,13 @@ export const COURSES_DATA: CourseDetail[] = [
         avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
         rating: 5,
         date: "3 weeks ago",
-        comment: "This course got me into BUET EEE! The admission question hacks were unbelievable."
+        comment: "This course got me into GPA-5 in my SSC exam"
       }
     ],
     faqs: [
       {
-        question: "Is this course suitable for HSC 2026 / 2027 students?",
-        answer: "Yes, both HSC candidates and admission examinees will benefit immensely from the advanced concept building."
+        question: "Is this course suitable for SSC 2028 students?",
+        answer: "Yes, both SSC 2027 & 2028 candidates will benefit immensely from the advanced concept building."
       }
     ]
   },
@@ -190,13 +190,13 @@ export const COURSES_DATA: CourseDetail[] = [
       "Full Syllabus Model Tests"
     ],
     instructor: {
-      name: "Engr. Mahmudul Hasan Bostami",
-      title: "Senior Physics Lecturer | Ex-BUET",
+      name: "Bayzid Bostami",
+      title: "Physics",
       avatar: "/avatar1.png",
       rating: 4.9,
       studentsCount: 15400,
       coursesCount: 12,
-      bio: "Engr. Bostami has guided over 15,000+ SSC, HSC and admission candidates."
+      bio: "Bayzid Bostami has guided over 100+ SSC students in 4 years."
     },
     curriculum: [
       {
