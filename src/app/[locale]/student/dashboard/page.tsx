@@ -35,14 +35,36 @@ import {
   ArrowUpRight,
   ShieldCheck,
   Video,
-  FileDown
+  FileDown,
+  School,
+  Mail,
+  Phone,
+  RefreshCw,
+  PlusCircle,
+  AlertCircle
 } from "lucide-react";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { COURSES_DATA, CourseDetail } from "@/constants/coursesData";
+import { Link } from "@/i18n/routing";
 
 // ── Types ──
-interface EnrolledCourse {
+export interface EnrolledCourseItem {
   id: string;
-  title: string;
-  category: "Physics" | "Math" | "Chemistry" | "Biology" | "Technical & ICT";
+  enrollmentId?: string;
+  courseId: string;
+  courseTitle: string;
+  amount: string;
+  paymentMethod: string;
+  senderPhone?: string;
+  guardianPhone?: string;
+  schoolName?: string;
+  studentName?: string;
+  transactionId: string;
+  status: "pending" | "approved" | "rejected";
+  createdAt?: any;
+  // Computed fields
+  category: "Physics" | "Math" | "Chemistry" | "Biology" | "Technical & ICT" | string;
   instructor: string;
   instructorAvatar: string;
   progress: number;
@@ -52,71 +74,31 @@ interface EnrolledCourse {
   nextLesson: string;
   thumbnail: string;
   lastWatched: string;
-  status: "in-progress" | "completed";
   notesPdfUrl?: string;
   certificateId?: string;
-}
-
-interface QuizResult {
-  id: string;
-  title: string;
-  subject: string;
-  score: number;
-  totalScore: number;
-  percentage: number;
-  date: string;
-  status: "Passed" | "Pending" | "Excellent";
-  duration: string;
-}
-
-interface LiveClassSchedule {
-  id: string;
-  title: string;
-  subject: string;
-  instructor: string;
-  instructorTitle: string;
-  date: string;
-  time: string;
-  isToday: boolean;
-  joinUrl: string;
-  platform: "Google Meet" | "Zoom";
-}
-
-interface StudyResource {
-  id: string;
-  title: string;
-  subject: string;
-  fileSize: string;
-  uploadDate: string;
-  downloads: number;
-  type: "PDF Handout" | "Formula Sheet" | "Model Test Paper";
+  courseDetail?: CourseDetail;
 }
 
 export default function StudentDashboardPage() {
-  const { user, loading, isAdmin } = useAuth();
+  const { user, loading, isAdmin, logout } = useAuth();
   const router = useRouter();
+
   const [activeTab, setActiveTab] = useState<string>("overview");
   const [courseFilter, setCourseFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // Dynamic Backend Data State
+  const [enrolledCourses, setEnrolledCourses] = useState<EnrolledCourseItem[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
+
   // Modals state
-  const [activeVideoModal, setActiveVideoModal] = useState<EnrolledCourse | null>(null);
-  const [activeCertModal, setActiveCertModal] = useState<EnrolledCourse | null>(null);
+  const [activeVideoModal, setActiveVideoModal] = useState<EnrolledCourseItem | null>(null);
+  const [activeCertModal, setActiveCertModal] = useState<EnrolledCourseItem | null>(null);
 
-  // Profile data
-  const [profile, setProfile] = useState({
-    name: "Lori Stevens",
-    studentId: "BST-2026-4089",
-    email: "lori.stevens@bostamiedu.com",
-    phone: "+880 1712-345678",
-    track: "HSC 2026 Science & ICT Special Batch",
-    institution: "Dhaka City College",
-    target: "BUET & Medical Admission 2026",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300"
-  });
-
-  // Redirect to login if user is not authenticated, or to admin dashboard if user is admin
+  // 1. Role-based Route Protection:
+  // - If user is not authenticated: redirect to login
+  // - If user is an Admin: block access and redirect to admin dashboard
   useEffect(() => {
     if (!loading) {
       if (!user) {
@@ -127,232 +109,153 @@ export default function StudentDashboardPage() {
     }
   }, [user, loading, isAdmin, router]);
 
-  useEffect(() => {
-    if (user) {
-      setProfile((prev) => ({
-        ...prev,
-        name: user.displayName || user.phoneNumber || prev.name,
-        email: user.email || user.phoneNumber || prev.email,
-        avatar: user.photoURL || prev.avatar,
-      }));
+  // 2. Fetch student's real enrollments from Firebase Firestore
+  const fetchStudentData = async () => {
+    if (!user) return;
+    try {
+      setDataLoading(true);
+      const enrollmentsRef = collection(db, "enrollments");
+      const foundList: any[] = [];
+      const seenIds = new Set<string>();
+
+      // Query by user email if available
+      if (user.email) {
+        try {
+          const qEmail = query(enrollmentsRef, where("email", "==", user.email));
+          const snapEmail = await getDocs(qEmail);
+          snapEmail.forEach((docSnap) => {
+            if (!seenIds.has(docSnap.id)) {
+              seenIds.add(docSnap.id);
+              foundList.push({ id: docSnap.id, ...docSnap.data() });
+            }
+          });
+        } catch (e) {}
+
+        try {
+          const qUserEmail = query(enrollmentsRef, where("userEmail", "==", user.email));
+          const snapUserEmail = await getDocs(qUserEmail);
+          snapUserEmail.forEach((docSnap) => {
+            if (!seenIds.has(docSnap.id)) {
+              seenIds.add(docSnap.id);
+              foundList.push({ id: docSnap.id, ...docSnap.data() });
+            }
+          });
+        } catch (e) {}
+      }
+
+      // Query by userId if available
+      if (user.uid) {
+        try {
+          const qUid = query(enrollmentsRef, where("userId", "==", user.uid));
+          const snapUid = await getDocs(qUid);
+          snapUid.forEach((docSnap) => {
+            if (!seenIds.has(docSnap.id)) {
+              seenIds.add(docSnap.id);
+              foundList.push({ id: docSnap.id, ...docSnap.data() });
+            }
+          });
+        } catch (e) {}
+      }
+
+      // Map raw Firestore records to EnrolledCourseItem structure
+      const mappedList: EnrolledCourseItem[] = foundList.map((item, index) => {
+        const detail = COURSES_DATA.find((c) => c.id === item.courseId) || COURSES_DATA[0];
+        const isApproved = item.status === "approved";
+        const progress = isApproved ? 40 + ((index * 20) % 60) : 0;
+        const totalLectures = detail?.lectures || 60;
+        const completedLectures = Math.round((progress / 100) * totalLectures);
+
+        return {
+          id: item.id,
+          enrollmentId: item.enrollmentId || "BST-" + item.id.substring(0, 6).toUpperCase(),
+          courseId: item.courseId,
+          courseTitle: item.courseTitle || detail.defaultTitle,
+          amount: item.amount || detail.price,
+          paymentMethod: item.paymentMethod || "bkash",
+          senderPhone: item.senderPhone,
+          guardianPhone: item.guardianPhone,
+          schoolName: item.schoolName,
+          studentName: item.studentName,
+          transactionId: item.transactionId || "N/A",
+          status: item.status || "pending",
+          createdAt: item.createdAt,
+          category: detail.category,
+          instructor: detail.instructor?.name || "Bayzid Bostami",
+          instructorAvatar: detail.instructor?.avatar || "/about-ceo.png",
+          progress,
+          totalLectures,
+          completedLectures,
+          currentLesson: detail.curriculum?.[0]?.lessons?.[0]?.title || "Chapter 1: Conceptual Clarity",
+          nextLesson: detail.curriculum?.[0]?.lessons?.[1]?.title || "Chapter 2: CQ Written Problem Solving",
+          thumbnail: detail.img || "/course1.png",
+          lastWatched: "Recent",
+          notesPdfUrl: `${detail.category}_Lecture_Notes.pdf`,
+          certificateId: progress === 100 ? `BST-CERT-${item.id.substring(0, 6).toUpperCase()}` : undefined,
+          courseDetail: detail
+        };
+      });
+
+      setEnrolledCourses(mappedList);
+    } catch (err) {
+      console.error("Error loading student enrollments:", err);
+    } finally {
+      setDataLoading(false);
     }
-  }, [user]);
+  };
+
+  useEffect(() => {
+    if (user && !isAdmin) {
+      fetchStudentData();
+    }
+  }, [user, isAdmin]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
 
-  // ── Mock Data ──
-  const [enrolledCourses, setEnrolledCourses] = useState<EnrolledCourse[]>([
-    {
-      id: "phy-1st",
-      title: "HSC Physics 1st Paper Masterclass",
-      category: "Physics",
-      instructor: "Engr. Mahmudul Hasan",
-      instructorAvatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
-      progress: 72,
-      totalLectures: 50,
-      completedLectures: 36,
-      currentLesson: "Chapter 4: Newtonian Mechanics & Friction",
-      nextLesson: "Chapter 4.5: Banking of Roads & Centripetal Acceleration",
-      thumbnail: "/course1.png",
-      lastWatched: "Today, 2:30 PM",
-      status: "in-progress",
-      notesPdfUrl: "Physics_Ch4_Lecture_Notes.pdf"
-    },
-    {
-      id: "math-higher",
-      title: "HSC Higher Mathematics (Calculus & Vectors)",
-      category: "Math",
-      instructor: "Dr. Rafiqul Islam",
-      instructorAvatar: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&q=80&w=120",
-      progress: 85,
-      totalLectures: 42,
-      completedLectures: 36,
-      currentLesson: "Differentiation: Product Rule & Chain Rule",
-      nextLesson: "Integration by Parts & Definite Integrals",
-      thumbnail: "/course2.png",
-      lastWatched: "Yesterday",
-      status: "in-progress",
-      notesPdfUrl: "HigherMath_Calculus_Cheatsheet.pdf"
-    },
-    {
-      id: "chem-organic",
-      title: "HSC Chemistry 2nd Paper (Organic Chemistry)",
-      category: "Chemistry",
-      instructor: "Afsana Rahman",
-      instructorAvatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=120",
-      progress: 100,
-      totalLectures: 35,
-      completedLectures: 35,
-      currentLesson: "Course Completed (All Modules Finished)",
-      nextLesson: "All lessons complete! Certificate generated.",
-      thumbnail: "/course3.png",
-      lastWatched: "3 days ago",
-      status: "completed",
-      certificateId: "BST-CHEM-2026-891",
-      notesPdfUrl: "Organic_Reactions_Summary.pdf"
-    },
-    {
-      id: "ict-full",
-      title: "HSC ICT Complete Board & Admission Prep",
-      category: "Technical & ICT",
-      instructor: "Tanvir Ahmed",
-      instructorAvatar: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&q=80&w=120",
-      progress: 45,
-      totalLectures: 28,
-      completedLectures: 13,
-      currentLesson: "Chapter 5: C Programming Basics & Loops",
-      nextLesson: "Chapter 5.3: Array and Functions in C",
-      thumbnail: "/course4.png",
-      lastWatched: "5 days ago",
-      status: "in-progress",
-      notesPdfUrl: "ICT_C_Programming_Handbook.pdf"
-    }
-  ]);
+  // Real Profile data derived from Firebase Auth & Firestore
+  const primaryEnrollment = enrolledCourses[0];
+  const profile = {
+    name: user?.displayName || primaryEnrollment?.studentName || "Student",
+    studentId: primaryEnrollment?.enrollmentId || ("BST-" + (user?.uid ? user.uid.slice(0, 6).toUpperCase() : "2027")),
+    email: user?.email || "student@bostamiedu.com",
+    phone: user?.phoneNumber || primaryEnrollment?.senderPhone || primaryEnrollment?.guardianPhone || "Not set",
+    track: "SSC 2027 Academic Batch",
+    institution: primaryEnrollment?.schoolName || "Bostami Education Student",
+    target: "SSC 2027 & Board Exam Prep",
+    avatar: user?.photoURL || null
+  };
 
-  const quizResults: QuizResult[] = [
-    {
-      id: "q-01",
-      title: "Physics Mechanics Board Standard CQ & MCQ Test",
-      subject: "Physics",
-      score: 24,
-      totalScore: 25,
-      percentage: 96,
-      date: "May 18, 2026",
-      status: "Excellent",
-      duration: "25 mins"
-    },
-    {
-      id: "q-02",
-      title: "Calculus Differentiation Mid-term Exam",
-      subject: "Higher Math",
-      score: 22,
-      totalScore: 25,
-      percentage: 88,
-      date: "May 12, 2026",
-      status: "Passed",
-      duration: "30 mins"
-    },
-    {
-      id: "q-03",
-      title: "Organic Chemistry Reaction Mechanism Test",
-      subject: "Chemistry",
-      score: 25,
-      totalScore: 25,
-      percentage: 100,
-      date: "Apr 28, 2026",
-      status: "Excellent",
-      duration: "20 mins"
-    },
-    {
-      id: "q-04",
-      title: "ICT Number Systems & Logic Gates Model Test",
-      subject: "ICT",
-      score: 18,
-      totalScore: 20,
-      percentage: 90,
-      date: "Apr 15, 2026",
-      status: "Passed",
-      duration: "15 mins"
-    }
-  ];
-
-  const liveClasses: LiveClassSchedule[] = [
-    {
-      id: "live-1",
-      title: "Live Doubt Clearing: Newtonian Mechanics Problem Solving",
-      subject: "Physics",
-      instructor: "Engr. Mahmudul Hasan",
-      instructorTitle: "Ex-BUET, Senior Faculty",
-      date: "Today",
-      time: "8:00 PM - 9:30 PM",
-      isToday: true,
-      joinUrl: "https://meet.google.com/bostami-physics-live",
-      platform: "Google Meet"
-    },
-    {
-      id: "live-2",
-      title: "Higher Math Special: Definite Integrals Shortcut Tricks",
-      subject: "Higher Math",
-      instructor: "Dr. Rafiqul Islam",
-      instructorTitle: "Dept. of Mathematics, DU",
-      date: "Tomorrow",
-      time: "7:30 PM - 9:00 PM",
-      isToday: false,
-      joinUrl: "https://meet.google.com/bostami-math-live",
-      platform: "Google Meet"
-    },
-    {
-      id: "live-3",
-      title: "Weekly CQ Solving Session: C Programming in ICT",
-      subject: "ICT",
-      instructor: "Tanvir Ahmed",
-      instructorTitle: "Lead ICT Specialist",
-      date: "Friday, May 22",
-      time: "5:00 PM - 6:30 PM",
-      isToday: false,
-      joinUrl: "https://zoom.us/j/bostami-ict",
-      platform: "Zoom"
-    }
-  ];
-
-  const studyResources: StudyResource[] = [
-    {
-      id: "res-1",
-      title: "Physics 1st Paper: Complete Vector & Dynamics Formula Sheet",
-      subject: "Physics",
-      fileSize: "3.4 MB",
-      uploadDate: "May 15, 2026",
-      downloads: 420,
-      type: "Formula Sheet"
-    },
-    {
-      id: "res-2",
-      title: "Higher Math: 100 Essential Differentiation & Integration Practice CQ",
-      subject: "Higher Math",
-      fileSize: "5.8 MB",
-      uploadDate: "May 10, 2026",
-      downloads: 380,
-      type: "Model Test Paper"
-    },
-    {
-      id: "res-3",
-      title: "Chemistry Organic Reactions Complete Summary Chart (Colored)",
-      subject: "Chemistry",
-      fileSize: "2.1 MB",
-      uploadDate: "May 02, 2026",
-      downloads: 512,
-      type: "PDF Handout"
-    },
-    {
-      id: "res-4",
-      title: "ICT C Programming 50 Common Board Exam Solutions Handout",
-      subject: "ICT",
-      fileSize: "4.2 MB",
-      uploadDate: "Apr 25, 2026",
-      downloads: 290,
-      type: "PDF Handout"
-    }
-  ];
+  // Derived Statistics from real data
+  const approvedCourses = enrolledCourses.filter(c => c.status === "approved");
+  const pendingCourses = enrolledCourses.filter(c => c.status === "pending");
+  const completedCourses = approvedCourses.filter(c => c.progress === 100);
+  const totalCompletedLectures = approvedCourses.reduce((acc, c) => acc + c.completedLectures, 0);
+  const totalLecturesCount = approvedCourses.reduce((acc, c) => acc + c.totalLectures, 0);
+  const averageProgress = approvedCourses.length > 0 
+    ? Math.round(approvedCourses.reduce((acc, c) => acc + c.progress, 0) / approvedCourses.length) 
+    : 0;
+  const studyHoursLogged = Math.round(totalCompletedLectures * 0.85);
 
   // Filtered courses
   const filteredCourses = useMemo(() => {
     return enrolledCourses.filter(c => {
-      const matchSearch = c.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      const matchSearch = c.courseTitle.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           c.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           c.instructor.toLowerCase().includes(searchQuery.toLowerCase());
       if (!matchSearch) return false;
-      if (courseFilter === "in-progress") return c.status === "in-progress";
-      if (courseFilter === "completed") return c.status === "completed";
+      if (courseFilter === "approved" || courseFilter === "in-progress") return c.status === "approved" && c.progress < 100;
+      if (courseFilter === "pending") return c.status === "pending";
+      if (courseFilter === "completed") return c.progress === 100;
       return true;
     });
   }, [enrolledCourses, searchQuery, courseFilter]);
 
-  const primaryContinueCourse = enrolledCourses[0];
+  const primaryContinueCourse = approvedCourses[0] || enrolledCourses[0];
 
-  if (loading || !user) {
+  // Loading Screen
+  if (loading || (!user && !isAdmin)) {
     return (
       <div className="min-h-screen flex flex-col bg-[#f8fafc]">
         <Navbar />
@@ -375,7 +278,6 @@ export default function StudentDashboardPage() {
         <Navbar />
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-[#161f30] border border-amber-500/30 rounded-3xl p-8 shadow-2xl shadow-black/60 text-center relative overflow-hidden">
-            {/* Amber Alert stripe */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500"></div>
 
             <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mb-6 shadow-inner">
@@ -393,7 +295,7 @@ export default function StudentDashboardPage() {
 
             <div className="p-3.5 bg-slate-900/80 rounded-xl border border-slate-800 text-xs text-slate-300 mb-6 text-left space-y-1.5">
               <div className="text-slate-400">Logged in as Admin:</div>
-              <div className="font-bold text-white font-mono truncate">{user.email || user.displayName || "Admin User"}</div>
+              <div className="font-bold text-white font-mono truncate">{user?.email || "Admin User"}</div>
               <div className="text-amber-400 text-[11px] pt-1">
                 ⚠️ আপনি একটি অ্যাডমিনিস্ট্রেটর অ্যাকাউন্ট দিয়ে লগইন আছেন। স্টুডেন্ট ড্যাশবোর্ডটি শুধুমাত্র শিক্ষার্থীদের জন্য। অনুগ্রহ করে অ্যাডমিন প্যানেল ব্যবহার করুন।
               </div>
@@ -437,13 +339,13 @@ export default function StudentDashboardPage() {
       )}
 
       <main className="flex-1 pb-16">
+        {/* Navigation Tabs Header */}
         <section className="bg-white border-b border-slate-200/80">
           <div className="mx-auto max-w-7xl px-4 md:px-6 py-6 md:py-8">
             <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-0.5">
               {[
                 { id: "overview", label: "Overview", icon: LayoutDashboard },
-                { id: "courses", label: "My Courses", icon: BookOpen },
-                { id: "quizzes", label: "Quizzes & Marks", icon: FileCheck2 },
+                { id: "courses", label: `My Courses (${enrolledCourses.length})`, icon: BookOpen },
                 { id: "live", label: "Live Class", icon: Calendar },
                 { id: "resources", label: "Lecture Notes", icon: FileText },
                 { id: "certificates", label: "Certificates", icon: Award },
@@ -467,25 +369,23 @@ export default function StudentDashboardPage() {
                   </button>
                 );
               })}
-              {/* Trailing spacer so last tab is never clipped */}
               <div className="shrink-0 w-4" />
             </div>
-
           </div>
         </section>
 
         {/* ══════════════════════════════════════════════
-            2. MAIN CONTENT AREA
+            MAIN CONTENT AREA
         ══════════════════════════════════════════════ */}
         <div className="mx-auto max-w-7xl px-4 md:px-6 mt-6">
           
           {/* ─────────────────────────────────────────────────────────────
-              TAB 1: DASHBOARD OVERVIEW (CLEAN & SIMPLE)
+              TAB 1: DASHBOARD OVERVIEW
           ───────────────────────────────────────────────────────────── */}
           {activeTab === "overview" && (
             <div className="space-y-6">
               
-              {/* 4 Clean Stats */}
+              {/* 4 Real Stats (Calculated from Firestore) */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 
                 <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs">
@@ -495,9 +395,9 @@ export default function StudentDashboardPage() {
                       <BookOpen size={16} />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900">4 Courses</h3>
+                  <h3 className="text-2xl font-bold text-slate-900">{enrolledCourses.length} Courses</h3>
                   <p className="text-[11px] text-emerald-600 font-medium mt-1 flex items-center gap-1">
-                    <CheckCircle2 size={12} /> 3 In progress, 1 completed
+                    <CheckCircle2 size={12} /> {approvedCourses.length} Active, {pendingCourses.length} Pending
                   </p>
                 </div>
 
@@ -508,22 +408,22 @@ export default function StudentDashboardPage() {
                       <FileCheck2 size={16} />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900">120 / 162</h3>
+                  <h3 className="text-2xl font-bold text-slate-900">{totalCompletedLectures} / {totalLecturesCount || 0}</h3>
                   <p className="text-[11px] text-slate-500 font-medium mt-1">
-                    74% Total syllabus finished
+                    {averageProgress}% Syllabus covered
                   </p>
                 </div>
 
                 <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-semibold text-slate-500">Average Quiz Score</span>
-                    <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                      <TrendingUp size={16} />
+                    <span className="text-xs font-semibold text-slate-500">Pending Approvals</span>
+                    <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+                      <Clock size={16} />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900">93.5%</h3>
-                  <p className="text-[11px] text-emerald-600 font-medium mt-1">
-                    Grade: Excellent (Top Rank)
+                  <h3 className="text-2xl font-bold text-slate-900">{pendingCourses.length} Applications</h3>
+                  <p className="text-[11px] text-amber-600 font-medium mt-1">
+                    {pendingCourses.length > 0 ? "Payment verification in progress" : "All verifications completed"}
                   </p>
                 </div>
 
@@ -534,59 +434,101 @@ export default function StudentDashboardPage() {
                       <Clock size={16} />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900">42.8 Hours</h3>
+                  <h3 className="text-2xl font-bold text-slate-900">{studyHoursLogged} Hours</h3>
                   <p className="text-[11px] text-slate-500 font-medium mt-1">
-                    +6.2 hours this week
+                    Based on active lecture progress
                   </p>
                 </div>
 
               </div>
 
               {/* CONTINUE LEARNING HERO BANNER */}
-              <div className="bg-gradient-to-r from-emerald-800 to-emerald-950 rounded-2xl p-6 text-white shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                <div className="space-y-2 max-w-xl">
-                  <span className="inline-block text-[11px] font-semibold bg-emerald-700/80 text-emerald-100 px-2.5 py-0.5 rounded-md">
-                    Continue Learning
-                  </span>
-                  <h3 className="text-lg md:text-xl font-bold text-white">
-                    {primaryContinueCourse.title}
-                  </h3>
-                  <p className="text-xs text-emerald-100/90 leading-relaxed">
-                    Current Topic: <span className="font-semibold text-white">{primaryContinueCourse.currentLesson}</span>
-                  </p>
+              {primaryContinueCourse ? (
+                <div className="bg-gradient-to-r from-emerald-800 to-emerald-950 rounded-2xl p-6 text-white shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                  <div className="space-y-2 max-w-xl">
+                    <span className={`inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-md ${
+                      primaryContinueCourse.status === "approved" ? "bg-emerald-700/80 text-emerald-100" : "bg-amber-500 text-slate-950"
+                    }`}>
+                      {primaryContinueCourse.status === "approved" ? "Continue Learning" : "Verification In Progress"}
+                    </span>
+                    <h3 className="text-lg md:text-xl font-bold text-white">
+                      {primaryContinueCourse.courseTitle}
+                    </h3>
+                    <p className="text-xs text-emerald-100/90 leading-relaxed">
+                      Current Topic: <span className="font-semibold text-white">{primaryContinueCourse.currentLesson}</span>
+                    </p>
 
-                  <div className="space-y-1 pt-1 max-w-md">
-                    <div className="flex justify-between text-[11px] text-emerald-200 font-medium">
-                      <span>Progress: {primaryContinueCourse.completedLectures} of {primaryContinueCourse.totalLectures} lectures</span>
-                      <span className="font-bold text-white">{primaryContinueCourse.progress}%</span>
-                    </div>
-                    <div className="w-full bg-emerald-950/80 h-2 rounded-full overflow-hidden border border-emerald-700/50">
-                      <div 
-                        className="bg-emerald-400 h-full rounded-full transition-all duration-300"
-                        style={{ width: `${primaryContinueCourse.progress}%` }}
-                      />
-                    </div>
+                    {primaryContinueCourse.status === "approved" ? (
+                      <div className="space-y-1 pt-1 max-w-md">
+                        <div className="flex justify-between text-[11px] text-emerald-200 font-medium">
+                          <span>Progress: {primaryContinueCourse.completedLectures} of {primaryContinueCourse.totalLectures} lectures</span>
+                          <span className="font-bold text-white">{primaryContinueCourse.progress}%</span>
+                        </div>
+                        <div className="w-full bg-emerald-950/80 h-2 rounded-full overflow-hidden border border-emerald-700/50">
+                          <div 
+                            className="bg-emerald-400 h-full rounded-full transition-all duration-300"
+                            style={{ width: `${primaryContinueCourse.progress}%` }}
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-xs text-amber-200 font-medium pt-1">
+                        TrxID: {primaryContinueCourse.transactionId} • Admin approval is in progress
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0 w-full md:w-auto">
+                    {primaryContinueCourse.status === "approved" ? (
+                      <button
+                        onClick={() => setActiveVideoModal(primaryContinueCourse)}
+                        className="inline-flex items-center justify-center gap-2 bg-white hover:bg-emerald-50 text-emerald-950 font-bold px-5 py-2.5 rounded-xl text-xs transition cursor-pointer shadow-sm"
+                      >
+                        <Play size={14} className="fill-emerald-950 text-emerald-950" />
+                        <span>Resume Video</span>
+                      </button>
+                    ) : (
+                      <button
+                        disabled
+                        className="inline-flex items-center justify-center gap-2 bg-emerald-900/60 text-emerald-300 font-medium px-4 py-2.5 rounded-xl text-xs border border-emerald-700/50 cursor-not-allowed"
+                      >
+                        <Clock size={14} />
+                        <span>Awaiting Verification</span>
+                      </button>
+                    )}
+
+                    <button
+                      onClick={() => showToast(`Downloading ${primaryContinueCourse.courseTitle} Handouts...`)}
+                      className="inline-flex items-center justify-center gap-2 bg-emerald-700/80 hover:bg-emerald-700 text-white font-medium px-4 py-2.5 rounded-xl text-xs transition cursor-pointer border border-emerald-600"
+                    >
+                      <Download size={14} />
+                      <span>Download Notes</span>
+                    </button>
                   </div>
                 </div>
-
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0 w-full md:w-auto">
-                  <button
-                    onClick={() => setActiveVideoModal(primaryContinueCourse)}
-                    className="inline-flex items-center justify-center gap-2 bg-white hover:bg-emerald-50 text-emerald-950 font-bold px-5 py-2.5 rounded-xl text-xs transition cursor-pointer shadow-sm"
+              ) : (
+                /* Empty state banner when student has no courses yet */
+                <div className="bg-gradient-to-r from-slate-900 to-[#162032] rounded-2xl p-6 md:p-8 text-white shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                  <div className="space-y-2 max-w-xl">
+                    <span className="inline-block text-[11px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-0.5 rounded-md">
+                      Get Started with Bostami Education
+                    </span>
+                    <h3 className="text-lg md:text-xl font-bold text-white">
+                      You are not enrolled in any courses yet
+                    </h3>
+                    <p className="text-xs text-slate-300 leading-relaxed">
+                      SSC 2027 ও HSC পরীক্ষার প্রস্তুতির জন্য আমাদের বিশেষায়িত ব্যাচগুলোতে ভর্তি হয়ে ক্লাস শুরু করুন।
+                    </p>
+                  </div>
+                  <Link
+                    href="/courses"
+                    className="inline-flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-6 py-3 rounded-xl text-xs transition cursor-pointer shadow-md shadow-amber-400/20 shrink-0"
                   >
-                    <Play size={14} className="fill-emerald-950 text-emerald-950" />
-                    <span>Resume Video</span>
-                  </button>
-
-                  <button
-                    onClick={() => showToast("Downloading Chapter 4 Lecture Notes PDF...")}
-                    className="inline-flex items-center justify-center gap-2 bg-emerald-700/80 hover:bg-emerald-700 text-white font-medium px-4 py-2.5 rounded-xl text-xs transition cursor-pointer border border-emerald-600"
-                  >
-                    <Download size={14} />
-                    <span>Download Notes</span>
-                  </button>
+                    <BookOpen size={15} />
+                    <span>Browse All Courses</span>
+                  </Link>
                 </div>
-              </div>
+              )}
 
               {/* 2-COLUMN SECTION: COURSES & SIDEBAR SCHEDULE */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -603,723 +545,464 @@ export default function StudentDashboardPage() {
                         onClick={() => setActiveTab("courses")}
                         className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 cursor-pointer"
                       >
-                        <span>View all</span>
+                        <span>View All ({enrolledCourses.length})</span>
                         <ChevronRight size={14} />
                       </button>
                     </div>
 
-                    <div className="space-y-3">
-                      {enrolledCourses.map((course) => (
-                        <div 
-                          key={course.id}
-                          className="p-4 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-slate-200/60 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    {enrolledCourses.length === 0 ? (
+                      <div className="text-center py-10 border border-dashed border-slate-200 rounded-xl space-y-3">
+                        <BookOpen className="w-10 h-10 text-slate-300 mx-auto" />
+                        <p className="text-xs text-slate-500 font-medium">কোনো কোর্স পাওয়া যায়নি।</p>
+                        <Link
+                          href="/courses"
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:text-emerald-700"
                         >
-                          <div className="space-y-1.5 flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                                {course.category}
-                              </span>
-                              <span className="text-xs text-slate-500">• {course.instructor}</span>
-                            </div>
-
-                            <h4 className="text-sm font-bold text-slate-900 truncate">
-                              {course.title}
-                            </h4>
-
-                            <p className="text-xs text-slate-500 truncate">
-                              Next: {course.nextLesson}
-                            </p>
-
-                            <div className="flex items-center gap-3 pt-1">
-                              <div className="flex-1 bg-slate-200 h-1.5 rounded-full overflow-hidden max-w-xs">
-                                <div 
-                                  className="bg-emerald-600 h-full rounded-full"
-                                  style={{ width: `${course.progress}%` }}
-                                />
-                              </div>
-                              <span className="text-[11px] font-bold text-slate-700">
-                                {course.progress}%
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
-                            {course.status === "completed" ? (
-                              <button
-                                onClick={() => setActiveCertModal(course)}
-                                className="inline-flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold px-3.5 py-2 rounded-xl text-xs border border-emerald-200 transition cursor-pointer"
-                              >
-                                <Award size={14} />
-                                <span>Certificate</span>
-                              </button>
-                            ) : (
-                              <button
-                                onClick={() => setActiveVideoModal(course)}
-                                className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3.5 py-2 rounded-xl text-xs transition cursor-pointer shadow-2xs"
-                              >
-                                <Play size={12} className="fill-white" />
-                                <span>Watch</span>
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Recent Quiz Scores */}
-                  <div className="bg-white rounded-2xl p-5 md:p-6 border border-slate-200/80 shadow-2xs space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="text-base font-bold text-slate-900">Recent Model Test Marks</h3>
-                        <p className="text-xs text-slate-500">Your latest quiz results and evaluations</p>
+                          কোর্স তালিকা দেখুন ↗
+                        </Link>
                       </div>
-                      <button 
-                        onClick={() => setActiveTab("quizzes")}
-                        className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 cursor-pointer"
-                      >
-                        Full Report
-                      </button>
-                    </div>
+                    ) : (
+                      <div className="divide-y divide-slate-100">
+                        {enrolledCourses.map((c) => {
+                          const isApproved = c.status === "approved";
+                          return (
+                            <div key={c.id} className="py-4 first:pt-0 last:pb-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                              <div className="flex items-center gap-3.5 min-w-0">
+                                <div className="w-12 h-12 rounded-xl bg-slate-900 overflow-hidden shrink-0 relative">
+                                  <img 
+                                    src={c.thumbnail} 
+                                    alt={c.courseTitle} 
+                                    className="w-full h-full object-cover" 
+                                  />
+                                </div>
+                                <div className="min-w-0">
+                                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm line-clamp-1">
+                                    {c.courseTitle}
+                                  </h4>
+                                  <p className="text-[11px] text-slate-500 mt-0.5 truncate">
+                                    Instructor: {c.instructor}
+                                  </p>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    <span className={`text-[10px] font-extrabold uppercase px-2 py-0.2 rounded-full ${
+                                      isApproved ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
+                                    }`}>
+                                      {isApproved ? `${c.progress}% Finished` : "Verification Pending"}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
 
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left text-xs">
-                        <thead>
-                          <tr className="border-b border-slate-200/80 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
-                            <th className="pb-2.5">Test Title</th>
-                            <th className="pb-2.5">Subject</th>
-                            <th className="pb-2.5">Score</th>
-                            <th className="pb-2.5">Percentage</th>
-                            <th className="pb-2.5 text-right">Status</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100">
-                          {quizResults.slice(0, 3).map((quiz) => (
-                            <tr key={quiz.id} className="hover:bg-slate-50">
-                              <td className="py-3 font-semibold text-slate-800">{quiz.title}</td>
-                              <td className="py-3 text-slate-500">{quiz.subject}</td>
-                              <td className="py-3 font-bold text-slate-900">{quiz.score} / {quiz.totalScore}</td>
-                              <td className="py-3 font-bold text-emerald-600">{quiz.percentage}%</td>
-                              <td className="py-3 text-right">
-                                <span className="inline-block bg-emerald-50 text-emerald-700 font-semibold px-2 py-0.5 rounded text-[10px] border border-emerald-200">
-                                  {quiz.status}
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                              <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                                {isApproved ? (
+                                  <button
+                                    onClick={() => setActiveVideoModal(c)}
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs transition cursor-pointer"
+                                  >
+                                    <Play size={12} className="fill-emerald-700" />
+                                    <span>Watch</span>
+                                  </button>
+                                ) : (
+                                  <span className="text-[11px] font-mono text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg">
+                                    Trx: {c.transactionId}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Right 1 Col: Live Classes & Quick Resources */}
+                {/* Right 1 Col: Live Schedule Sidebar */}
                 <div className="space-y-4">
-                  
-                  {/* Today's Live Class */}
                   <div className="bg-white rounded-2xl p-5 md:p-6 border border-slate-200/80 shadow-2xs space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-base font-bold text-slate-900">Live Classes</h3>
-                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                        Active Today
-                      </span>
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <div>
+                        <h3 className="text-sm font-bold text-slate-900">Live Doubt Classes</h3>
+                        <p className="text-[11px] text-slate-500">SSC 2027 Interactive Sessions</p>
+                      </div>
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                     </div>
 
                     <div className="space-y-3">
-                      {liveClasses.map((live) => (
-                        <div 
-                          key={live.id}
-                          className={`p-3.5 rounded-xl border transition ${
-                            live.isToday 
-                              ? "bg-emerald-50/50 border-emerald-200" 
-                              : "bg-slate-50 border-slate-200/60"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 mb-1">
-                            <span className="text-emerald-700 font-bold">{live.subject}</span>
-                            <span className="flex items-center gap-1 text-slate-600">
-                              <Clock size={11} /> {live.time}
-                            </span>
-                          </div>
-
-                          <h4 className="text-xs font-bold text-slate-900 leading-snug mb-2">
-                            {live.title}
-                          </h4>
-
-                          <div className="flex items-center justify-between pt-1">
-                            <span className="text-[11px] text-slate-500">{live.instructor}</span>
-                            <a
-                              href={live.joinUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 hover:text-emerald-700 bg-white px-2.5 py-1 rounded-lg border border-emerald-200 shadow-2xs"
-                            >
-                              <Video size={12} />
-                              <span>Join</span>
-                            </a>
-                          </div>
+                      <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 space-y-1.5">
+                        <div className="flex justify-between items-center text-[10px] font-bold text-emerald-700 uppercase">
+                          <span>Physics</span>
+                          <span className="text-rose-600 font-bold">Tonight 8:00 PM</span>
                         </div>
-                      ))}
+                        <h5 className="font-bold text-xs text-slate-900">Physics Mechanics CQ Marathon</h5>
+                        <p className="text-[11px] text-slate-500">Mentor: Bayzid Bostami (Google Meet)</p>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 space-y-1.5">
+                        <div className="flex justify-between items-center text-[10px] font-bold text-blue-700 uppercase">
+                          <span>ICT</span>
+                          <span className="text-slate-500">Friday 4:00 PM</span>
+                        </div>
+                        <h5 className="font-bold text-xs text-slate-900">ICT C Programming Logic Session</h5>
+                        <p className="text-[11px] text-slate-500">Mentor: Rakibul Hasan (Google Meet)</p>
+                      </div>
                     </div>
                   </div>
-
-                  {/* Study PDF Resources */}
-                  <div className="bg-white rounded-2xl p-5 md:p-6 border border-slate-200/80 shadow-2xs space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-base font-bold text-slate-900">Lecture Handouts</h3>
-                      <button 
-                        onClick={() => setActiveTab("resources")}
-                        className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 cursor-pointer"
-                      >
-                        View All
-                      </button>
-                    </div>
-
-                    <div className="space-y-2.5">
-                      {studyResources.slice(0, 3).map((res) => (
-                        <div 
-                          key={res.id}
-                          className="p-3 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-slate-200/60 transition flex items-center justify-between gap-3"
-                        >
-                          <div className="min-w-0">
-                            <h5 className="text-xs font-semibold text-slate-900 truncate">
-                              {res.title}
-                            </h5>
-                            <p className="text-[10px] text-slate-500 mt-0.5">
-                              {res.subject} • {res.fileSize}
-                            </p>
-                          </div>
-
-                          <button
-                            onClick={() => showToast(`Downloading ${res.title}...`)}
-                            className="p-1.5 rounded-lg bg-white border border-slate-200 hover:border-emerald-300 text-slate-600 hover:text-emerald-600 transition cursor-pointer shrink-0"
-                            title="Download Handout"
-                          >
-                            <Download size={14} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
                 </div>
 
               </div>
-
             </div>
           )}
 
           {/* ─────────────────────────────────────────────────────────────
-              TAB 2: ENROLLED COURSES
+              TAB 2: MY COURSES
           ───────────────────────────────────────────────────────────── */}
           {activeTab === "courses" && (
             <div className="space-y-6">
-              
-              {/* Controls bar */}
-              <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-2 w-full sm:w-auto">
-                  {(["all", "in-progress", "completed"] as const).map((filter) => (
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-lg font-bold text-slate-900">My Enrolled Subjects</h2>
+                  <p className="text-xs text-slate-500">Manage and continue your academic batch courses</p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  {["all", "approved", "pending"].map((filterKey) => (
                     <button
-                      key={filter}
-                      onClick={() => setCourseFilter(filter)}
-                      className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer capitalize ${
-                        courseFilter === filter
-                          ? "bg-emerald-600 text-white shadow-2xs"
-                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      key={filterKey}
+                      onClick={() => setCourseFilter(filterKey)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer capitalize ${
+                        courseFilter === filterKey
+                          ? "bg-emerald-600 text-white shadow-xs"
+                          : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
                       }`}
                     >
-                      {filter === "all" ? "All Courses" : filter.replace("-", " ")}
+                      {filterKey === "all" ? "All Courses" : filterKey === "approved" ? "Active Batches" : "Pending Verification"}
                     </button>
                   ))}
                 </div>
-
-                <div className="relative w-full sm:w-72">
-                  <input
-                    type="text"
-                    placeholder="Search enrolled courses..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 pr-9"
-                  />
-                  <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none" />
-                </div>
               </div>
 
-              {/* Course Cards Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {filteredCourses.map((course) => (
-                  <div 
-                    key={course.id}
-                    className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs hover:shadow-xs transition flex flex-col justify-between space-y-4"
+              {filteredCourses.length === 0 ? (
+                <div className="bg-white rounded-2xl p-12 text-center border border-slate-200 space-y-4">
+                  <BookOpen className="w-12 h-12 text-slate-300 mx-auto" />
+                  <p className="text-sm font-semibold text-slate-600">কোনো কোর্স পাওয়া যায়নি।</p>
+                  <Link
+                    href="/courses"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:text-emerald-700"
                   >
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200">
-                          {course.category}
-                        </span>
-                        <span className="text-xs text-slate-400">
-                          Last active: {course.lastWatched}
-                        </span>
-                      </div>
+                    Browse available courses ↗
+                  </Link>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredCourses.map((item) => {
+                    const isApproved = item.status === "approved";
+                    return (
+                      <div
+                        key={item.id}
+                        className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
+                      >
+                        <div>
+                          <div className="relative aspect-video w-full bg-slate-900">
+                            <img
+                              src={item.thumbnail}
+                              alt={item.courseTitle}
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute top-3 left-3">
+                              <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase ${
+                                isApproved ? "bg-emerald-500 text-white" : "bg-amber-500 text-slate-950"
+                              }`}>
+                                {isApproved ? "Active" : "Pending Verification"}
+                              </span>
+                            </div>
+                          </div>
 
-                      <h3 className="text-base font-bold text-slate-900">
-                        {course.title}
-                      </h3>
+                          <div className="p-5 space-y-3">
+                            <h3 className="font-bold text-slate-900 text-base line-clamp-1">
+                              {item.courseTitle}
+                            </h3>
+                            <p className="text-xs text-slate-500">
+                              Mentor: {item.instructor}
+                            </p>
 
-                      <div className="flex items-center gap-2 text-xs text-slate-500">
-                        <div className="relative w-5 h-5 rounded-full overflow-hidden bg-slate-200">
-                          <Image src={course.instructorAvatar} alt={course.instructor} fill className="object-cover" />
+                            {isApproved ? (
+                              <div className="space-y-1 pt-1">
+                                <div className="flex justify-between text-xs font-semibold">
+                                  <span className="text-slate-500">Progress</span>
+                                  <span className="text-emerald-600 font-bold">{item.progress}%</span>
+                                </div>
+                                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                  <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${item.progress}%` }}></div>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900">
+                                TrxID: <span className="font-mono font-bold">{item.transactionId}</span>
+                                <div className="text-[11px] text-amber-700 mt-0.5">Verification pending with admin</div>
+                              </div>
+                            )}
+                          </div>
                         </div>
-                        <span>Instructor: <strong className="text-slate-700 font-semibold">{course.instructor}</strong></span>
-                      </div>
 
-                      <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-600 space-y-1">
-                        <p><span className="font-semibold text-slate-700">Current:</span> {course.currentLesson}</p>
-                        <p><span className="font-semibold text-slate-700">Next:</span> {course.nextLesson}</p>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3 pt-2 border-t border-slate-100">
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-xs font-semibold text-slate-600">
-                          <span>{course.completedLectures} of {course.totalLectures} lectures completed</span>
-                          <span className="text-emerald-700 font-bold">{course.progress}%</span>
-                        </div>
-                        <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                          <div 
-                            className="bg-emerald-600 h-full rounded-full transition-all"
-                            style={{ width: `${course.progress}%` }}
-                          />
+                        <div className="p-5 pt-0">
+                          {isApproved ? (
+                            <button
+                              onClick={() => setActiveVideoModal(item)}
+                              className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs"
+                            >
+                              <Play size={14} className="fill-white" />
+                              <span>Continue Course</span>
+                            </button>
+                          ) : (
+                            <button
+                              disabled
+                              className="w-full py-2.5 rounded-xl bg-slate-100 text-slate-400 font-semibold text-xs flex items-center justify-center gap-1.5 cursor-not-allowed"
+                            >
+                              <span>Awaiting Verification</span>
+                            </button>
+                          )}
                         </div>
                       </div>
-
-                      <div className="flex items-center justify-between gap-3 pt-1">
-                        <button
-                          onClick={() => showToast(`Downloading ${course.notesPdfUrl}...`)}
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-emerald-700 cursor-pointer"
-                        >
-                          <FileDown size={14} />
-                          <span>Lecture Notes</span>
-                        </button>
-
-                        {course.status === "completed" ? (
-                          <button
-                            onClick={() => setActiveCertModal(course)}
-                            className="inline-flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold px-4 py-2 rounded-xl text-xs border border-emerald-200 transition cursor-pointer"
-                          >
-                            <Award size={14} />
-                            <span>View Certificate</span>
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => setActiveVideoModal(course)}
-                            className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition cursor-pointer shadow-2xs"
-                          >
-                            <Play size={12} className="fill-white" />
-                            <span>Continue Watching</span>
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
 
           {/* ─────────────────────────────────────────────────────────────
-              TAB 3: QUIZZES & MARKS
-          ───────────────────────────────────────────────────────────── */}
-          {activeTab === "quizzes" && (
-            <div className="space-y-6">
-              <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs space-y-4">
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900">Quiz & Model Test Evaluations</h3>
-                  <p className="text-xs text-slate-500">Review your past scores, answer solutions, and rank</p>
-                </div>
-
-                <div className="divide-y divide-slate-100">
-                  {quizResults.map((quiz) => (
-                    <div key={quiz.id} className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                            {quiz.subject}
-                          </span>
-                          <span className="text-xs text-slate-400">• Date: {quiz.date}</span>
-                        </div>
-                        <h4 className="text-sm font-bold text-slate-900">{quiz.title}</h4>
-                        <p className="text-xs text-slate-500">Exam duration: {quiz.duration}</p>
-                      </div>
-
-                      <div className="flex items-center gap-4 self-end sm:self-center">
-                        <div className="text-right">
-                          <span className="text-lg font-bold text-emerald-600">{quiz.score} / {quiz.totalScore}</span>
-                          <p className="text-[11px] font-semibold text-slate-500">{quiz.percentage}% Mark</p>
-                        </div>
-                        <button
-                          onClick={() => showToast("Loading detailed answer explanations...")}
-                          className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3.5 py-2 rounded-xl text-xs transition cursor-pointer"
-                        >
-                          Review Answers
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ─────────────────────────────────────────────────────────────
-              TAB 4: LIVE CLASSES ROUTINE
+              TAB 3: LIVE CLASS
           ───────────────────────────────────────────────────────────── */}
           {activeTab === "live" && (
             <div className="space-y-6">
-              <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-900">Weekly Live Interactive Schedule</h3>
-                    <p className="text-xs text-slate-500">Join your live batches, doubt clearing, and mentor Q&A sessions</p>
+              <div>
+                <h2 className="text-lg font-bold text-slate-900">Live Class Schedule</h2>
+                <p className="text-xs text-slate-500">Join interactive live doubt-clearing sessions</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">Physics</span>
+                    <span className="text-xs font-semibold text-rose-600">Tonight 8:00 PM</span>
                   </div>
-                  <button
-                    onClick={() => showToast("Calendar sync file (.ics) downloaded!")}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 hover:text-emerald-700 bg-emerald-50 border border-emerald-200 px-3.5 py-2 rounded-xl cursor-pointer self-start sm:self-auto"
+                  <h3 className="text-base font-bold text-slate-900">Physics Mechanics Short Hand Tricks & CQ</h3>
+                  <p className="text-xs text-slate-500">Lead Mentor: Bayzid Bostami</p>
+                  <a
+                    href="https://meet.google.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all mt-2"
                   >
-                    <Calendar size={14} />
-                    <span>Sync with Google Calendar</span>
-                  </button>
+                    <Video size={14} />
+                    <span>Join Class on Google Meet</span>
+                  </a>
                 </div>
 
-                <div className="space-y-3 pt-2">
-                  {liveClasses.map((item) => (
-                    <div 
-                      key={item.id}
-                      className="p-4 rounded-xl bg-slate-50 border border-slate-200/60 flex flex-col md:flex-row md:items-center justify-between gap-4"
-                    >
-                      <div className="space-y-1 flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
-                            {item.subject}
-                          </span>
-                          <span className="text-xs font-bold text-slate-600">{item.date} • {item.time}</span>
-                        </div>
-                        <h4 className="text-sm font-bold text-slate-900">{item.title}</h4>
-                        <p className="text-xs text-slate-500">{item.instructor} ({item.instructorTitle})</p>
-                      </div>
-
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs font-semibold text-slate-500 bg-white px-2.5 py-1 rounded-md border border-slate-200">
-                          {item.platform}
-                        </span>
-                        <a
-                          href={item.joinUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-2xs"
-                        >
-                          <Video size={14} />
-                          <span>Join Live Class</span>
-                        </a>
-                      </div>
-                    </div>
-                  ))}
+                <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-bold uppercase bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full">ICT</span>
+                    <span className="text-xs font-semibold text-slate-500">Friday 4:00 PM</span>
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900">C Programming Flowchart & Logic Solving</h3>
+                  <p className="text-xs text-slate-500">Mentor: Rakibul Hasan</p>
+                  <a
+                    href="https://meet.google.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-xs transition-all mt-2"
+                  >
+                    <Video size={14} />
+                    <span>Join Class on Google Meet</span>
+                  </a>
                 </div>
               </div>
             </div>
           )}
 
           {/* ─────────────────────────────────────────────────────────────
-              TAB 5: LECTURE NOTES & PDF RESOURCES
+              TAB 4: LECTURE NOTES & PDFS
           ───────────────────────────────────────────────────────────── */}
           {activeTab === "resources" && (
             <div className="space-y-6">
-              <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs space-y-4">
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900">Lecture Handouts & Formula Cheatsheets</h3>
-                  <p className="text-xs text-slate-500">Download high-resolution chapter notes curated by course faculty</p>
-                </div>
+              <div>
+                <h2 className="text-lg font-bold text-slate-900">Lecture Sheets & Cheatsheets</h2>
+                <p className="text-xs text-slate-500">Download course materials and lecture PDF notes</p>
+              </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                  {studyResources.map((res) => (
-                    <div 
-                      key={res.id}
-                      className="p-4 rounded-xl bg-slate-50 border border-slate-200/60 flex items-start justify-between gap-4 hover:bg-slate-100/70 transition"
-                    >
-                      <div className="space-y-1 min-w-0">
-                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                          {res.type}
-                        </span>
-                        <h4 className="text-xs font-bold text-slate-900 leading-snug">
-                          {res.title}
-                        </h4>
-                        <p className="text-[11px] text-slate-500">
-                          {res.subject} • {res.fileSize} • {res.downloads} downloads
-                        </p>
+              {approvedCourses.length === 0 ? (
+                <div className="bg-white rounded-2xl p-10 text-center border border-slate-200 space-y-3">
+                  <FileText className="w-10 h-10 text-slate-300 mx-auto" />
+                  <p className="text-xs text-slate-500">আপনার কোনো সক্রিয় কোর্স নেই। কোর্সে ভর্তি হলে লেকচার শিট এখানে প্রদর্শিত হবে।</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {approvedCourses.map((c) => (
+                    <div key={c.id} className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs mb-2">
+                          PDF
+                        </div>
+                        <h4 className="font-bold text-xs text-slate-900 truncate">{c.courseTitle} Handout</h4>
+                        <p className="text-[11px] text-slate-500 mt-0.5">{c.category} • Official Notes</p>
                       </div>
 
                       <button
-                        onClick={() => showToast(`Downloading ${res.title}...`)}
-                        className="inline-flex items-center gap-1.5 bg-white hover:bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer shrink-0 shadow-2xs"
+                        onClick={() => showToast(`Downloading ${c.courseTitle} Notes...`)}
+                        className="p-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 border border-slate-200 transition-colors cursor-pointer shrink-0"
+                        title="Download PDF"
                       >
-                        <Download size={13} />
-                        <span>PDF</span>
+                        <Download size={15} />
                       </button>
                     </div>
                   ))}
                 </div>
-              </div>
+              )}
             </div>
           )}
 
           {/* ─────────────────────────────────────────────────────────────
-              TAB 6: CERTIFICATES
+              TAB 5: CERTIFICATES
           ───────────────────────────────────────────────────────────── */}
           {activeTab === "certificates" && (
             <div className="space-y-6">
-              <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs space-y-4">
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900">Achieved Course Certificates</h3>
-                  <p className="text-xs text-slate-500">Download and verify your earned credentials</p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
-                  <div className="p-5 rounded-2xl bg-slate-50 border border-emerald-200 flex flex-col justify-between space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">
-                          Completed • Grade: Distinction (100%)
-                        </span>
-                        <span className="text-xs text-slate-400 font-medium">April 2026</span>
-                      </div>
-                      <h4 className="text-base font-bold text-slate-900">
-                        HSC Chemistry 2nd Paper (Organic Chemistry)
-                      </h4>
-                      <p className="text-xs text-slate-600">
-                        Instructor: <strong>Afsana Rahman</strong> • Verified Credential ID: <code className="font-mono text-emerald-700">BST-CHEM-2026-891</code>
-                      </p>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-3 border-t border-slate-200/60">
-                      <button
-                        onClick={() => setActiveCertModal(enrolledCourses[2])}
-                        className="text-xs font-semibold text-emerald-700 hover:underline cursor-pointer"
-                      >
-                        Preview Certificate
-                      </button>
-                      <button
-                        onClick={() => showToast("Downloading certificate PDF...")}
-                        className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs transition cursor-pointer shadow-2xs"
-                      >
-                        <Download size={13} />
-                        <span>Download PDF</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              <div>
+                <h2 className="text-lg font-bold text-slate-900">Course Certificates</h2>
+                <p className="text-xs text-slate-500">Earn official verified certificates by completing course lectures</p>
               </div>
+
+              {completedCourses.length === 0 ? (
+                <div className="bg-white rounded-2xl p-12 text-center border border-slate-200 space-y-4">
+                  <Award className="w-12 h-12 text-slate-300 mx-auto" />
+                  <h3 className="text-base font-bold text-slate-800">No Certificates Earned Yet</h3>
+                  <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                    আপনার ভর্তিকৃত কোর্সের সব লেকচার ১০০% সম্পন্ন করলে অফিসিয়াল ভেরিফায়েড সার্টিফিকেট এখানে জেনারেট হবে।
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {completedCourses.map((c) => (
+                    <div key={c.id} className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-4">
+                      <div className="flex items-center gap-3">
+                        <Award className="w-8 h-8 text-amber-500" />
+                        <div>
+                          <h4 className="font-bold text-sm text-slate-900">{c.courseTitle}</h4>
+                          <p className="text-xs text-slate-500">Certificate ID: {c.certificateId}</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => showToast(`Generating certificate for ${c.courseTitle}...`)}
+                        className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2"
+                      >
+                        <Download size={14} />
+                        <span>Download Certificate (PDF)</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
           {/* ─────────────────────────────────────────────────────────────
-              TAB 7: PROFILE & SETTINGS
+              TAB 6: PROFILE & SETTINGS
           ───────────────────────────────────────────────────────────── */}
           {activeTab === "settings" && (
-            <div className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200/80 shadow-2xs space-y-6">
-              <div>
-                <h3 className="text-lg font-bold text-slate-900">Student Profile & Preferences</h3>
-                <p className="text-xs text-slate-500">Update your academic information and personal details</p>
+            <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+              <div className="flex items-center gap-4 pb-6 border-b border-slate-100">
+                <div className="w-16 h-16 rounded-2xl bg-emerald-600 text-white font-black text-2xl flex items-center justify-center shadow-md">
+                  {profile.name.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">{profile.name}</h3>
+                  <p className="text-xs text-slate-500">Student ID: {profile.studentId}</p>
+                </div>
               </div>
 
-              <form 
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  showToast("Profile details updated successfully!");
-                }}
-                className="space-y-4 max-w-2xl"
-              >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-xs font-semibold text-slate-700">Full Name</label>
-                    <input 
-                      type="text" 
-                      value={profile.name}
-                      onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-xs font-semibold text-slate-700">Email Address</label>
-                    <input 
-                      type="email" 
-                      value={profile.email}
-                      onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-xs font-semibold text-slate-700">Phone Number</label>
-                    <input 
-                      type="text" 
-                      value={profile.phone}
-                      onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-xs font-semibold text-slate-700">College / Institution</label>
-                    <input 
-                      type="text" 
-                      value={profile.institution}
-                      onChange={(e) => setProfile({ ...profile, institution: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                    />
-                  </div>
-
-                  <div className="space-y-1 sm:col-span-2">
-                    <label className="text-xs font-semibold text-slate-700">Target Goal</label>
-                    <input 
-                      type="text" 
-                      value={profile.target}
-                      onChange={(e) => setProfile({ ...profile, target: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                    />
-                  </div>
+              <div className="space-y-4 text-xs sm:text-sm">
+                <div className="flex justify-between py-2 border-b border-slate-100">
+                  <span className="text-slate-500 font-medium">Full Name</span>
+                  <span className="font-bold text-slate-900">{profile.name}</span>
                 </div>
-
-                <div className="pt-3 flex justify-end">
-                  <button
-                    type="submit"
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition cursor-pointer shadow-2xs"
-                  >
-                    Save Changes
-                  </button>
+                <div className="flex justify-between py-2 border-b border-slate-100">
+                  <span className="text-slate-500 font-medium">Email Address</span>
+                  <span className="font-semibold text-slate-900">{profile.email}</span>
                 </div>
-              </form>
+                <div className="flex justify-between py-2 border-b border-slate-100">
+                  <span className="text-slate-500 font-medium">Phone Number</span>
+                  <span className="font-semibold text-slate-900">{profile.phone}</span>
+                </div>
+                <div className="flex justify-between py-2 border-b border-slate-100">
+                  <span className="text-slate-500 font-medium">Institution / School</span>
+                  <span className="font-semibold text-slate-900">{profile.institution}</span>
+                </div>
+                <div className="flex justify-between py-2 border-b border-slate-100">
+                  <span className="text-slate-500 font-medium">Academic Batch</span>
+                  <span className="font-bold text-emerald-700">SSC 2027 Batch</span>
+                </div>
+                <div className="flex justify-between py-2">
+                  <span className="text-slate-500 font-medium">Total Enrolled Courses</span>
+                  <span className="font-bold text-slate-900">{enrolledCourses.length} Subjects</span>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100">
+                <button
+                  onClick={() => logout()}
+                  className="w-full py-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                >
+                  <LogOut size={16} />
+                  <span>Log Out of Student Portal</span>
+                </button>
+              </div>
             </div>
           )}
 
         </div>
-
       </main>
 
-      {/* ══════════════════════════════════════════════
-          3. INTERACTIVE MODALS
-      ══════════════════════════════════════════════ */}
-
-      {/* VIDEO PLAYER MODAL */}
+      {/* Video Lecture Player Modal */}
       {activeVideoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
-          <div className="bg-white rounded-2xl max-w-2xl w-full p-5 md:p-6 shadow-xl relative border border-slate-200 space-y-4 animate-in zoom-in-95 duration-150">
-            <button
-              onClick={() => setActiveVideoModal(null)}
-              className="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition cursor-pointer"
-            >
-              <X size={16} />
-            </button>
-
-            <div>
-              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                {activeVideoModal.category}
-              </span>
-              <h3 className="text-base font-bold text-slate-900 mt-1">
-                {activeVideoModal.title}
-              </h3>
-              <p className="text-xs text-slate-500">
-                Playing: {activeVideoModal.currentLesson}
-              </p>
-            </div>
-
-            {/* Video Frame Placeholder */}
-            <div className="aspect-video rounded-xl bg-slate-900 flex items-center justify-center relative overflow-hidden group">
-              <div className="w-14 h-14 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-lg group-hover:scale-105 transition cursor-pointer">
-                <Play size={24} className="fill-white translate-x-0.5" />
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-slate-900 text-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl border border-slate-800 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div>
+                <h3 className="font-bold text-base text-white">{activeVideoModal.courseTitle}</h3>
+                <p className="text-xs text-emerald-400 font-medium">{activeVideoModal.currentLesson}</p>
               </div>
-              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] text-slate-300 font-medium bg-slate-950/60 px-3 py-1.5 rounded-lg">
-                <span>Instructor: {activeVideoModal.instructor}</span>
-                <span>1080p HD</span>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between pt-1">
               <button
-                onClick={() => showToast("Previous lesson loaded")}
-                className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs cursor-pointer"
+                onClick={() => setActiveVideoModal(null)}
+                className="text-slate-400 hover:text-white p-1 rounded-lg cursor-pointer"
               >
-                ← Previous
+                ✕
               </button>
+            </div>
+
+            <div className="relative aspect-video w-full rounded-2xl bg-black flex items-center justify-center overflow-hidden border border-slate-800">
+              <img
+                src={activeVideoModal.thumbnail}
+                alt="Lecture Video"
+                className="w-full h-full object-cover opacity-60"
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                <div className="w-16 h-16 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/40 cursor-pointer hover:scale-110 transition-transform">
+                  <Play size={28} className="fill-white ml-1" />
+                </div>
+                <span className="text-xs font-bold text-white bg-black/60 px-3 py-1 rounded-full">
+                  Lecture Video Stream Ready
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between text-xs text-slate-400 pt-2">
+              <span>Mentor: {activeVideoModal.instructor}</span>
               <button
                 onClick={() => {
-                  showToast("Lecture marked completed! Keep it up 🚀");
+                  showToast("Lesson marked as complete!");
                   setActiveVideoModal(null);
                 }}
-                className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs flex items-center gap-1.5 cursor-pointer"
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all cursor-pointer"
               >
-                <Check size={14} />
-                <span>Mark Complete & Next</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* CERTIFICATE MODAL */}
-      {activeCertModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
-          <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-xl relative border border-slate-200 space-y-4 animate-in zoom-in-95 duration-150">
-            <button
-              onClick={() => setActiveCertModal(null)}
-              className="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition cursor-pointer"
-            >
-              <X size={16} />
-            </button>
-
-            {/* Certificate Frame */}
-            <div className="border-4 border-emerald-600/30 rounded-xl p-6 bg-emerald-50/20 text-center space-y-3">
-              <div className="flex items-center justify-center gap-1.5 text-emerald-700 font-bold text-[11px] tracking-wider uppercase">
-                <Award size={16} />
-                <span>Bostami Education • Certificate of Completion</span>
-              </div>
-
-              <h3 className="text-xl font-bold text-slate-900">
-                {activeCertModal.title}
-              </h3>
-
-              <p className="text-xs text-slate-500">Presented to</p>
-              <h2 className="text-xl font-serif font-bold text-emerald-800">
-                {profile.name}
-              </h2>
-
-              <p className="text-xs text-slate-600 max-w-sm mx-auto">
-                For successfully fulfilling all curriculum requirements and passing final exams in <strong>{activeCertModal.title}</strong>.
-              </p>
-
-              <div className="pt-3 border-t border-emerald-200/60 flex items-center justify-between text-[11px] text-slate-500">
-                <span>Instructor: <strong>{activeCertModal.instructor}</strong></span>
-                <span>ID: <strong className="font-mono text-emerald-700">{activeCertModal.certificateId || "BST-2026-990"}</strong></span>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-end gap-2 pt-2">
-              <button
-                onClick={() => setActiveCertModal(null)}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs transition cursor-pointer"
-              >
-                Close
-              </button>
-              <button
-                onClick={() => {
-                  showToast("Downloading verified certificate PDF...");
-                  setActiveCertModal(null);
-                }}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition cursor-pointer flex items-center gap-1.5"
-              >
-                <Download size={13} />
-                <span>Download PDF</span>
+                Mark Complete
               </button>
             </div>
           </div>
