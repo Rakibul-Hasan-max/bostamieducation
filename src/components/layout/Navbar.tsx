@@ -4,13 +4,13 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Link, usePathname } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { ChevronDown, Menu, X, User as UserIcon, LogOut, LayoutDashboard } from "lucide-react";
+import { ChevronDown, Menu, X, User as UserIcon, LogOut, LayoutDashboard, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
   const t = useTranslations("Navbar");
   const pathname = usePathname();
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [pagesOpen, setPagesOpen] = useState(false);
   const [desktopPagesOpen, setDesktopPagesOpen] = useState(false);
@@ -150,14 +150,28 @@ export default function Navbar() {
                     <p className="text-sm font-bold text-slate-900 truncate">{user.displayName || user.phoneNumber || "Student"}</p>
                     <p className="text-xs text-slate-500 truncate">{user.email || user.phoneNumber}</p>
                   </div>
-                  <Link
-                    href="/student/dashboard"
-                    onClick={() => setUserDropdownOpen(false)}
-                    className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
-                  >
-                    <LayoutDashboard className="h-4 w-4 text-blue-600" />
-                    Dashboard
-                  </Link>
+                  {isAdmin ? (
+                    <Link
+                      href="/admin/dashboard"
+                      onClick={() => setUserDropdownOpen(false)}
+                      className="flex items-center justify-between rounded-xl px-3 py-2 text-sm font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors mb-1.5 border border-amber-200/60"
+                    >
+                      <div className="flex items-center gap-2">
+                        <ShieldCheck className="h-4 w-4 text-amber-600" />
+                        <span>Admin Panel</span>
+                      </div>
+                      <span className="text-[10px] bg-amber-200 text-amber-900 font-extrabold px-1.5 py-0.5 rounded">ADMIN</span>
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/student/dashboard"
+                      onClick={() => setUserDropdownOpen(false)}
+                      className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+                    >
+                      <LayoutDashboard className="h-4 w-4 text-blue-600" />
+                      Dashboard
+                    </Link>
+                  )}
                   <button
                     onClick={() => {
                       setUserDropdownOpen(false);
@@ -285,14 +299,25 @@ export default function Navbar() {
                       <p className="text-xs text-slate-500 truncate">{user.email || user.phoneNumber}</p>
                     </div>
                   </div>
-                  <Link
-                    href="/student/dashboard"
-                    onClick={() => setIsOpen(false)}
-                    className="rounded-xl bg-blue-50 text-blue-700 py-2.5 text-center text-[14px] font-semibold flex items-center justify-center gap-2"
-                  >
-                    <LayoutDashboard className="h-4 w-4" />
-                    Student Dashboard
-                  </Link>
+                  {isAdmin ? (
+                    <Link
+                      href="/admin/dashboard"
+                      onClick={() => setIsOpen(false)}
+                      className="rounded-xl bg-amber-400/20 border border-amber-400/40 text-amber-900 py-2.5 text-center text-[14px] font-bold flex items-center justify-center gap-2"
+                    >
+                      <ShieldCheck className="h-4 w-4 text-amber-700" />
+                      Admin Dashboard
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/student/dashboard"
+                      onClick={() => setIsOpen(false)}
+                      className="rounded-xl bg-blue-50 text-blue-700 py-2.5 text-center text-[14px] font-semibold flex items-center justify-center gap-2"
+                    >
+                      <LayoutDashboard className="h-4 w-4" />
+                      Student Dashboard
+                    </Link>
+                  )}
                   <button
                     onClick={() => {
                       setIsOpen(false);

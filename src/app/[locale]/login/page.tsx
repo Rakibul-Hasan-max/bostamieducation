@@ -22,6 +22,7 @@ import {
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useAuth } from "@/context/AuthContext";
+import { isUserAdmin } from "@/constants/adminConfig";
 
 declare global {
   interface Window {
@@ -55,15 +56,28 @@ function LoginForm() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectUrl = searchParams.get("redirect") || "/student/dashboard";
   const { user, loading, signInWithGoogle, loginWithEmail } = useAuth();
+
+  const getDestinationUrl = (userEmail?: string | null) => {
+    const redirectParam = searchParams.get("redirect");
+    const isAdmin = isUserAdmin(userEmail);
+
+    if (redirectParam) {
+      if (redirectParam.startsWith("/admin") && !isAdmin) {
+        return "/student/dashboard";
+      }
+      return redirectParam;
+    }
+
+    return isAdmin ? "/admin/dashboard" : "/student/dashboard";
+  };
 
   // If user is already logged in, redirect them directly
   useEffect(() => {
     if (!loading && user) {
-      router.push(redirectUrl);
+      router.push(getDestinationUrl(user.email));
     }
-  }, [user, loading, router, redirectUrl]);
+  }, [user, loading, router, searchParams]);
 
   // Resend OTP countdown timer
   useEffect(() => {
@@ -100,9 +114,9 @@ function LoginForm() {
 
     setEmailLoading(true);
     try {
-      await loginWithEmail(email.trim(), password);
+      const loggedUser = await loginWithEmail(email.trim(), password);
       setSuccessMsg("Logged in successfully! Redirecting...");
-      router.push(redirectUrl);
+      router.push(getDestinationUrl(loggedUser.email));
     } catch (err: any) {
       console.error("Email login failed:", err);
       if (err?.code === "auth/invalid-credential" || err?.code === "auth/wrong-password" || err?.code === "auth/user-not-found") {
@@ -126,8 +140,8 @@ function LoginForm() {
     setSuccessMsg("");
     setGoogleLoading(true);
     try {
-      await signInWithGoogle();
-      router.push(redirectUrl);
+      const loggedUser = await signInWithGoogle();
+      router.push(getDestinationUrl(loggedUser.email));
     } catch (err: any) {
       console.error("Login failed:", err);
       if (err?.code === "auth/popup-closed-by-user") {
@@ -139,7 +153,7 @@ function LoginForm() {
       } else if (err?.code === "auth/invalid-api-key") {
         setErrorMsg("Invalid Firebase API Key. Please configure NEXT_PUBLIC_FIREBASE_API_KEY in your .env.local file.");
       } else {
-        setErrorMsg(err?.message || "Failed to sign in with Google. Please try again.");
+        setErrorMsg(err?.message || "Google sign-in failed. Please try again.");
       }
     } finally {
       setGoogleLoading(false);
@@ -263,9 +277,9 @@ function LoginForm() {
 
     setVerifyingOtp(true);
     try {
-      await conf.confirm(otp.trim());
+      const res = await conf.confirm(otp.trim());
       setSuccessMsg("Logged in successfully! Redirecting...");
-      router.push(redirectUrl);
+      router.push(getDestinationUrl(res.user?.email));
     } catch (err: any) {
       console.error("OTP verification error:", err);
       if (err?.code === "auth/invalid-verification-code") {

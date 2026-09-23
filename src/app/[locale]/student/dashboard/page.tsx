@@ -93,7 +93,7 @@ interface StudyResource {
 }
 
 export default function StudentDashboardPage() {
-  const { user, loading } = useAuth();
+  const { user, loading, isAdmin } = useAuth();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<string>("overview");
   const [courseFilter, setCourseFilter] = useState<string>("all");
@@ -116,12 +116,16 @@ export default function StudentDashboardPage() {
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300"
   });
 
-  // Redirect to login if user is not authenticated
+  // Redirect to login if user is not authenticated, or to admin dashboard if user is admin
   useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login?redirect=/student/dashboard");
+    if (!loading) {
+      if (!user) {
+        router.push("/login?redirect=/student/dashboard");
+      } else if (isAdmin) {
+        router.push("/admin/dashboard");
+      }
     }
-  }, [user, loading, router]);
+  }, [user, loading, isAdmin, router]);
 
   useEffect(() => {
     if (user) {
@@ -353,11 +357,65 @@ export default function StudentDashboardPage() {
       <div className="min-h-screen flex flex-col bg-[#f8fafc]">
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center p-8">
-          <div className="w-12 h-12 rounded-full border-4 border-emerald-200 border-t-emerald-600 animate-spin mb-4" />
+          <div className="w-12 h-12 rounded-full border-4 border-amber-200 border-t-amber-600 animate-spin mb-4" />
           <p className="text-sm font-semibold text-slate-700">
             {loading ? "Verifying student session..." : "Redirecting to login..."}
           </p>
           <p className="text-xs text-slate-400 mt-1">Please wait a moment</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Strictly block administrators from accessing student dashboard
+  if (isAdmin) {
+    return (
+      <div className="min-h-screen flex flex-col bg-[#0d131f] text-slate-200 font-sans">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[#161f30] border border-amber-500/30 rounded-3xl p-8 shadow-2xl shadow-black/60 text-center relative overflow-hidden">
+            {/* Amber Alert stripe */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500"></div>
+
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mb-6 shadow-inner">
+              <ShieldCheck className="w-8 h-8 animate-pulse" />
+            </div>
+
+            <div className="text-[11px] font-bold text-amber-400 uppercase tracking-widest mb-1.5 flex items-center justify-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+              Admin Account Detected
+            </div>
+
+            <h1 className="text-2xl font-bold text-white mb-2">
+              স্টুডেন্ট পোর্টাল সংরক্ষিত
+            </h1>
+
+            <div className="p-3.5 bg-slate-900/80 rounded-xl border border-slate-800 text-xs text-slate-300 mb-6 text-left space-y-1.5">
+              <div className="text-slate-400">Logged in as Admin:</div>
+              <div className="font-bold text-white font-mono truncate">{user.email || user.displayName || "Admin User"}</div>
+              <div className="text-amber-400 text-[11px] pt-1">
+                ⚠️ আপনি একটি অ্যাডমিনিস্ট্রেটর অ্যাকাউন্ট দিয়ে লগইন আছেন। স্টুডেন্ট ড্যাশবোর্ডটি শুধুমাত্র শিক্ষার্থীদের জন্য। অনুগ্রহ করে অ্যাডমিন প্যানেল ব্যবহার করুন।
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <button
+                onClick={() => router.push("/admin/dashboard")}
+                className="w-full py-3 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-amber-400/10 cursor-pointer"
+              >
+                <LayoutDashboard size={16} />
+                <span>Go to Admin Dashboard</span>
+              </button>
+
+              <button
+                onClick={() => router.push("/")}
+                className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+              >
+                <span>Return to Home Page</span>
+              </button>
+            </div>
+          </div>
         </div>
         <Footer />
       </div>

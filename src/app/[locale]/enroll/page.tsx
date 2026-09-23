@@ -118,6 +118,8 @@ function EnrollFormContent() {
 
       await addDoc(collection(db, "enrollments"), {
         enrollmentId: generatedId,
+        userId: user?.uid || null,
+        userEmail: user?.email || formData.emailAddress,
         studentName: formData.fullName,
         schoolName: formData.schoolName,
         guardianPhone: formData.guardianPhone,

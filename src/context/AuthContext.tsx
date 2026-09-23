@@ -11,10 +11,12 @@ import {
   onAuthStateChanged 
 } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
+import { isUserAdmin } from "@/constants/adminConfig";
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  isAdmin: boolean;
   signInWithGoogle: () => Promise<User>;
   registerWithEmail: (email: string, pass: string, name?: string) => Promise<User>;
   loginWithEmail: (email: string, pass: string) => Promise<User>;
@@ -35,6 +37,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     return () => unsubscribe();
   }, []);
+
+  const isAdmin = isUserAdmin(user?.email);
 
   const signInWithGoogle = async (): Promise<User> => {
     try {
@@ -83,7 +87,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, registerWithEmail, loginWithEmail, logout }}>
+    <AuthContext.Provider value={{ user, loading, isAdmin, signInWithGoogle, registerWithEmail, loginWithEmail, logout }}>
       {children}
     </AuthContext.Provider>
   );
