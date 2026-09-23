@@ -118,17 +118,22 @@ function LoginForm() {
       setSuccessMsg("Logged in successfully! Redirecting...");
       router.push(getDestinationUrl(loggedUser.email));
     } catch (err: any) {
-      console.error("Email login failed:", err);
-      if (err?.code === "auth/invalid-credential" || err?.code === "auth/wrong-password" || err?.code === "auth/user-not-found") {
-        setErrorMsg("Incorrect email or password. Please check your credentials.");
+      if (
+        err?.code === "auth/invalid-credential" || 
+        err?.code === "auth/wrong-password" || 
+        err?.code === "auth/user-not-found"
+      ) {
+        setErrorMsg("ইমেইল বা পাসওয়ার্ড সঠিক নয়। আপনি যদি নতুন হন, অনুগ্রহ করে আগে Sign Up (রেজিস্ট্রেশন) করুন অথবা সঠিক পাসওয়ার্ড দিন।");
       } else if (err?.code === "auth/invalid-email") {
-        setErrorMsg("Please enter a valid email address.");
+        setErrorMsg("সঠিক ইমেইল অ্যাড্রেস লিখুন (Invalid email format)।");
       } else if (err?.code === "auth/too-many-requests") {
-        setErrorMsg("Access to this account has been temporarily disabled due to many failed attempts. Please try again later.");
+        setErrorMsg("অনেকবার ভুল চেষ্টার কারণে সাময়িকভাবে একাউন্ট লক হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।");
+      } else if (err?.code === "auth/network-request-failed") {
+        setErrorMsg("ইন্টারনেট সংযোগে সমস্যা হয়েছে। আপনার নেটওয়ার্ক চেক করে আবার চেষ্টা করুন।");
       } else if (err?.code === "auth/invalid-api-key") {
         setErrorMsg("Invalid Firebase API Key. Please configure NEXT_PUBLIC_FIREBASE_API_KEY in your .env.local file.");
       } else {
-        setErrorMsg(err?.message || "Failed to sign in. Please try again.");
+        setErrorMsg(err?.message || "লগইন ব্যর্থ হয়েছে। অনুগ্রহ করে তথ্য যাচাই করে পুনরায় চেষ্টা করুন।");
       }
     } finally {
       setEmailLoading(false);
@@ -143,7 +148,6 @@ function LoginForm() {
       const loggedUser = await signInWithGoogle();
       router.push(getDestinationUrl(loggedUser.email));
     } catch (err: any) {
-      console.error("Login failed:", err);
       if (err?.code === "auth/popup-closed-by-user") {
         setErrorMsg("Sign-in popup was closed before completing.");
       } else if (err?.code === "auth/unauthorized-domain") {

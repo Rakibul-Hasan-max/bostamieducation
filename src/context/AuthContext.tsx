@@ -60,7 +60,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(result.user);
       return result.user;
     } catch (error: any) {
-      console.error("Email Registration Error:", error);
       throw error;
     }
   };
@@ -71,7 +70,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(result.user);
       return result.user;
     } catch (error: any) {
-      console.error("Email Login Error:", error);
       throw error;
     }
   };
@@ -81,7 +79,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await firebaseSignOut(auth);
       setUser(null);
     } catch (error) {
-      console.error("Logout Error:", error);
       throw error;
     }
   };
